@@ -7,7 +7,7 @@ function SearchComponent() {
     <>
       <div className="w-[100%] h-[7.5%] bg-[#111b21] p-4">
         <div className="flex">
-          <div className="w-[20%] py-1 rounded-l-lg bg-[#202c33] ] flex justify-center items-center">
+          <div className="w-[20%] py-1 rounded-l-lg bg-[#202c33] flex justify-center items-center">
             <div className={`svg-container ${focus ? 'focused' : 'unfocused'}`}>
               {focus ? (
                 <svg

@@ -1,9 +1,8 @@
 import { useState } from 'react'
-import RenderCards from "./render_cards"
-import SearchComponent from './search'
-import ProfileHeadBar from './profile_head_bar'
-import ChatHeadBar from "./chat_head_bar"
-import CharArea from './chatArea'
+import RenderCards from "./sidebar/chatList"
+import SearchComponent from './sidebar/searchBar'
+import ProfileHeadBar from './sidebar/userProfile'
+import ChatWindow from './chatWindow/chatWindow'
 
 
 function App() {
@@ -16,10 +15,8 @@ function App() {
         <SearchComponent />
         <RenderCards />  
      </div>
-     <div className='w-[70%]  '>
-      {/* <div className='h-[100%] w-[100%] bg-[#202c33]'></div> */}
-        <ChatHeadBar /> 
-        <CharArea />
+     <div className='w-[70%]'>
+        <ChatWindow />
      </div>
     </div>
    </>

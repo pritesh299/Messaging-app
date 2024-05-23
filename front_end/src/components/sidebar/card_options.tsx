@@ -11,7 +11,7 @@ function Card_options() {
           console.log(viewOptions)
           setViewOptions(!viewOptions);
         }}
-        className="w-[100%] flex justify-center "
+        className="w-[100%] flex justify-center slide-left "
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

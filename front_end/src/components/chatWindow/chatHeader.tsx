@@ -1,6 +1,6 @@
 import React from "react";
  
-function ChatHeadBar(){
+function ChatHeader(){
   return(<>
    <div className=" w-[100%] h-[7.5%] bg-[#202c33] px-4 py-[6px] flex border-x border-slate-700">
        <div className="w-[5%] min-w-[50px]" ><div className="h-[40px] w-[40px] bg-white rounded-full" /></div>
@@ -25,4 +25,4 @@ function ChatHeadBar(){
    </div> 
   </>)
 }
-export default ChatHeadBar
+export default ChatHeader
