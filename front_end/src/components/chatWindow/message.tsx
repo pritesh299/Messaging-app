@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import ChatOptions from "./chatOptions";
 
 function Message(props: any) {
+
   const [hover, setHover] = useState(false);
-  const [text, setText] = useState("Just connect to vicharaka wifi, type of :rjnfnrj");
+  const [text, setText] = useState("Just connect to vicharaka wifi, type of   ewewe wgf gfeswf hzet eh fd bfd fgrs htsrv sedhd fvbsrgrs bbf dbgbg dbgd gdb");
   const [read, setRead] = useState(false);
   const [reached, setReached] = useState(true);
 
@@ -11,47 +11,8 @@ function Message(props: any) {
   return (
     <>
       {props.left && (
-        <div
-          className="flex w-full p-2 text-white"
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
-        >
-          <svg
-            viewBox="0 0 8 13"
-            height="13"
-            width="8"
-            preserveAspectRatio="xMidYMid meet"
-            className=""
-            version="1.1"
-            x="0px"
-            y="0px"
-            enableBackground="new 0 0 8 13"
-          >
-            <title>tail-in</title>
-            <path
-              opacity="0.13"
-              fill="#000000"
-              d="M1.533,3.568L8,12.193V1H2.812C1.042,1,0.474,2.156,1.533,3.568z"
-            ></path>
-            <path
-              fill="#202c33"
-              d="M1.533,2.568L8,11.193V0L2.812,0C1.042,0,0.474,1.156,1.533,2.568z"
-            ></path>
-          </svg>
-          <div className="bg-[#202c33] w-auto relative max-w-[90%] rounded-r-lg rounded-b-lg flex gap-2 overflow-hidden">
-            <div className="gap-2 p-2 flex">
-              <div className="max-w-[100%]">
-                <p>{text}</p>
-              </div>
-              <div className="text-[10px] flex items-end min-w-[50px]">02:30 PM</div>
-            </div>
-            {hover && <ChatOptions color="#202c33" />}
-          </div>
-        </div>
-      )}
-      {props.left && (
          <div
-         className="flex w-full p-2 text-white"
+         className="flex  max-w-[90%] p-2  text-white"
          onMouseEnter={() => setHover(true)}
          onMouseLeave={() => setHover(false)}
        >
@@ -85,7 +46,7 @@ function Message(props: any) {
              </div>
            </div>
            <div className=" float-right text-[10px] flex items-end min-w-[50px] m-1">02:30 PM</div>
-           {hover && <ChatOptions color="#202c33" options={{viewOptions:props.options.viewOptions,setViewOptions:props.options.setViewOptions} } />}
+           
          </div>
         
        </div>
@@ -93,16 +54,16 @@ function Message(props: any) {
       {props.right && (
         <div className="flex justify-end w-full">
           <div
-            className="flex p-2 text-white"
+            className="flex p-2 max-w-[90%] justify-end text-white"
             onMouseEnter={() => setHover(true)}
             onMouseLeave={() => setHover(false)}
             onMouseOver={() => setHover(true)}
           >
-            <div className="bg-[#005c4b] relative px-3 py-2 rounded-l-lg rounded-b-lg flex gap-2 overflow-hidden">
-              <div className="max-w-[90%]">
+            <div className="bg-[#005c4b] relative max-w-[90%] rounded-l-lg w-auto rounded-b-lg  p-2 gap-2 overflow-hidden">
+              <div className="max-w-[100%]">
                 <p>{text}</p>
               </div>
-              <div className="flex items-end">
+              <div className=" float-right flex min-w-[50px]  items-end">
                 <div className="text-[10px] flex items-end min-w-[50px]">02:30 PM</div>
                 <div className="text-[10px] flex items-end min-w-[5px]">
                   {reached ? (
@@ -138,7 +99,6 @@ function Message(props: any) {
                   )}
                 </div>
               </div>
-              {hover && <ChatOptions color="#005c4b" />}
             </div>
             <svg
               viewBox="0 0 8 13"
@@ -165,7 +125,7 @@ function Message(props: any) {
       )}
 
       {props.middle && (
-       <div className="w-full flex justify-center  text-gray-400 sticky  top-0 z-10  ">
+       <div className="w-full flex justify-center text-gray-400 sticky z-10  ">
              <div className="bg-[#182229] p-2 rounded-xl text-[12px]">04/02/2024</div>
        </div>
       )}

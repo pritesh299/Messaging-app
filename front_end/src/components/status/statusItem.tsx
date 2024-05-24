@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React,{useState} from "react";
 
-function Card(props: any) {
+function StatusItem(props:any){
+
   let [hover, setHover] = useState(false);
-
-  return (
-    <>
+   
+   return(<>
       <div
         onMouseEnter={() => setHover(true)}
         onMouseOver={() => setHover(true)}
@@ -14,18 +14,16 @@ function Card(props: any) {
         <div className="w-[20%] flex justify-center">
           <div className="h-[50px] w-[50px] bg-white rounded-full" />
         </div>
-        <div className="w-[80%] border-b py-3  border-slate-700 flex ">
+        <div className="w-[80%] border-t py-3  border-slate-700 flex ">
           <div className="text-left w-[80%]">
             <p>{props.name || "John Doe"}</p>
             <p className=" text-slate-400 text-sm">{props.lastMessage || "Last message"}</p>
           </div>
-          <div className="w-[20%] flex flex-col  items-center  ">
-            <div className="w-[100%]  flex justify-center text-[12px]" >{props.time || "2:30"}</div>         
-          </div>
         </div>
       </div>
-    </>
-  );
+   
+   </>)
+
 }
 
-export default Card;
+export default StatusItem
