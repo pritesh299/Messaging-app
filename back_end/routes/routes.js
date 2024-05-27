@@ -1,11 +1,12 @@
 import express from "express";
-import Login from "../controllers/authController.js";
-const route = express.Router();
-route.get("/", Login);
-//login
-//register
-//new convo
-//get convo
-//new message
-//get message
-export default route;
+import { LoginUser, RegisterUser } from "../controllers/authController.js";
+const router = express.Router();
+router.post("/login", LoginUser);
+router.post("/register", RegisterUser);
+// login
+// register
+// new convo
+// get convo
+// new message
+// get message
+export default router;

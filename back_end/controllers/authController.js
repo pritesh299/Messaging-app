@@ -8,23 +8,45 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import User from "../models/user.js";
-function Login() {
+function RegisterUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        let [username, email, password, avatar, contacts] = ["jngjb", "btb", "erthbgtbgf", "", ""];
+        console.log(req.body.username);
         try {
-            const newUser = new User({
-                username,
-                email,
-                password,
-                avatar,
-                contacts
-            });
-            const savedUser = yield newUser.save();
+            let exist = yield User.findOne({ username: req.body.username });
+            if (exist) {
+                res.status(200).json({ msg: "User already exists" });
+            }
+            else {
+                const newUser = new User(req.body);
+                yield newUser.save();
+                res.status(201).json({ msg: "User registered successfully" });
+                return res.status(200).json(newUser);
+            }
         }
         catch (error) {
-            console.error(`Error: ${error.message}`);
+            console.error(error);
+            res.status(500).json({ msg: "Internal server error" });
         }
-        console.log("fdbvhbfshvbfsb");
     });
 }
-export default Login;
+function LoginUser(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            console.log(req.body);
+            const user = yield User.findOne({ email: req.body.email });
+            if (!user) {
+                return res.status(400).json({ msg: 'Invalid Email' });
+            }
+            const passwordMatched = yield user.matchPasswords(req.body.password);
+            if (!passwordMatched) {
+                return res.status(400).json({ msg: 'Invalid Password' });
+            }
+            res.status(200).json({ msg: 'Login successful' });
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).json({ msg: "Internal server error" });
+        }
+    });
+}
+export { LoginUser, RegisterUser };
