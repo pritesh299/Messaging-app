@@ -7,18 +7,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-dotenv.config();
-const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const conn = yield mongoose.connect(process.env.MONGO_URI);
-        console.log(`MongoDB Connected: ${conn.connection.host}`);
-        return conn.connection;
-    }
-    catch (error) {
-        console.error(`Error: ${error.message}`);
-        process.exit(1);
-    }
-});
-export default connectDB;
+import User from "../models/user.js";
+function Login() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let [username, email, password, avatar, contacts] = ["jngjb", "btb", "erthbgtbgf", "", ""];
+        try {
+            const newUser = new User({
+                username,
+                email,
+                password,
+                avatar,
+                contacts
+            });
+            const savedUser = yield newUser.save();
+        }
+        catch (error) {
+            console.error(`Error: ${error.message}`);
+        }
+        console.log("fdbvhbfshvbfsb");
+    });
+}
+export default Login;
