@@ -8,31 +8,44 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import User from "../models/user.js";
+import jwt from "jsonwebtoken";
 function RegisterUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(req.body.username);
+        const { username, email, password, avatar } = req.body;
+        const secert = process.env.JWT_SECRET || "";
+        if (secert === "") {
+            console.log("ERROR: secert is undefiends,please check your jwt scecert ");
+            return res.send(403);
+        }
         try {
-            let exist = yield User.findOne({ username: req.body.username });
+            let exist = yield User.findOne({ username });
             if (exist) {
-                res.status(200).json({ msg: "User already exists" });
+                return res.status(200).json({ msg: "User already exists" });
             }
-            else {
-                const newUser = new User(req.body);
-                yield newUser.save();
-                res.status(201).json({ msg: "User registered successfully" });
-                return res.status(200).json(newUser);
-            }
+            console.log("Registering new user");
+            const newUser = new User({ username, email, password, avatar });
+            const payload = { user: newUser };
+            jwt.sign(payload, secert, { expiresIn: '1h' }, (err, token) => {
+                if (err)
+                    throw err;
+                res.status(201).json({ msg: "User registered successfully", user: newUser, token: token });
+            });
+            yield newUser.save();
         }
         catch (error) {
             console.error(error);
-            res.status(500).json({ msg: "Internal server error" });
+            res.status(500).json({ msg: "Internal server error occurred" });
         }
     });
 }
 function LoginUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        const secert = process.env.JWT_SECRET || "";
+        if (secert === "") {
+            console.log("ERROR: secert is undefiends,please check your jwt scecert ");
+            return res.send(403);
+        }
         try {
-            console.log(req.body);
             const user = yield User.findOne({ email: req.body.email });
             if (!user) {
                 return res.status(400).json({ msg: 'Invalid Email' });
@@ -41,6 +54,13 @@ function LoginUser(req, res) {
             if (!passwordMatched) {
                 return res.status(400).json({ msg: 'Invalid Password' });
             }
+            user.password = req.body.password;
+            const payload = { user: user };
+            jwt.sign(payload, secert, { expiresIn: '1h' }, (err, token) => {
+                if (err)
+                    throw err;
+                res.status(201).json({ msg: "User registered successfully", user: user, token: token });
+            });
             res.status(200).json({ msg: 'Login successful' });
         }
         catch (error) {

@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 const MessageSchema = new mongoose.Schema({
+    convoId: { type: String },
     messageID: { type: String },
     senderId: { type: String },
     recieverId: { type: String },
     message: { type: String },
-    type: { type: String }
+    seen: { type: Boolean }
 }, {
     timestamps: true
 });
-const message = mongoose.model("Message", MessageSchema);
-export default message;
+const Message = mongoose.model("Message", MessageSchema);
+export default Message;
