@@ -71,8 +71,7 @@ function RenderCards() {
   ];
 
   return (
-    
-    <div className="overflow-y-scroll  w-[100%]  h-[77.5%] bg-[#111b21] shadow-lg p-1">
+    <div className="overflow-y-scroll w-[100%] h-[77.5%] bg-[#111b21] shadow-lg p-1">
       {dummyUsers.map((user, index) => (
         <Card
           key={index}

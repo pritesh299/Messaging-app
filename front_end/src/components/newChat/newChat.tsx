@@ -1,5 +1,6 @@
 import React from "react";
 import ContactList from "./contactList";
+import SearchComponent from "./seacrhContact";
 
 function NewChat(props: any) {
   const dummyStatusData = [
@@ -10,7 +11,7 @@ function NewChat(props: any) {
   ];
 
   return (
-    <div className="h-full">
+    <div className="h-full bg-[#111b21]">
       <div className="w-full flex items-end h-[15%] bg-[#202c33] py-4 px-2">
         <div className="px-3 flex items-center gap-6 w-full">
           <button
@@ -41,18 +42,8 @@ function NewChat(props: any) {
         </div>
       </div>
       <div className="overflow-y-scroll h-[85%]">
-        <div className="card py-4 h-[100px] gap-[5px] text-white flex justify-between items-center w-full bg-[#111b21]">
-          <div className="w-[20%] flex justify-center">
-            <div className="h-[50px] w-[50px] bg-white rounded-full" />
-          </div>
-          <div className="w-[80%] py-4 flex">
-            <div className="text-left w-full">
-              <p>{props.name || "John Doe"}</p>
-              <p className="text-slate-400 text-sm">
-                {props.lastMessage || "Last message"}
-              </p>
-            </div>
-          </div>
+        <div className="card py-4 h-[100px] gap-[5px] text-white  justify-between items-center w-full bg-[#111b21]">
+          <SearchComponent />
         </div>
         <ContactList statusList={dummyStatusData} />
       </div>

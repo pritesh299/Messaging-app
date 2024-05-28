@@ -8,14 +8,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import Message from "../models/message.js";
-export default function newMessage(req, res) {
+import { getConversation } from "./ConverstionController.js";
+export function newMessage(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { convoId, senderId, receiverId, message, seen } = req.body;
+        const { conversationId, senderId, receiverId, message, seen } = req.body;
         console.log(req.body);
         try {
-            const newMessage = new Message({ convoId, senderId, receiverId, message, seen });
+            const newMessage = new Message({ conversationId, senderId, receiverId, message, seen });
             yield newMessage.save();
             res.status(201).json({ message: newMessage, msg: "message has been register" });
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).json({ msg: "Internal server error" });
+        }
+    });
+}
+export function getMessages(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const { id1, id2 } = req.params;
+            const { messageList, conversation: convo } = yield getConversation(id1, id2);
+            res.json({ messageList, conversation: convo });
         }
         catch (error) {
             console.error(error);

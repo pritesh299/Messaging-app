@@ -17,7 +17,6 @@ const LoginPage = () => {
 
   const handleSubmit = (e:any) => {
     e.preventDefault();
-    // Handle form submission logic
     console.log(formData);
   };
 
