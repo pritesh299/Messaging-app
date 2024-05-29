@@ -7,17 +7,18 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import User from "../models/user.js";
+import User from '../models/user.js';
 export function getUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const searchKeyword = req.params.Keyword;
         try {
-            const userList = yield User.find({ email: searchKeyword });
+            // Correctly interpolate the searchKeyword variable
+            const userList = yield User.find({ email: new RegExp(searchKeyword, 'i') });
             res.json({ userList });
         }
         catch (error) {
             console.error(error);
-            res.status(500).json({ msg: "Internal server error" });
+            res.status(500).json({ msg: 'Internal server error' });
         }
     });
 }

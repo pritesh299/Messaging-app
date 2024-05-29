@@ -1,14 +1,22 @@
 import React, { useState } from "react";
 
-function Card(props: any) {
-  let [hover, setHover] = useState(false);
+interface CardProps {
+  name?: string;
+  lastMessage?: string;
+  time?: string;
+  setCurrentUserId: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const Card: React.FC<CardProps> = (props) => {
+  const [hover, setHover] = useState(false);
 
   return (
     <>
-      <div
+      <button
         onMouseEnter={() => setHover(true)}
         onMouseOver={() => setHover(true)}
         onMouseOut={() => setHover(false)}
+        onClick={() => { props.setCurrentUserId(`${Math.random() }`)}}
         className={`card h-[70px] gap-[5px] text-white flex justify-between items-center w-[100%] ${hover ? 'bg-[#273443]' : 'bg-[#111b21]'}`}
       >
         <div className="w-[20%] flex justify-center">
@@ -23,7 +31,7 @@ function Card(props: any) {
             <div className="w-[100%] flex justify-center text-[12px]">{props.time || "2:30"}</div>
           </div>
         </div>
-      </div>
+      </button>
     </>
   );
 }

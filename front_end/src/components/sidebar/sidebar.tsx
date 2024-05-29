@@ -3,14 +3,21 @@ import ProfileHeadBar from "./userProfile";
 import SearchComponent from "./searchBar";
 import RenderCards from "./chatList";
 
-function Sidebar(props: any) {
+interface SidebarProps {
+  viewNewContact: boolean;
+  setViewNewContact: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentUserId: React.Dispatch<React.SetStateAction<string>>;
+}
+
+
+function Sidebar(props:SidebarProps ) {
   return (
     <>
       <ProfileHeadBar 
-        viewStatus={props.viewStatus} 
-        setViewStatus={props.setViewStatus} 
+      
         viewNewContact={props.viewNewContact} 
         setViewNewContact={props.setViewNewContact} 
+        setCurrentUserId={props.setCurrentUserId}
       />
       <SearchComponent />
       <RenderCards /> 

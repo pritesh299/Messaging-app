@@ -1,14 +1,14 @@
-import {useState} from "react"
 
 import MessagesContainer from "./messagesContainer"
 
+interface ChatWindowProps{
+    currentUserId:string
+}
 
-function ChatWindow(){
+const ChatWindow:React.FC<ChatWindowProps>=({currentUserId})=>{
    
     return(<>
-   
-     <MessagesContainer />
-    
+     <MessagesContainer  currentUserId={currentUserId} />
     </>)
 }
 

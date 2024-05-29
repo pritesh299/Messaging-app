@@ -1,6 +1,11 @@
 import React, { useState } from "react";
 
-function SearchComponent() {
+interface SearchComponentProps {
+  keyWord:string
+  setKeyword: React.Dispatch<React.SetStateAction<string>>;
+}
+
+const SearchComponent: React.FC<SearchComponentProps> = ({ keyWord,setKeyword }) => {
   let [focus, setFocus] = useState(false);
 
   return (
@@ -48,11 +53,18 @@ function SearchComponent() {
               setFocus(true);
             }}
             onBlur={() => {
+              
+              if(keyWord===""){
               setFocus(false);
+              }
+
             }}
-            onChange={(e)=>{ console.log(e.target.value)}}
+            onChange={(e)=>{setKeyword(e.target.value)} }
             className="w-[100%] bg-[#202c33] outline-none rounded-r-lg  text-white"
             placeholder="Search by email"
+
+            value={keyWord}
+
           />
         </div>
       </div>

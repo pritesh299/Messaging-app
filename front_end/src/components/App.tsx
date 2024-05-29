@@ -1,55 +1,38 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Sidebar from './sidebar/sidebar';
 import ChatWindow from './chatWindow/chatWindow';
-import Status from './status/status';
 import NewChat from './newChat/newChat';
 import LoginPage from './login';
-import axios from 'axios';
-import test from '../api';
 
 function App() {
-    let [viewStatus, setViewStatus] = useState(false);
-    let [viewNewContact, setViewNewContact] = useState(false);
-    let [login, setLogin] = useState(true);
+    const [viewNewContact, setViewNewContact] = useState(false);
+    const [login, setLogin] = useState(true)
+    const [currentUserId,setCurrentUserId]=useState("")
 
-    const [data, setData] = useState('');
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                let response = await axios.get('http://localhost:3000/');
-                setData(response.data.message);
-            } catch (error) {
-                console.error(error);
-            }
-        };
+    useEffect(()=>{
+        console.log(currentUserId)
+    },[currentUserId])
 
-        fetchData();
-    }, []);
-
-    test()
-      
     return (
         <>
             {login ? (
                 <div className='flex flex-row fixed w-[98vw] justify-center h-[98vh] overflow-hidden'>
                     <div className='w-[30%] min-w-[375px] h-[100%] relative'>
-                        {viewStatus ? (
-                            <Status viewStatus={viewStatus} setViewStatus={setViewStatus} />
-                        ) : viewNewContact ? (
-                            <NewChat viewNewContact={viewNewContact} setViewNewContact={setViewNewContact} />
+                        {viewNewContact ? (
+                            <NewChat viewNewContact={viewNewContact} setViewNewContact={setViewNewContact}  setCurrentUserId={setCurrentUserId} />
                         ) : (
                             <>
                                 <Sidebar
-                                    viewStatus={viewStatus}
-                                    setViewStatus={setViewStatus}
                                     viewNewContact={viewNewContact}
                                     setViewNewContact={setViewNewContact}
+                                    setCurrentUserId={setCurrentUserId}
                                 />
                             </>
                         )}
                     </div>
                     <div className='w-[70%]'>
-                        <ChatWindow />
+
+                        <ChatWindow currentUserId={currentUserId} />
                     </div>
                 </div>
             ) : (

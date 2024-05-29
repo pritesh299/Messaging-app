@@ -1,7 +1,13 @@
 import React from "react";
 import Card from "./card";
 
-function RenderCards() {
+interface RenderCardsProps{
+  setCurrentUserId: React.Dispatch<React.SetStateAction<string>>;
+
+}
+
+function RenderCards(props:RenderCardsProps) {
+
   let dummyUsers = [
     {
       name: "Alice Johnson",
@@ -78,6 +84,7 @@ function RenderCards() {
           name={user.name}
           lastMessage={user.lastMessage}
           time={user.Time}
+setCurrentUserId={props.setCurrentUserId}
         />
       ))}
     </div>

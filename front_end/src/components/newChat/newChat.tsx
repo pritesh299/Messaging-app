@@ -1,14 +1,38 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import ContactList from "./contactList";
 import SearchComponent from "./seacrhContact";
+import { getUsers } from "../../api";
 
-function NewChat(props: any) {
-  const dummyStatusData = [
-    { id: 1, name: "John Doe", lastMessage: "Hello there!", viewed: true },
-    { id: 2, name: "Jane Smith", lastMessage: "What's up?", viewed: false },
-    { id: 3, name: "Alice Johnson", lastMessage: "See you soon", viewed: true },
-    { id: 4, name: "Michael Brown", lastMessage: "Good night", viewed: false },
-  ];
+
+
+interface NewChatProps{
+  viewNewContact: boolean;
+  setViewNewContact: React.Dispatch<React.SetStateAction<boolean>>;
+  setCurrentUserId:React.Dispatch<React.SetStateAction<string>>;
+}
+
+const NewChat:React.FC<NewChatProps>=({viewNewContact,setViewNewContact,setCurrentUserId})=>{
+
+  const [keyWord, setKeyword] = useState<string>("");
+  const [userList, setUserList] = useState<Array<any>>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+
+          const data = await getUsers(keyWord);
+          setUserList([...data]);
+
+      } catch (error) {
+
+        setUserList([])
+        console.error("Error fetching users:", error);
+
+      }
+    };
+
+    fetchData();
+  }, [keyWord]);
 
   return (
     <div className="h-full bg-[#111b21]">
@@ -16,7 +40,7 @@ function NewChat(props: any) {
         <div className="px-3 flex items-center gap-6 w-full">
           <button
             onClick={() => {
-              props.setViewNewContact(!props.viewNewContact);
+              setViewNewContact(!viewNewContact);
             }}
           >
             <svg
@@ -43,9 +67,9 @@ function NewChat(props: any) {
       </div>
       <div className="overflow-y-scroll h-[85%]">
         <div className="card py-4 h-[100px] gap-[5px] text-white  justify-between items-center w-full bg-[#111b21]">
-          <SearchComponent />
+          <SearchComponent keyWord={keyWord} setKeyword={setKeyword} />
         </div>
-        <ContactList statusList={dummyStatusData} />
+        <ContactList userList={userList}  setCurrentUserId={setCurrentUserId}  />
       </div>
     </div>
   );

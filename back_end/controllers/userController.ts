@@ -1,15 +1,14 @@
-import {Request,Response} from "express"
-import User from "../models/user.js"
-
+import { Request, Response } from 'express';
+import User from '../models/user.js';
 
 export async function getUser(req: Request, res: Response) {
     const searchKeyword = req.params.Keyword;
-
     try {
-        const userList = await User.find({ email: searchKeyword });
+        // Correctly interpolate the searchKeyword variable
+        const userList = await User.find({ email: new RegExp(searchKeyword, 'i') });
         res.json({ userList });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ msg: "Internal server error" });
+        res.status(500).json({ msg: 'Internal server error' });
     }
 }

@@ -21,17 +21,10 @@ export  default async function  NewConvo(req:Request,res:Response){
 
 
 
-export async function getConversation(id1: string, id2: string) {
+export async function getConversation(req:Request,res:Response) {
+
     try {
-        console.log(id1, id2);
-        const convo = await conversation.findOne({ memberList: { $all: [id1, id2] } }).exec();
-
-        if (!convo) {
-            throw new Error("Conversation not found");
-        }
-
-        const messageList = convo.messageList;
-        return { messageList, conversation: convo };
+        console.log("dkfg")
     } catch (error) {
         console.error(error);
         throw new Error("Internal server error");

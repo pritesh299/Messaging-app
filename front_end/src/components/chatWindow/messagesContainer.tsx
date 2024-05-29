@@ -3,7 +3,12 @@ import ChatHeader from "./chatHeader";
 import MessageInput from "./messageInput";
 import Message from "./message";
 
-function MessagesContainer() {
+interface MessagesContainerProps{
+  currentUserId:string
+}
+
+
+const MessagesContainer:React.FC<MessagesContainerProps>=(currentUserId,)=> {
   return (
     <div className="h-[100%]">
       <div

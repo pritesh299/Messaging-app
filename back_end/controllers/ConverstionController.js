@@ -24,16 +24,11 @@ export default function NewConvo(req, res) {
         }
     });
 }
-export function getConversation(id1, id2) {
+export function getConversation(req, res) {
+    console.log("dkfg");
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            console.log(id1, id2);
-            const convo = yield conversation.findOne({ memberList: { $all: [id1, id2] } }).exec();
-            if (!convo) {
-                throw new Error("Conversation not found");
-            }
-            const messageList = convo.messageList;
-            return { messageList, conversation: convo };
+            console.log("dkfg");
         }
         catch (error) {
             console.error(error);
