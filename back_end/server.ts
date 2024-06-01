@@ -18,6 +18,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use("/", route);
 
 
+app.post('/newMessage', (req, res) => {
+    console.log('Received message data:', req.body);
+    res.status(200).send('Message received');
+  });
+
 
 app.listen(PORT,() => {
     console.log('The application is listening '
