@@ -1,91 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Card from "./card";
+import { getContacts, getUser } from "../../api";
+import { getGlobal } from "../App";
 
 interface RenderCardsProps{
   setCurrentUserId: React.Dispatch<React.SetStateAction<string>>;
 
 }
 
-function RenderCards(props:RenderCardsProps) {
+ 
+ function RenderCards(props:RenderCardsProps) {
+  const [chatList, setChatList] = useState<string[]>([]);
 
-  let dummyUsers = [
-    {
-      name: "Alice Johnson",
-      lastMessage: "Hey, are you coming to the party?",
-      Time: "03:15 PM",
-    },
-    {
-      name: "Bob Smith",
-      lastMessage: "Don't forget the meeting tomorrow.",
-      Time: "02:45 PM",
-    },
-    {
-      name: "Alice Johnson",
-      lastMessage: "Hey, are you coming to the party?",
-      Time: "03:15 PM",
-    },
-    {
-      name: "Bob Smith",
-      lastMessage: "Don't forget the meeting tomorrow.",
-      Time: "02:45 PM",
-    },
-    {
-      name: "Charlie Brown",
-      lastMessage: "I'll send the report by evening.",
-      Time: "01:30 PM",
-    },
-    {
-      name: "David Wilson",
-      lastMessage: "Let's catch up over the weekend.",
-      Time: "12:00 PM",
-    },
-    {
-      name: "Ella Roberts",
-      lastMessage: "Can you review the document?",
-      Time: "11:15 AM",
-    },
-    {
-      name: "Alice Johnson",
-      lastMessage: "Hey, are you coming to the party?",
-      Time: "03:15 PM",
-    },
-    {
-      name: "Bob Smith",
-      lastMessage: "Don't forget the meeting tomorrow.",
-      Time: "02:45 PM",
-    },
-    {
-      name: "Charlie Brown",
-      lastMessage: "I'll send the report by evening.",
-      Time: "01:30 PM",
-    },
-    {
-      name: "David Wilson",
-      lastMessage: "Let's catch up over the weekend.",
-      Time: "12:00 PM",
-    },
-    {
-      name: "David Wilson",
-      lastMessage: "Let's catch up over the weekend.",
-      Time: "12:00 PM",
-    },
-    {
-      name: "David Wilson",
-      lastMessage: "Let's catch up over the weekend.",
-      Time: "12:00 PM",
-    },
-  ];
+  
+ 
+  useEffect(() => {
+      
+    async function fetchChatList() {
+
+      try {
+        const data = await getContacts(getGlobal("id"));
+      
+           setChatList(data)          
+      } catch (err) {
+        console.log(err);
+      }
+    }
+    fetchChatList();
+  }, []);
+
+  
 
   return (
     <div className="overflow-y-scroll w-[100%] h-[77.5%] bg-[#111b21] shadow-lg p-1">
-      {dummyUsers.map((user, index) => (
+      {chatList.map((id, index) => (
+      <>
+      { }
         <Card
-          key={index}
-          name={user.name}
-          lastMessage={user.lastMessage}
-          time={user.Time}
-setCurrentUserId={props.setCurrentUserId}
+          key={id}
+          userId={id}
+          setCurrentUserId={props.setCurrentUserId}
         />
+        </>
       ))}
     </div>
   );

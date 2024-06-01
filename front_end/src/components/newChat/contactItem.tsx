@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { addNewChat } from "../../api";
+import { getGlobal } from "../App";
 
 interface ContactItemProp {
   user: {
@@ -17,8 +17,8 @@ const ContactItem: React.FC<ContactItemProp> = ({ user,setCurrentUserId }) => {
 
    function clickHandler()
    {
-    addNewChat(user._id,"main user Id")
-    setCurrentUserId(user._id)
+    
+    setCurrentUserId(user._id) 
 
    }
   return (

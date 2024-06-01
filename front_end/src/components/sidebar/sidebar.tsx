@@ -17,10 +17,10 @@ function Sidebar(props:SidebarProps ) {
       
         viewNewContact={props.viewNewContact} 
         setViewNewContact={props.setViewNewContact} 
-        setCurrentUserId={props.setCurrentUserId}
+    
       />
       <SearchComponent />
-      <RenderCards /> 
+      <RenderCards  setCurrentUserId={props.setCurrentUserId}/> 
     </>
   );
 }

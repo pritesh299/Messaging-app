@@ -1,7 +1,65 @@
 import React, { useState } from "react";
+import { getGlobal } from "../App";
+import { addMessage } from "../../api";
+import axios from "axios";
+import { response } from "express";
 
-function MessageInput() {
-  let [focus, setFocus] = useState(false);
+interface MessageInputProps{
+  currentUserId:string
+}
+
+function getTime(): string {
+
+  const date = new Date();
+  let hours = date.getHours();
+  const minutes = date.getMinutes();
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+
+  hours = hours % 12;
+  hours = hours ? hours : 12; // the hour '0' should be '12'
+  const minutesStr = minutes < 10 ? '0' + minutes : minutes.toString();
+
+  const time = hours + ':' + minutesStr + ' ' + ampm;
+
+  return time;
+}
+
+function getDate(): string {
+  const date = new Date();
+  const day = date.getDate();
+  const month = date.getMonth() + 1; 
+  const year = date.getFullYear();
+
+  const dayStr = day < 10 ? '0' + day : day.toString();
+  const monthStr = month < 10 ? '0' + month : month.toString();
+
+  const formattedDate = monthStr + '/' + dayStr + '/' + year
+
+  return formattedDate;
+}
+
+
+
+function MessageInput({currentUserId}:MessageInputProps) {
+  const [focus, setFocus] = useState(false);
+  const [message, setMessage] = useState("");
+  const [post, setPost] = useState({ senderId: "" });
+
+  function sendMessage() {
+    const newPost = {
+      senderId: getGlobal("id"),
+      receiverId: currentUserId,
+      message: message,
+      seen: false,
+      time: getTime(),
+      date: getDate(),
+    };
+    setPost(newPost);
+    addMessage(newPost)
+
+  }
+
+ 
 
   return (
     <>
@@ -43,15 +101,20 @@ function MessageInput() {
         </div>
         <div className="min-w-[300px] w-[85%]">
           <form action="post" className="flex justify-center">
-            <input
+             
+            <input  name="message"
               onChange={(event) => {
                 event.target.value === "" ? setFocus(false) : setFocus(true);
+                setMessage(event.target.value)
               }}
               className="min-w-[300px] w-[90%] px-4 py-2 rounded-lg outline-none bg-[#2a3942] text-white"
               type="text"
             />
             {focus ? (
-              <button className="min-w-[50px] w-[10%] flex justify-center items-center">
+              <button 
+              type="button"
+               onClick={()=>{sendMessage()}}
+                className="min-w-[50px] w-[10%] flex justify-center items-center">
                 <svg
                   viewBox="0 0 24 24"
                   height="24"

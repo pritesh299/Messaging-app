@@ -4,14 +4,36 @@ import ChatWindow from './chatWindow/chatWindow';
 import NewChat from './newChat/newChat';
 import LoginPage from './login';
 
+let _obj:any={}
+
+
+export const setGlobal = (obj:any) => {
+    Object.assign(_obj, obj)
+}
+
+export const getGlobal = (varName:any) => {
+    if(_obj[varName] !== undefined){
+       return _obj[varName]
+    }
+    else {
+       return null
+    }
+ }
+
+ setGlobal( {
+    id:"6656cc14ce2308b03287ca0b",
+    username: 'Alberta_Sipes',
+    email: 'Arno29@yahoo.com',
+    password: 'XGPB9_39vx0LbZn',
+    avatar: 'https://avatars.githubusercontent.com/u/30393004' 
+  })
+
 function App() {
     const [viewNewContact, setViewNewContact] = useState(false);
     const [login, setLogin] = useState(true)
-    const [currentUserId,setCurrentUserId]=useState("")
+    const [currentUserId,setCurrentUserId]=useState("6656cc1ece2308b03287ca1f")
 
-    useEffect(()=>{
-        console.log(currentUserId)
-    },[currentUserId])
+
 
     return (
         <>
