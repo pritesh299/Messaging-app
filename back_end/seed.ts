@@ -1,11 +1,14 @@
-import mongoose from 'mongoose';
+ import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import {faker} from '@faker-js/faker';
 import User from "./models/user.js"
 import connectDB from './config/db.js';
+import Message from './models/message.js';
+import { error } from 'console';
 
 dotenv.config();
 // Generate dummy users
+/*
 const generateUsers = async (num: number) => {
   const users = [];
  
@@ -21,35 +24,15 @@ const generateUsers = async (num: number) => {
       email,
       password,
       avatar,
+      contactList:["6656cc10ce2308b03287ca03"]
+
     });
   } 
    console.log(users)
   return users;
 };
-const generateMessages = async (num: number, conversationIds: mongoose.Types.ObjectId[], userIds: string[]) => {
-    const messages = [];
 
-    for (let i = 0; i < num; i++) {
-        const conversationId = faker.helpers.arrayElement(conversationIds);
-        const senderId = faker.helpers.arrayElement(userIds);
-        const receiverId = faker.helpers.arrayElement(userIds.filter(id => id !== senderId)); // Ensure receiver is different from sender
-        const messageID = faker.datatype.uuid();
-        const message = faker.lorem.sentence();
-        const seen = faker.datatype.boolean();
 
-        messages.push({
-            conversationId,
-            messageID,
-            senderId,
-            receiverId,
-            message,
-            seen
-        });
-    }
-
-    console.log(messages);
-    return messages;
-};
 
 
 // Insert dummy users into the database
@@ -58,8 +41,8 @@ const insertDummyUsers = async () => {
 
   try {
     const users = await generateUsers(1); // Adjust the number as needed
-    await User.insertMany(users);
-    console.log('Dummy users inserted');
+   let response= await User.insertMany(users);
+    console.log('Dummy users inserted',response);
     mongoose.connection.close();
   } catch (err:any) {
     console.error(err.message);
@@ -67,4 +50,40 @@ const insertDummyUsers = async () => {
   }
 };
 
-setInterval(insertDummyUsers,1000)
+insertDummyUsers() */
+
+
+const generateMessages = async (num: number) => {
+  const messages = [];
+
+  for (let i = 0; i < num; i++) {
+      const senderId = "6656cc1ece2308b03287ca1f"
+      const recieverId = "6656cc14ce2308b03287ca0b"
+      const message = faker.lorem.sentence();
+      const seen = faker.datatype.boolean();
+
+      messages.push({
+          senderId,
+          recieverId,
+          message,
+          seen,
+      });
+  }
+
+  return messages;
+};
+
+
+async function insertDummyMessages() {
+  connectDB()
+  try{
+  console.log(generateMessages(20))
+  let messagesData=generateMessages(20)
+  const response= await Message.insertMany(messagesData)
+  console.log(response)
+  } catch(error){
+    console.log(error)
+  }
+
+}
+insertDummyMessages()
