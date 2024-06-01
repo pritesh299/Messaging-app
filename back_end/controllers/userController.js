@@ -8,17 +8,50 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import User from '../models/user.js';
-export function getUser(req, res) {
+import { error } from 'console';
+export function getUsers(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const searchKeyword = req.params.Keyword;
+        const currentUserId = req.params.userId;
         try {
-            // Correctly interpolate the searchKeyword variable
-            const userList = yield User.find({ email: new RegExp(searchKeyword, 'i') });
+            const user = yield User.findOne({ _id: currentUserId });
+            const contactList = user === null || user === void 0 ? void 0 : user.contactList;
+            const userList = yield User.find({
+                $and: [
+                    { email: { $regex: new RegExp(searchKeyword, 'i') } },
+                    { contactList: { $nin: contactList } }
+                ]
+            });
             res.json({ userList });
         }
         catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Internal server error' });
+        }
+    });
+}
+export function getContacts(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        var _a;
+        const userId = req.params.id;
+        try {
+            const contactList = (_a = (yield User.findOne({ _id: userId }))) === null || _a === void 0 ? void 0 : _a.contactList;
+            res.json(contactList);
+        }
+        catch (errror) {
+            console.log(error);
+        }
+    });
+}
+export function getUser(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const userId = req.params.id;
+        try {
+            const user = yield User.findOne({ _id: userId });
+            res.json(user);
+        }
+        catch (errror) {
+            console.log(error);
         }
     });
 }

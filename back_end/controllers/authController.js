@@ -23,7 +23,7 @@ function RegisterUser(req, res) {
                 return res.status(200).json({ msg: "User already exists" });
             }
             console.log("Registering new user");
-            const newUser = new User({ username, email, password, avatar });
+            const newUser = new User({ username, email, password, avatar, contactList: [] });
             const payload = { user: newUser };
             jwt.sign(payload, secert, { expiresIn: '1h' }, (err, token) => {
                 if (err)

@@ -1,18 +1,15 @@
 import express from "express";
 import { LoginUser, RegisterUser } from "../controllers/authController.js";
 import TokenAuth from "../middleware/authMiddleware.js";
-import getConversation from "../controllers/ConverstionController.js";
 import { newMessage, getMessages } from "../controllers/messageController.js";
-import { getUser } from "../controllers/userController.js";
+import { getContacts, getUser, getUsers } from "../controllers/userController.js";
+/* import getConversations, { newConverstion } from "../controllers/ConverstionController.js"; */
 const router = express.Router();
+router.get("/getContacts/:id", getContacts);
+router.get("/getMessages/:id1/:id2", getMessages);
+router.get("/getUsers/:Keyword", getUsers);
+router.get("/:id", getUser);
 router.post("/login", TokenAuth, LoginUser);
 router.post("/register", RegisterUser);
-router.get("/newConversation/:id1/:id2", getConversation);
-router.post("/newmessage", newMessage);
-router.get("/:id1/:id2", getMessages);
-router.get("/:Keyword", getUser);
-router.get("/", (req, res) => {
-    console.log("dfkdkkd");
-    res.json({ message: "message from backend" });
-});
+router.post("/newMessage", newMessage);
 export default router;

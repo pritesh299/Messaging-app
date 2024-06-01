@@ -10,10 +10,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 import Message from "../models/message.js";
 export function newMessage(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { conversationId, senderId, receiverId, message, seen } = req.body;
-        console.log(req.body);
+        const { senderId, receiverId, message, seen, date, time } = req.body;
         try {
-            const newMessage = new Message({ senderId, receiverId, message, seen });
+            const newMessage = new Message({ senderId, receiverId, message, seen, date, time });
             yield newMessage.save();
             res.status(201).json({ message: newMessage, msg: "message has been register" });
         }
@@ -27,8 +26,13 @@ export function getMessages(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const { id1, id2 } = req.params;
-            /*       const { messageList, conversation: convo } = await getConversation(id1, id2); */
-            /*    res.json({ messageList, conversation: convo }); */
+            const messageList = yield Message.find({
+                $or: [
+                    { $and: [{ senderId: id1 }, { receiverId: id2 }] },
+                    { $and: [{ senderId: id2 }, { receiverId: id1 }] },
+                ]
+            });
+            res.json(messageList);
         }
         catch (error) {
             console.error(error);

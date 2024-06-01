@@ -14,6 +14,8 @@ const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     avatar: { type: String },
+    contactList: [{ type: mongoose.Schema.ObjectId, ref: 'User',
+        }]
 }, { timestamps: true });
 UserSchema.pre("save", function (next) {
     return __awaiter(this, void 0, void 0, function* () {

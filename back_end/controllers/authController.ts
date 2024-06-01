@@ -18,7 +18,7 @@ async function RegisterUser(req: Request, res: Response) {
         }
 
         console.log("Registering new user");
-        const newUser = new User({ username, email, password, avatar });
+        const newUser = new User({ username, email, password, avatar,contactList:[] });
         const payload = { user: newUser };
     
        jwt.sign(payload , secert,{ expiresIn: '1h' }, (err, token) => {

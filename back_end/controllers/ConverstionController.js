@@ -1,38 +1,35 @@
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
+"use strict";
+/* import { request } from "http";
+import Conversation from "../models/Conversation.js";
+import { Request, Response } from "express";
 import conversation from "../models/Conversation.js";
-export default function NewConvo(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let { creator, member } = req.body;
-        try {
-            let newConvo = new conversation({
-                memberList: [creator, member],
-                messageList: []
-            });
-            yield newConvo.save();
-            res.status(201).json(newConvo);
-        }
-        catch (error) {
-            console.log(error);
-        }
-    });
+import User from "../models/user.js";
+
+export   async function  newConverstion(req:Request,res:Response){
+   
+    const memberList= [req.params.id1,req.params.id2]
+
+ try{
+    console.log(memberList)
+   let conversation = new Conversation({memberList})
+
+     await conversation.save()
+
+ }catch(error){
+    console.log(error)
+ }
 }
-export function getConversation(req, res) {
-    console.log("dkfg");
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            console.log("dkfg");
-        }
-        catch (error) {
-            console.error(error);
-            throw new Error("Internal server error");
-        }
-    });
-}
+ 
+
+
+export default async function getConversation(req:Request,res:Response) {
+      
+    const userId=req.params.id
+        try{
+          let conversation = await Conversation.find({memberList:userId})
+            res.json(conversation)
+        } catch (error) {
+        console.error(error);
+        throw new Error("Internal server error");
+    }
+}A */ 
