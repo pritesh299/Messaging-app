@@ -61,10 +61,55 @@ export async function addMessage( data:object ) {
   
   try {
     const response = await axios(config)
-
-    console.log('Response:', response);
+     return response
   } catch (error: any) {
     console.error('Error:', error.message);
     return null;
   }
 }
+
+
+export async function registerUser(userData:object){
+
+  const config = {
+    method : "post",
+    url : serverURL+ "register",
+    xsrfCookieName: 'csrftoken',
+        xsrfHeaderName: 'X-CSRFToken',
+        headers: {'X-Requested-With': 'XMLHttpRequest',
+                  'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+    data : userData
+}
+  
+  try {
+    const response = await axios(config)
+     return response
+  } catch (error: any) {
+    console.error('Error:', error.message);
+    return error;
+  } 
+}
+
+export async function LoginUser(userCredentails:object) {
+  
+  const config = {
+    method : "post",
+    url : serverURL+ "login",
+    xsrfCookieName: 'csrftoken',
+        xsrfHeaderName: 'X-CSRFToken',
+        headers: {'X-Requested-With': 'XMLHttpRequest',
+                  'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+    data : userCredentails
+}
+  
+  try {
+   
+     const response = await axios(config)
+     return response.data  
+  } catch (error: any) {
+    console.log(error.response.data.code)
+    return error.response.data;
+  } 
+
+}
+
