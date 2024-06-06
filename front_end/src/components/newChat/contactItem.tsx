@@ -17,10 +17,9 @@ const ContactItem: React.FC<ContactItemProp> = ({ user,setCurrentUserId }) => {
 
    function clickHandler()
    {
-    
     setCurrentUserId(user._id) 
-
    }
+
   return (
     <>
       <button

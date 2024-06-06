@@ -5,7 +5,6 @@ import { getGlobal } from "../App";
 
 interface RenderCardsProps{
   setCurrentUserId: React.Dispatch<React.SetStateAction<string>>;
-
 }
 
  

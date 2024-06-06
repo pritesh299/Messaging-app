@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { getGlobal } from "../App";
 import { addMessage } from "../../api";
-import axios from "axios";
 import { response } from "express";
 
-interface MessageInputProps{
-  currentUserId:string
+
+interface MessageInputProps {
+  currentUserId: string;
+  messages: object[];
+  setMessages: React.Dispatch<React.SetStateAction<object[]>>;
 }
+
 
 function getTime(): string {
 
@@ -39,13 +42,12 @@ function getDate(): string {
 }
 
 
-
-function MessageInput({currentUserId}:MessageInputProps) {
+function MessageInput({currentUserId,messages,setMessages}:MessageInputProps) {
   const [focus, setFocus] = useState(false);
   const [message, setMessage] = useState("");
   const [post, setPost] = useState({ senderId: "" });
 
-  function sendMessage() {
+  async function sendMessage() {
     const newPost = {
       senderId: getGlobal("id"),
       receiverId: currentUserId,
@@ -55,12 +57,11 @@ function MessageInput({currentUserId}:MessageInputProps) {
       date: getDate(),
     };
     setPost(newPost);
-    addMessage(newPost)
-
+    const response:{data:{message:object}} = await addMessage(newPost) || {data:{message:{}}}
+    console.log("message sent ",response.data.message,messages)
+   setMessages([...messages,response.data.message]) 
   }
-
  
-
   return (
     <>
       <div className="z-10 h-[7.5%] bg-[#202c33] w-[100%] flex items-center border-x border-slate-700">
@@ -100,7 +101,11 @@ function MessageInput({currentUserId}:MessageInputProps) {
           </svg>
         </div>
         <div className="min-w-[300px] w-[85%]">
-          <form action="post" className="flex justify-center">
+          <form  onSubmit={(e)=>{
+            e.preventDefault()
+                sendMessage()
+                 setMessage("")
+              }}id="messageInput"  className="flex justify-center">
              
             <input  name="message"
               onChange={(event) => {
@@ -109,11 +114,11 @@ function MessageInput({currentUserId}:MessageInputProps) {
               }}
               className="min-w-[300px] w-[90%] px-4 py-2 rounded-lg outline-none bg-[#2a3942] text-white"
               type="text"
+              value={message}
             />
             {focus ? (
               <button 
-              type="button"
-               onClick={()=>{sendMessage()}}
+               type="submit"
                 className="min-w-[50px] w-[10%] flex justify-center items-center">
                 <svg
                   viewBox="0 0 24 24"
@@ -133,7 +138,10 @@ function MessageInput({currentUserId}:MessageInputProps) {
                 </svg>
               </button>
             ) : (
-              <button className="min-w-[50px] w-[10%] flex justify-center items-center">
+              <button 
+              type="button"
+
+              className="min-w-[50px] w-[10%] flex justify-center items-center">
                 <svg
                   viewBox="0 0 24 24"
                   height="24"

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { getGlobal } from "../App";
 
 function ProfileHeadBar(props: any) {
 
@@ -8,7 +9,9 @@ function ProfileHeadBar(props: any) {
     <>
       <div className="w-[100%] h-[7.5%] bg-[#202c33] px-4 py-2">
         <div className="px-3 flex justify-between items-center">
-          <div className="h-[40px] w-[40px] bg-white rounded-full" />
+          <div className="h-[40px] w-[40px] bg-white rounded-full overflow-hidden" >
+            <img src={getGlobal("avatar")} alt="user Avatar" />
+          </div>
           <div className="flex gap-3">
             <button
               onClick={() => {

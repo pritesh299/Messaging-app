@@ -3,38 +3,76 @@ import { getGlobal } from "../App";
 
 
 
-function Message({message,currentUserId}:{message:{message:string,recieverId:string,date:Date,time:String},currentUserId:string}) {
+function Message({message,currentUserId}:{message:{receiverId:String,message:String},currentUserId:string}) {
 
 const [reciver,setReciver]= useState<boolean>()
+const [read,setRead]= useState(false)
 
 
   useEffect(()=>{
-    if(message.recieverId===currentUserId){
+    if(message.receiverId===currentUserId){
       setReciver(false)
-}else if(message.recieverId===getGlobal("id")){
- setReciver(true)
-}
+    }else if(message.receiverId===getGlobal("id")){
+      setReciver(true)
+    }
   },[])
+  
 
-
-
-    
   return (
     <>
    {reciver
    ?<>
-   <div className="flex justify-end w-full">
+   <div
+   className="flex  max-w-[90%] p-2  text-white"
+ >
+   <svg
+     viewBox="0 0 8 13"
+     height="13"
+     width="8"
+     preserveAspectRatio="xMidYMid meet"
+     className=""
+     version="1.1"
+     x="0px"
+     y="0px"
+     enableBackground="new 0 0 8 13"
+   >
+     <title>tail-in</title>
+     <path
+       opacity="0.13"
+       fill="#000000"
+       d="M1.533,3.568L8,12.193V1H2.812C1.042,1,0.474,2.156,1.533,3.568z"
+     ></path>
+     <path
+       fill="#202c33"
+       d="M1.533,2.568L8,11.193V0L2.812,0C1.042,0,0.474,1.156,1.533,2.568z"
+     ></path>
+   </svg>
+
+   <div className="bg-[#202c33]  w-auto relative max-w-[90%] rounded-r-lg rounded-b-lg  gap-2 overflow-hidden">
+     <div className="gap-2 p-2 flex">
+       <div className="max-w-[100%]">
+         <p>{message.message}</p>
+       </div>
+     </div>
+     <div className=" float-right text-[10px] flex items-end min-w-[50px] m-1">02:30 PM</div>
+     
+   </div>
+  
+ </div>
+   </>
+   :<> 
+    <div className="flex justify-end w-full">
           <div
             className="flex p-2 max-w-[90%] justify-end text-white"
           >
-            <div className="bg-[#005c4b] relative max-w-[90%] rounded-l-lg w-auto rounded-b-lg  p-2 gap-2 overflow-hidden">
+            <div className="bg-[#005c4b] relative  rounded-l-lg w-auto rounded-b-lg  p-2 gap-2 overflow-hidden">
               <div className="max-w-[100%]">
-                <p>{message.message}</p>
+              <p>{message.message}</p>
               </div>
               <div className=" float-right flex min-w-[50px]  items-end">
                 <div className="text-[10px] flex items-end min-w-[50px]">02:30 PM</div>
                 <div className="text-[10px] flex items-end min-w-[5px]">
-                 {/*  {reached ? (
+           
                     <svg
                       viewBox="0 0 16 11"
                       height="11"
@@ -48,23 +86,7 @@ const [reciver,setReciver]= useState<boolean>()
                      fill={read?"#3b82f6":"currentColor"} 
                       ></path>
                     </svg>
-                  ) : (
-                    <svg
-                      viewBox="0 0 16 15"
-                      width="16"
-                      preserveAspectRatio="xMidYMid meet"
-                      version="1.1"
-                      x="0px"
-                      y="0px"
-                      enableBackground="new 0 0 16 15"
-                    >
-                      <title>msg-time</title>
-                      <path
-                        fill="currentColor"
-                        d="M9.75,7.713H8.244V5.359c0-0.276-0.224-0.5-0.5-0.5H7.65c-0.276,0-0.5,0.224-0.5,0.5v2.947 c0,0.276,0.224,0.5,0.5,0.5h0.094c0.001,0,0.002-0.001,0.003-0.001S7.749,8.807,7.75,8.807h2c0.276,0,0.5-0.224,0.5-0.5V8.213 C10.25,7.937,10.026,7.713,9.75,7.713z M9.75,2.45h-3.5c-1.82,0-3.3,1.48-3.3,3.3v3.5c0,1.82,1.48,3.3,3.3,3.3h3.5 c1.82,0,3.3-1.48,3.3-3.3v-3.5C13.05,3.93,11.57,2.45,9.75,2.45z M11.75,9.25c0,1.105-0.895,2-2,2h-3.5c-1.104,0-2-0.895-2-2v-3.5 c0-1.104,0.896-2,2-2h3.5c1.105,0,2,0.896,2,2V9.25z"
-                      ></path>
-                    </svg>
-                  )} */}
+                
                 </div>
               </div>
             </div>
@@ -90,46 +112,7 @@ const [reciver,setReciver]= useState<boolean>()
             </svg>
           </div>
         </div>
-   
-   </>
-   :<> 
-       <div
-         className="flex  max-w-[90%] p-2  text-white"
-       >
-         <svg
-           viewBox="0 0 8 13"
-           height="13"
-           width="8"
-           preserveAspectRatio="xMidYMid meet"
-           className=""
-           version="1.1"
-           x="0px"
-           y="0px"
-           enableBackground="new 0 0 8 13"
-         >
-           <title>tail-in</title>
-           <path
-             opacity="0.13"
-             fill="#000000"
-             d="M1.533,3.568L8,12.193V1H2.812C1.042,1,0.474,2.156,1.533,3.568z"
-           ></path>
-           <path
-             fill="#202c33"
-             d="M1.533,2.568L8,11.193V0L2.812,0C1.042,0,0.474,1.156,1.533,2.568z"
-           ></path>
-         </svg>
-
-         <div className="bg-[#202c33]  w-auto relative max-w-[90%] rounded-r-lg rounded-b-lg  gap-2 overflow-hidden">
-           <div className="gap-2 p-2 flex">
-             <div className="max-w-[100%]">
-               <p>{message.message}</p>
-             </div>
-           </div>
-           <div className=" float-right text-[10px] flex items-end min-w-[50px] m-1">02:30 PM</div>
-           
-         </div>
-        
-       </div>
+     
        </>}
    
 
