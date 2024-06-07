@@ -113,3 +113,26 @@ export async function LoginUser(userCredentails:object) {
 
 }
 
+export async function addContact(ContactData:object,userId:string) {
+  
+  const config = {
+    method : "post",
+    url : serverURL+ "addContact",
+    xsrfCookieName: 'csrftoken',
+        xsrfHeaderName: 'X-CSRFToken',
+        headers: {'X-Requested-With': 'XMLHttpRequest',
+                  'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+    data : {ContactData:ContactData,userId:userId}
+}
+  
+  try {
+   
+     const response = await axios(config)
+     return response.data  
+  } catch (error: any) {
+    console.log(error.response.data.code)
+    return error.response.data;
+  } 
+
+}
+

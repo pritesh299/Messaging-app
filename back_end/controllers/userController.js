@@ -22,6 +22,7 @@ export function getUsers(req, res) {
                     { contactList: { $nin: contactList } }
                 ]
             });
+            console.log(user, req.params);
             res.json({ userList });
         }
         catch (error) {
@@ -49,6 +50,24 @@ export function getUser(req, res) {
         try {
             const user = yield User.findOne({ _id: userId });
             res.json(user);
+        }
+        catch (errror) {
+            console.log(error);
+        }
+    });
+}
+export function addContact(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let userId = req.body.userId;
+        let contact = req.body.ContactData;
+        try {
+            const user = yield User.findOne({ _id: userId });
+            console.log(contact);
+            if (user) {
+                let response = yield user.updateOne({ contactList: [...user.contactList, contact] });
+                return res.json(response);
+            }
+            res.json({ msg: "user not found" });
         }
         catch (errror) {
             console.log(error);

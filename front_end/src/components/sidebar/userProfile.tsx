@@ -32,8 +32,8 @@ function ProfileHeadBar(props: any) {
                   fill="#94a3b8"
                 ></path>
                 <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
                   d="M0.944298 5.52617L2.99998 8.84848V17.3333C2.99998 18.8061 4.19389 20 5.66665 20H19.3333C20.8061 20 22 18.8061 22 17.3333V6.66667C22 5.19391 20.8061 4 19.3333 4H1.79468C1.01126 4 0.532088 4.85997 0.944298 5.52617ZM4.99998 8.27977V17.3333C4.99998 17.7015 5.29845 18 5.66665 18H19.3333C19.7015 18 20 17.7015 20 17.3333V6.66667C20 6.29848 19.7015 6 19.3333 6H3.58937L4.99998 8.27977Z"
                   fill="#94a3b8"
                 ></path>
@@ -53,7 +53,7 @@ function ProfileHeadBar(props: any) {
                 version="1.1"
                 x="0px"
                 y="0px"
-                enable-background="new 0 0 24 24"
+                enableBackground="new 0 0 24 24"
               >
                 <title>menu</title>
                 <path

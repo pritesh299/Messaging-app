@@ -17,6 +17,7 @@ export async function getUsers(req: Request, res: Response) {
               { contactList: { $nin: contactList } }
             ]
           });
+          console.log(user,req.params)
         res.json({ userList });
     } catch (error) {
         console.error(error);
@@ -45,4 +46,23 @@ export async function getUser(req:Request,res:Response){
 
 console.log(error)
  }
+}
+
+export async function addContact(req:Request,res:Response){
+ 
+    let userId=req.body.userId
+    let contact=req.body.ContactData
+  
+try{
+  const user=await User.findOne({_id:userId})
+  console.log(contact)
+  if(user){
+      let response= await user.updateOne({contactList:[...user.contactList,contact]})
+    
+      return res.json(response)
+    } 
+    res.json({msg:"user not found"})
+ }catch(errror){
+   console.log(error)
+ } 
 }
