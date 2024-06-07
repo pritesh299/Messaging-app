@@ -9,9 +9,10 @@ interface NewChatProps{
   viewNewContact: boolean;
   setViewNewContact: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentUserId:React.Dispatch<React.SetStateAction<string>>;
+  setChat:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const NewChat:React.FC<NewChatProps>=({viewNewContact,setViewNewContact,setCurrentUserId})=>{
+const NewChat:React.FC<NewChatProps>=({viewNewContact,setViewNewContact,setCurrentUserId,setChat})=>{
 
   const [keyWord, setKeyword] = useState<string>("");
   const [userList, setUserList] = useState<Array<any>>([]);
@@ -51,7 +52,7 @@ const NewChat:React.FC<NewChatProps>=({viewNewContact,setViewNewContact,setCurre
               version="1.1"
               x="0px"
               y="0px"
-              enable-background="new 0 0 24 24"
+              enableBackground="new 0 0 24 24"
             >
               <title>back</title>
               <path
@@ -69,7 +70,7 @@ const NewChat:React.FC<NewChatProps>=({viewNewContact,setViewNewContact,setCurre
         <div className="card py-4 h-[100px] gap-[5px] text-white  justify-between items-center w-full bg-[#111b21]">
           <SearchComponent keyWord={keyWord} setKeyword={setKeyword} />
         </div>
-        <ContactList userList={userList}  setCurrentUserId={setCurrentUserId}  />
+        <ContactList userList={userList} setChat={setChat} setViewNewContact={setViewNewContact} setCurrentUserId={setCurrentUserId}  />
       </div>
     </div>
   );

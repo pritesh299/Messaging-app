@@ -5,16 +5,19 @@ import { getGlobal } from "../App";
 interface CardProps {
    userId:string;
   setCurrentUserId: React.Dispatch<React.SetStateAction<string>>;
+  setChat:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Card: React.FC<CardProps> = ({userId,setCurrentUserId}) => {
+const Card: React.FC<CardProps> = ({userId,setCurrentUserId,setChat}) => {
   const [hover, setHover] = useState(false);
-  const [user,setUser]=  useState<{userName:String,LastMessgae:string,TimeStamp:string,Avatar:string}>()
+  const [user,setUser]=  useState<{id:string,userName:String,LastMessgae:string,TimeStamp:string,Avatar:string}>()
 
   useEffect(  ()=>{
      async function fetchUser(){
       let userData  = await getUser(userId)
+      
       setUser({
+        id:userData._id,
         userName:userData.username,
         LastMessgae:"Last message",
         TimeStamp:"2:30",
@@ -30,7 +33,7 @@ const Card: React.FC<CardProps> = ({userId,setCurrentUserId}) => {
         onMouseEnter={() => setHover(true)}
         onMouseOver={() => setHover(true)}
         onMouseOut={() => setHover(false)}
-        onClick={() => {addMessage() ;getMessages(userId,getGlobal("id"))}}
+        onClick={() => {setChat(true); {user&&setCurrentUserId(user.id)}getMessages(userId,getGlobal("id"))}}
         className={`card h-[70px] gap-[5px] text-white flex justify-between items-center w-[100%] ${hover ? 'bg-[#273443]' : 'bg-[#111b21]'}`}
       >
         <div className="w-[20%] flex justify-center">

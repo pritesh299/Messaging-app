@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { getGlobal } from "../App";
+import { addContact } from "../../api";
 
 interface ContactItemProp {
   user: {
@@ -10,14 +11,21 @@ interface ContactItemProp {
 
   };
   setCurrentUserId:React.Dispatch<React.SetStateAction<string>>;
+  setChat:React.Dispatch<React.SetStateAction<boolean>>;
+  setViewNewContact: React.Dispatch<React.SetStateAction<boolean>>;
+
 }
 
-const ContactItem: React.FC<ContactItemProp> = ({ user,setCurrentUserId }) => {
+const ContactItem: React.FC<ContactItemProp> = ({ user,setCurrentUserId,setChat,setViewNewContact}) => {
   const [hover, setHover] = useState(false);
 
    function clickHandler()
    {
+ 
     setCurrentUserId(user._id) 
+    addContact(user,getGlobal("id"))
+    setChat(true)
+    setViewNewContact(false) 
    }
 
   return (

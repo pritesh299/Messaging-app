@@ -5,22 +5,22 @@ import RenderCards from "./chatList";
 
 interface SidebarProps {
   viewNewContact: boolean;
+  setChat:React.Dispatch<React.SetStateAction<boolean>>;
   setViewNewContact: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentUserId: React.Dispatch<React.SetStateAction<string>>;
 }
 
 
-function Sidebar(props:SidebarProps ) {
+const Sidebar:React.FC<SidebarProps>=( {viewNewContact,setChat,setViewNewContact,setCurrentUserId})=>{
   return (
     <>
       <ProfileHeadBar 
-      
-        viewNewContact={props.viewNewContact} 
-        setViewNewContact={props.setViewNewContact} 
+        viewNewContact={viewNewContact} 
+        setViewNewContact={setViewNewContact} 
     
       />
       <SearchComponent />
-      <RenderCards  setCurrentUserId={props.setCurrentUserId}/> 
+      <RenderCards  setCurrentUserId={setCurrentUserId} setChat={setChat}/> 
     </>
   );
 }

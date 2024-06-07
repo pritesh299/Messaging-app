@@ -1,14 +1,39 @@
-import React,{useState} from "react";
+import React,{useEffect, useState} from "react";
+import { getUser } from "../../api";
  
-function ChatHeader(){
+interface ChatHeaderProps{
+  currentUserId:string
+}
+
+const ChatHeader:React.FC<ChatHeaderProps> =({currentUserId})=>{
 
   const [viewSetting, setViewSetting] = useState(false);
+  const [user,setUser]=useState<{id:string,userName:String,LastMessgae:string,TimeStamp:string,Avatar:string}>()
+  useEffect(  ()=>{
+    async function fetchUser(){
+     let userData  = await getUser(currentUserId)
+     
+     setUser({
+       id:userData._id,
+       userName:userData.username,
+       LastMessgae:"Last message",
+       TimeStamp:"2:30",
+       Avatar:userData.avatar
+     })
+    }
+    fetchUser()
+ },[currentUserId])
+
 
   return(<>
    <div className=" w-[100%] h-[7.5%] bg-[#202c33] px-4 py-[6px] flex border-x border-slate-700">
-       <div className="w-[5%] min-w-[50px]" ><div className="h-[40px] w-[40px] bg-white rounded-full" /></div>
+       <div className="w-[5%] min-w-[50px]" >
+        <div className="h-[40px] w-[40px] bg-white rounded-full overflow-hidden" >
+        <img src={user&&user.Avatar} alt="contcat image" />
+        </div>
+       </div>
        <div className="flex flex-col w-[75%] text-white "> 
-          <p >Name</p>
+          <p >{user&&user.userName}</p>
           <p className=" text-sm text-slate-400">online status</p>
        </div>
        <div className="flex w-[20%] min-w-[125px] justify-between">

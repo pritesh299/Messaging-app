@@ -5,10 +5,11 @@ import { getGlobal } from "../App";
 
 interface RenderCardsProps{
   setCurrentUserId: React.Dispatch<React.SetStateAction<string>>;
+  setChat:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
  
- function RenderCards(props:RenderCardsProps) {
+ const RenderCards:React.FC<RenderCardsProps>=({setChat,setCurrentUserId})=> {
   const [chatList, setChatList] = useState<string[]>([]);
 
   
@@ -31,14 +32,15 @@ interface RenderCardsProps{
   
 
   return (
-    <div className="overflow-y-scroll w-[100%] h-[77.5%] bg-[#111b21] shadow-lg p-1">
+    <div className="overflow-y-scroll w-[100%] h-[85%] bg-[#111b21] shadow-lg p-1">
       {chatList.map((id, index) => (
       <>
       { }
         <Card
           key={id}
           userId={id}
-          setCurrentUserId={props.setCurrentUserId}
+          setCurrentUserId={setCurrentUserId}
+          setChat={setChat}
         />
         </>
       ))}

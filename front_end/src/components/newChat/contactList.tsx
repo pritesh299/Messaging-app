@@ -4,10 +4,12 @@ import ContactItem from "./contactItem";
 interface ContactListProps{
   userList:any[]
   setCurrentUserId:React.Dispatch<React.SetStateAction<string>>;
+  setChat:React.Dispatch<React.SetStateAction<boolean>>;
+  setViewNewContact: React.Dispatch<React.SetStateAction<boolean>>;
 
 }
 
-const ContactList :React.FC<ContactListProps>= ({userList,setCurrentUserId})=> {
+const ContactList :React.FC<ContactListProps>= ({userList,setCurrentUserId,setChat,setViewNewContact})=> {
 
   const [NoneUser,setNoneUser]=useState(false)
   const [hover, setHover] = useState(false);  
@@ -27,7 +29,7 @@ const ContactList :React.FC<ContactListProps>= ({userList,setCurrentUserId})=> {
         <div>
         
         <div className="px-2">
-        { userList.map((user) => <ContactItem key={user.id} user={user}  setCurrentUserId={setCurrentUserId}/>)}
+        { userList.map((user) => <ContactItem key={user.id} setViewNewContact={setViewNewContact} user={user} setChat={setChat} setCurrentUserId={setCurrentUserId}/>)}
         {NoneUser&&
         <div
         onMouseEnter={() => setHover(true)}

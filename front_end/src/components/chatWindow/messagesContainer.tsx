@@ -19,7 +19,7 @@ const MessagesContainer:React.FC<MessagesContainerProps>=({currentUserId})=> {
     setMessages(messageList)
     }
     fetchMessageList()
- },[])
+ },[currentUserId])
 
  useEffect(()=>{
  MesagesRef.current?.lastElementChild?.scrollIntoView()
@@ -31,7 +31,7 @@ const MessagesContainer:React.FC<MessagesContainerProps>=({currentUserId})=> {
         className="h-full w-full bg-fixed"
         style={{ backgroundImage: `url('/background.png')` }}
       >
-        <ChatHeader />
+        <ChatHeader  currentUserId={currentUserId} />
         <div  className="h-[85%] w-full bg-[#0b141a] bg-opacity-[0.95]  pt-2 pb-4">
           <div ref={MesagesRef} className="h-full w-full overflow-y-scroll relative px-[5%]">
             {messages.map((message,index)=>(

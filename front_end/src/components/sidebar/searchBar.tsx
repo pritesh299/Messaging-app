@@ -5,7 +5,7 @@ function SearchComponent() {
 
   return (
     <>
-      <div className="w-[100%] h-[7.5%] bg-[#111b21] p-4">
+      <div className="w-[100%] h-[7.5%] bg-[#111b21] p-4 border-b-[0.5px] border-slate-700">
         <div className="flex">
           <div className="w-[20%] py-1 rounded-l-lg bg-[#202c33] flex justify-center items-center">
             <div className={`svg-container ${focus ? 'focused' : 'unfocused'}`}>
@@ -55,16 +55,7 @@ function SearchComponent() {
           />
         </div>
       </div>
-      <div className="w-[100%] h-[7.5%] bg-[#111b21] pb-3 px-3 pt-2 border-b border-slate-700">
-        <div className="flex gap-3">
-          <button className="text-slate-200 bg-[#202c33] rounded-2xl px-3 py-1">
-            All
-          </button>
-          <button className="text-slate-200 bg-[#202c33] rounded-2xl px-3 py-1">
-            Unread
-          </button>
-        </div>
-      </div>
+     
     </>
   );
 }
