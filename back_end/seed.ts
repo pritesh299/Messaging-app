@@ -8,7 +8,7 @@ import { error } from 'console';
 
 dotenv.config();
 // Generate dummy users
-/*
+
 const generateUsers = async (num: number) => {
   const users = [];
  
@@ -40,7 +40,7 @@ const insertDummyUsers = async () => {
     await connectDB()
 
   try {
-    const users = await generateUsers(1); // Adjust the number as needed
+    const users = await generateUsers(8); // Adjust the number as needed
    let response= await User.insertMany(users);
     console.log('Dummy users inserted',response);
     mongoose.connection.close();
@@ -50,9 +50,9 @@ const insertDummyUsers = async () => {
   }
 };
 
-insertDummyUsers() */
+insertDummyUsers() 
 
-
+/* 
 const generateMessages = async (num: number) => {
   const messages = [];
 
@@ -86,4 +86,4 @@ async function insertDummyMessages() {
   }
 
 }
-insertDummyMessages()
+insertDummyMessages() */
