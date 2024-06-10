@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getGlobal } from "../App";
+import { getGlobal } from "../../api";
 
 function ProfileHeadBar(props: any) {
 
@@ -65,19 +65,11 @@ function ProfileHeadBar(props: any) {
               </svg>
               {viewSetting ? (
                 <>
-                  <div className="w-[50%] absolute top-10 right-10 bg-[#202c33] py-3 text-white shadow-lg">
-                    <button className="w-full py-2 hover:bg-[#2a3942]">
-                      option 1
+                  <div className="w-[50%] absolute top-10 right-10 bg-[#202c33] py-3 border border-slate-500 text-white shadow-lg">
+                    <button onClick={()=>{props.setViewProfile(true)}} className="w-full py-2 hover:bg-[#2a3942]">
+                     Profile
                     </button>
-                    <button className="w-full py-2 hover:bg-[#2a3942]">
-                      option 2
-                    </button>
-                    <button className="w-full py-2 hover:bg-[#2a3942]">
-                      option 3
-                    </button>
-                    <button className="w-full py-2 hover:bg-[#2a3942]">
-                      option 4
-                    </button>
+                  
                   </div>
                 </>
               ) : (

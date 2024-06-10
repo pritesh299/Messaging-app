@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { getGlobal } from "../App";
+import { getGlobal } from "../../api";
 
 
 
-function Message({message,currentUserId}:{message:{receiverId:String,message:String},currentUserId:string}) {
+function Message({message,currentUserId}:{message:{receiverId:String,message:String,time:string},currentUserId:string}) {
 
 const [reciver,setReciver]= useState<boolean>()
 const [read,setRead]= useState(false)
@@ -70,7 +70,7 @@ const [read,setRead]= useState(false)
               <p>{message.message}</p>
               </div>
               <div className=" float-right flex min-w-[50px]  items-end">
-                <div className="text-[10px] flex items-end min-w-[50px]">02:30 PM</div>
+                <div className="text-[10px] flex items-end min-w-[50px]">{message.time}</div>
                 <div className="text-[10px] flex items-end min-w-[5px]">
            
                     <svg

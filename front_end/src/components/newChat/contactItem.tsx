@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getGlobal } from "../App";
+import { getGlobal }  from "../../api";
 import { addContact } from "../../api";
 
 interface ContactItemProp {
@@ -19,11 +19,11 @@ interface ContactItemProp {
 const ContactItem: React.FC<ContactItemProp> = ({ user,setCurrentUserId,setChat,setViewNewContact}) => {
   const [hover, setHover] = useState(false);
 
-   function clickHandler()
+   async function clickHandler()
    {
  
     setCurrentUserId(user._id) 
-    addContact(user,getGlobal("id"))
+    console.log(await addContact(user,getGlobal("id")))
     setChat(true)
     setViewNewContact(false) 
    }

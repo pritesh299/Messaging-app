@@ -11,7 +11,7 @@ router.get("/getContacts/:id", getContacts);
 
 router.get("/getMessages/:id1/:id2", getMessages);
 
-router.get("/getUsers/:Keyword", getUsers);
+router.post("/getusers", getUsers);
 router.get("/:id", getUser);
 router.post("/login", TokenAuth, LoginUser);
 

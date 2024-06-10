@@ -4,6 +4,7 @@ import route from "./routes/routes.js"
 import cors from "cors";
 import connectDB from './config/db.js';
 
+
 const app = express();
 const PORT:Number=3000;
 const corsOption = {

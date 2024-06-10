@@ -29,7 +29,7 @@ const ContactList :React.FC<ContactListProps>= ({userList,setCurrentUserId,setCh
         <div>
         
         <div className="px-2">
-        { userList.map((user) => <ContactItem key={user.id} setViewNewContact={setViewNewContact} user={user} setChat={setChat} setCurrentUserId={setCurrentUserId}/>)}
+        { userList && userList.map((user) => <ContactItem key={user.id} setViewNewContact={setViewNewContact} user={user} setChat={setChat} setCurrentUserId={setCurrentUserId}/>)}
         {NoneUser&&
         <div
         onMouseEnter={() => setHover(true)}

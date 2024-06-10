@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Card from "./card";
 import { getContacts, getUser } from "../../api";
-import { getGlobal } from "../App";
+import { getGlobal } from "../../api";
 
 interface RenderCardsProps{
   setCurrentUserId: React.Dispatch<React.SetStateAction<string>>;
   setChat:React.Dispatch<React.SetStateAction<boolean>>;
+  messages: never[]
 }
 
  
- const RenderCards:React.FC<RenderCardsProps>=({setChat,setCurrentUserId})=> {
+ const RenderCards:React.FC<RenderCardsProps>=({messages,setChat,setCurrentUserId})=> {
   const [chatList, setChatList] = useState<string[]>([]);
 
   
@@ -33,7 +34,7 @@ interface RenderCardsProps{
 
   return (
     <div className="overflow-y-scroll w-[100%] h-[85%] bg-[#111b21] shadow-lg p-1">
-      {chatList.map((id, index) => (
+      {chatList&&chatList.map((id,index) => (
       <>
       { }
         <Card
@@ -41,6 +42,7 @@ interface RenderCardsProps{
           userId={id}
           setCurrentUserId={setCurrentUserId}
           setChat={setChat}
+          messages={messages}
         />
         </>
       ))}

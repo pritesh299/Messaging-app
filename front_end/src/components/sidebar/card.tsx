@@ -1,31 +1,36 @@
 import React, { useEffect, useState } from "react";
 import { addMessage, getMessages, getUser } from "../../api";
-import { getGlobal } from "../App";
+import { getGlobal } from "../../api";
 
 interface CardProps {
    userId:string;
+ 
   setCurrentUserId: React.Dispatch<React.SetStateAction<string>>;
   setChat:React.Dispatch<React.SetStateAction<boolean>>;
+  messages: never[]
 }
 
-const Card: React.FC<CardProps> = ({userId,setCurrentUserId,setChat}) => {
+const Card: React.FC<CardProps> = ({messages,userId,setCurrentUserId,setChat}) => {
   const [hover, setHover] = useState(false);
   const [user,setUser]=  useState<{id:string,userName:String,LastMessgae:string,TimeStamp:string,Avatar:string}>()
 
-  useEffect(  ()=>{
-     async function fetchUser(){
+
+  useEffect(()=>{
+     async function fetchData(){
       let userData  = await getUser(userId)
-      
+      let messaegList=await getMessages(userData._id,getGlobal("id"))
+    
+   
       setUser({
         id:userData._id,
         userName:userData.username,
-        LastMessgae:"Last message",
-        TimeStamp:"2:30",
+        LastMessgae:messaegList[messaegList.length-1].message,
+        TimeStamp:messaegList[messaegList.length-1].time,
         Avatar:userData.avatar
       })
      }
-     fetchUser()
-  },[])
+     fetchData()
+  },[messages])
 
   return (
     <>
@@ -44,7 +49,7 @@ const Card: React.FC<CardProps> = ({userId,setCurrentUserId,setChat}) => {
         <div className="w-[80%] border-b py-3 border-slate-700 flex">
           <div className="text-left w-[80%]">
             <p>{ user?.userName || "John Doe"}</p>
-            <p className="text-slate-400 text-sm"> { user?.LastMessgae}</p>
+            <p className="text-slate-400 text-sm"> {user?.LastMessgae}</p>
           </div>
           <div className="w-[20%] flex flex-col items-center">
             <div className="w-[100%] flex justify-center text-[12px]">{user?.TimeStamp}</div>

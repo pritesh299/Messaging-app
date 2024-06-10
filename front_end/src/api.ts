@@ -1,18 +1,45 @@
 import axios from "axios"
 
 let serverURL="http://localhost:3000/"
-console.log(serverURL)
+
+
+let _obj:any={}
+
+
+export const setGlobal = (obj:any) => {
+    Object.assign(_obj, obj)
+}
+
+export const getGlobal = (varName:any) => {
+    if(_obj[varName] !== undefined){
+       return _obj[varName]
+    }
+    else {
+       return null
+    }
+ } 
 
 
 export async function getUsers(keyword:string){
-   
-     try {
-        const userList = await axios.get(serverURL+"getUsers/"+keyword)
-        return userList.data.userList
-    } catch (error:any) {
-        console.error('Error:', error.message);
-    }
+  const config = {
+    method : "post",
+    url : serverURL+ "getusers",
+    xsrfCookieName: 'csrftoken',
+        xsrfHeaderName: 'X-CSRFToken',
+        headers: {'X-Requested-With': 'XMLHttpRequest',
+                  'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
+    data : {keyqord:keyword,userId:getGlobal("id")}
+}
+  
+  try {
+    const response = await axios(config)
+    console.log(response)
 
+     return response.data.userList
+  } catch (error: any) {
+    console.error('Error:', error.message);
+    return null;
+  }
 }
   
   export async function getContacts(id1: string) {
@@ -90,7 +117,7 @@ export async function registerUser(userData:object){
   } 
 }
 
-export async function LoginUser(userCredentails:object) {
+export async function LoginUser(userCredentails:object,token?:string) {
   
   const config = {
     method : "post",
@@ -99,7 +126,7 @@ export async function LoginUser(userCredentails:object) {
         xsrfHeaderName: 'X-CSRFToken',
         headers: {'X-Requested-With': 'XMLHttpRequest',
                   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-    data : userCredentails
+    data : {userData:userCredentails,token:token||""}
 }
   
   try {

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { registerUser } from '../../api';
-import { setGlobal } from '../App';
+import { setGlobal } from "../../api";
+import CircularProgress from '@mui/material/CircularProgress';
 
 
 interface AuthenticateProps {
@@ -10,6 +11,7 @@ interface AuthenticateProps {
 
 const RegisterPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) => {
   const[emailError,setEmailError]= useState(false)
+  const [loading,setLoading]=useState(true)
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -31,6 +33,7 @@ const RegisterPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) =>
 
    const handleSubmit = async (e:any) => {
     e.preventDefault();
+    setLoading(true)
      let response= await registerUser(formData)
     
       if (response.status===200){
@@ -45,14 +48,18 @@ const RegisterPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) =>
           avatar:response.data.user.avatar 
         }) 
           setEmailError(false)
+          console.log(response)
+          localStorage.setItem("JWTtoken",response.data.token)
           setAuthenticate(true)
-
          }
   };
 
-  return (
+  return (<>
 
-  <div className="w-full max-w-md p-4 space-y-6 bg-[#202c33]  rounded shadow-md">
+   
+      {loading
+      ? <CircularProgress color="success" />
+      : <div className="w-full max-w-md p-4 space-y-6 bg-[#202c33]  rounded shadow-md">
     <h2 className="text-2xl font-bold text-center text-[#128C7E]">Register user </h2>
     <form onSubmit={handleSubmit} className="space-y-6  text-white">
       <div>
@@ -119,9 +126,10 @@ const RegisterPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) =>
     <div className='text-white'>
       Already a User? <button className='text-[#25D366]' onClick={()=>{setLogin(true)}}>Login</button>
     </div>
-  </div>
+  </div>}
+   
 
-
+  </>
   );
 };
 
