@@ -11,18 +11,17 @@ import User from '../models/user.js';
 import { error } from 'console';
 export function getUsers(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const searchKeyword = req.params.Keyword;
-        const currentUserId = req.params.userId;
+        const searchKeyword = req.body.Keyword;
+        const userId = req.body.userId;
         try {
-            const user = yield User.findOne({ _id: currentUserId });
+            const user = yield User.findOne({ _id: userId });
             const contactList = user === null || user === void 0 ? void 0 : user.contactList;
             const userList = yield User.find({
                 $and: [
                     { email: { $regex: new RegExp(searchKeyword, 'i') } },
-                    { contactList: { $nin: contactList } }
+                    { _id: { $nin: contactList } }
                 ]
             });
-            console.log(user, req.params);
             res.json({ userList });
         }
         catch (error) {

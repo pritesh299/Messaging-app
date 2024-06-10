@@ -4,20 +4,20 @@ import { error } from 'console';
 
 export async function getUsers(req: Request, res: Response) {
 
-    const searchKeyword = req.params.Keyword;
-    const currentUserId=req.params.userId
-
+    const searchKeyword = req.body.Keyword;
+    const userId=req.body.userId
+  
     try {
-        const user= await User.findOne({_id:currentUserId})
+        const user= await User.findOne({_id:userId})
         const contactList=user?.contactList
        
         const userList = await User.find( {
             $and: [
               { email:{$regex: new RegExp(searchKeyword, 'i')} },
-              { contactList: { $nin: contactList } }
+              { _id: { $nin: contactList } }
             ]
           });
-          console.log(user,req.params)
+   
         res.json({ userList });
     } catch (error) {
         console.error(error);
