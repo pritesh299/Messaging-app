@@ -11,7 +11,7 @@ interface AuthenticateProps {
 
 const RegisterPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) => {
   const[emailError,setEmailError]= useState(false)
-  const [loading,setLoading]=useState(true)
+  const [loading,setLoading]=useState(false)
   const [formData, setFormData] = useState({
     username: '',
     email: '',
@@ -51,6 +51,8 @@ const RegisterPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) =>
           console.log(response)
           localStorage.setItem("JWTtoken",response.data.token)
           setAuthenticate(true)
+         setLoading(false)
+
          }
   };
 

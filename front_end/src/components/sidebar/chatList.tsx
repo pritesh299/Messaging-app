@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Card from "./card";
-import { getContacts, getUser } from "../../api";
+import { getContacts } from "../../api";
 import { getGlobal } from "../../api";
 
 interface RenderCardsProps{
@@ -30,7 +30,7 @@ interface RenderCardsProps{
     fetchChatList();
   }, []);
 
-  
+
 
   return (
     <div className="overflow-y-scroll w-[100%] h-[85%] bg-[#111b21] shadow-lg p-1">

@@ -5,18 +5,21 @@ import NewChat from './newChat/newChat';
 import Authenticate from './authenticate/authenticate';
 
 
+
 function App() {
     const [viewNewContact, setViewNewContact] = useState(false);
     const [authenticate, setAuthenticate] = useState(false)
     const [currentUserId,setCurrentUserId]=useState("")
     const [messages,setMessages]=useState< [{receiverId: String; message: String; }]>()
     const [chat,setChat]=useState(false)
-
  
+    
+
     return (
         <>
         
             {authenticate ? (
+               <>
                 <div className='flex flex-row fixed w-[98vw] justify-center h-[98vh] overflow-hidden'>
                     <div className='w-[30%] min-w-[375px] h-[100%] relative'>
                         {viewNewContact ? (
@@ -42,6 +45,7 @@ function App() {
                        
                     </div>
                 </div>
+               </> 
             ) : (
                 <>
                     <Authenticate  authenticate={authenticate} setAuthenticate={setAuthenticate} />

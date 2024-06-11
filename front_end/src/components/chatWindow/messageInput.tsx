@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getGlobal } from "../../api";
+import { getGlobal, socket } from "../../api";
 import { addMessage } from "../../api";
 
 
@@ -51,6 +51,9 @@ function MessageInput({currentUserId,messages,setMessages,message, setMessage,se
   const [post, setPost] = useState({ senderId: "" });
 
   async function sendMessage() {
+    if(message!==""){
+    const data={receiverId:currentUserId,message:message}
+    socket.emit("sendMessage",data)
     const newPost = {
       senderId: getGlobal("id"),
       receiverId: currentUserId,
@@ -61,10 +64,22 @@ function MessageInput({currentUserId,messages,setMessages,message, setMessage,se
     };
     setPost(newPost);
     const response:{data:{message:object}} = await addMessage(newPost) || {data:{message:{}}}
-    console.log("message sent ",response.data.message,messages)
-   setMessages([...messages,response.data.message]) 
+    setMessages([...messages,response.data.message]) 
   }
- 
+  }
+
+socket.on("getMessage",(data)=>{
+    const recivedMessaged:object = {
+      senderId: currentUserId,
+      receiverId:getGlobal("id") ,
+      message: data.message,
+      seen: false,
+      time: getTime(),
+      date: getDate(),
+    };
+    messages&&setMessages([...messages,recivedMessaged]) 
+  }) 
+
 useEffect(()=>{
     setMessage("")
     setFocus(false)

@@ -15,14 +15,16 @@ export function getUsers(req, res) {
         const userId = req.body.userId;
         try {
             const user = yield User.findOne({ _id: userId });
-            const contactList = user === null || user === void 0 ? void 0 : user.contactList;
-            const userList = yield User.find({
-                $and: [
-                    { email: { $regex: new RegExp(searchKeyword, 'i') } },
-                    { _id: { $nin: contactList } }
-                ]
-            });
-            res.json({ userList });
+            if (user) {
+                const contactList = user.contactList;
+                const userList = yield User.find({
+                    $and: [
+                        { email: { $regex: new RegExp(searchKeyword, 'i') } },
+                        { _id: { $nin: [...contactList, userId] } }
+                    ]
+                });
+                res.json({ userList });
+            }
         }
         catch (error) {
             console.error(error);
@@ -60,10 +62,15 @@ export function addContact(req, res) {
         let userId = req.body.userId;
         let contact = req.body.ContactData;
         try {
-            const user = yield User.findOne({ _id: userId });
+            const user1 = yield User.findOne({ _id: userId });
+            const user2 = yield User.findOne({ _id: contact._id });
             console.log(contact);
-            if (user) {
-                let response = yield user.updateOne({ contactList: [...user.contactList, contact] });
+            if (user1) {
+                let response = yield user1.updateOne({ contactList: [...user1.contactList, contact] });
+                return res.json(response);
+            }
+            if (user2) {
+                let response = yield user2.updateOne({ contactList: [...user2.contactList, contact] });
                 return res.json(response);
             }
             res.json({ msg: "user not found" });

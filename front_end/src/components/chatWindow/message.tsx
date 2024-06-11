@@ -54,7 +54,7 @@ const [read,setRead]= useState(false)
          <p>{message.message}</p>
        </div>
      </div>
-     <div className=" float-right text-[10px] flex items-end min-w-[50px] m-1">02:30 PM</div>
+     <div className=" float-right text-[10px] flex items-end min-w-[50px] m-1">{message.time}</div>
      
    </div>
   

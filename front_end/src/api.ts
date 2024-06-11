@@ -1,7 +1,8 @@
 import axios from "axios"
-
+import { io } from "socket.io-client";
 let serverURL="http://localhost:3000/"
 
+export const socket=io(serverURL)
 
 let _obj:any={}
 
@@ -134,7 +135,7 @@ export async function LoginUser(userCredentails:object,token?:string) {
      const response = await axios(config)
      return response.data  
   } catch (error: any) {
-    console.log(error.response.data.code)
+ 
     return error.response.data;
   } 
 

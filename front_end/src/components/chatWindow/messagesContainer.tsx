@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import ChatHeader from "./chatHeader";
 import MessageInput from "./messageInput";
 import Message from "./message";
-import { getMessages } from "../../api";
+import { getMessages, socket } from "../../api";
 import { getGlobal } from "../../api";
 import EmojiTray from "./emojiTray";
 
@@ -32,8 +32,9 @@ const MessagesContainer:React.FC<MessagesContainerProps>=({messages,setMessages,
  },[currentUserId])
 
  useEffect(()=>{
- MesagesRef.current?.lastElementChild?.scrollIntoView()
+  MesagesRef.current?.lastElementChild?.scrollIntoView()
  },[messages])
+
 
   return (
     <div className="h-[100%]">

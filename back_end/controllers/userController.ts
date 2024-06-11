@@ -9,16 +9,17 @@ export async function getUsers(req: Request, res: Response) {
   
     try {
         const user= await User.findOne({_id:userId})
-        const contactList=user?.contactList
+        if(user){
+        const contactList=user.contactList
        
         const userList = await User.find( {
             $and: [
               { email:{$regex: new RegExp(searchKeyword, 'i')} },
-              { _id: { $nin: contactList } }
+              { _id: { $nin: [...contactList,userId] } }
             ]
           });
    
-        res.json({ userList });
+        res.json({ userList });}
     } catch (error) {
         console.error(error);
         res.status(500).json({ msg: 'Internal server error' });
@@ -54,13 +55,21 @@ export async function addContact(req:Request,res:Response){
     let contact=req.body.ContactData
   
 try{
-  const user=await User.findOne({_id:userId})
+  const user1=await User.findOne({_id:userId})
+  const user2=await User.findOne({_id:contact._id})
   console.log(contact)
-  if(user){
-      let response= await user.updateOne({contactList:[...user.contactList,contact]})
+  if(user1){
+      let response= await user1.updateOne({contactList:[...user1.contactList,contact]})
     
       return res.json(response)
     } 
+    if(user2){
+      let response= await user2.updateOne({contactList:[...user2.contactList,contact]})
+    
+      return res.json(response)
+    } 
+
+
     res.json({msg:"user not found"})
  }catch(errror){
    console.log(error)
