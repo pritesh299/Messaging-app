@@ -21,7 +21,6 @@ const ContactItem: React.FC<ContactItemProp> = ({ user,setCurrentUserId,setChat,
 
    async function clickHandler()
    {
- 
     setCurrentUserId(user._id) 
     console.log(await addContact(user,getGlobal("id")))
     setChat(true)

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Card from "./card";
-import { getContacts } from "../../api";
+import { getContacts, getUser } from "../../api";
 import { getGlobal } from "../../api";
 
 interface RenderCardsProps{
@@ -26,17 +26,18 @@ interface RenderCardsProps{
       } catch (err) {
         console.log(err);
       }
+
     }
-    fetchChatList();
+    fetchChatList()
+    setInterval(fetchChatList,1000)
   }, []);
+ 
 
-
-
+   
   return (
     <div className="overflow-y-scroll w-[100%] h-[85%] bg-[#111b21] shadow-lg p-1">
-      {chatList&&chatList.map((id,index) => (
+      {chatList&&chatList.map((id) => (
       <>
-      { }
         <Card
           key={id}
           userId={id}

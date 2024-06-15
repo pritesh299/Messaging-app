@@ -18,13 +18,12 @@ const RegisterPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) =>
     password: '',
     avatar:'',
   });
-
      
   const handleChange = (e:any) => {
     setEmailError(false)
 
     const { name, value } = e.target;
-  
+    
      setFormData({
       ...formData,
       [name]: value

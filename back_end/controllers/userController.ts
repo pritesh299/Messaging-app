@@ -58,17 +58,12 @@ try{
   const user1=await User.findOne({_id:userId})
   const user2=await User.findOne({_id:contact._id})
   console.log(contact)
-  if(user1){
-      let response= await user1.updateOne({contactList:[...user1.contactList,contact]})
-    
-      return res.json(response)
-    } 
-    if(user2){
-      let response= await user2.updateOne({contactList:[...user2.contactList,contact]})
-    
-      return res.json(response)
-    } 
+  if(user1 && user2){
+      let response1= await user1.updateOne({contactList:[...user1.contactList,contact]})
+       let response2= await user2.updateOne({contactList:[...user2.contactList,user1]})
+      return res.json([response1,response2])
 
+    } 
 
     res.json({msg:"user not found"})
  }catch(errror){

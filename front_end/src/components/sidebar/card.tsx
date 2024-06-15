@@ -13,24 +13,33 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({messages,userId,setCurrentUserId,setChat}) => {
   const [hover, setHover] = useState(false);
   const [user,setUser]=  useState<{id:string,userName:String,LastMessgae:string,TimeStamp:string,Avatar:string}>()
-
-
+  
   useEffect(()=>{
      async function fetchData(){
       let userData  = await getUser(userId)
       let messaegList=await getMessages(userData._id,getGlobal("id"))
-    
-   
-      setUser({
+      let LastMessgae=messaegList[messaegList.length-1]
+      console.log(LastMessgae)
+      userData&&setUser({
         id:userData._id,
         userName:userData.username,
-        LastMessgae:messaegList[messaegList.length-1].message,
-        TimeStamp:messaegList[messaegList.length-1].time,
+        LastMessgae:LastMessgae?LastMessgae.message:"      ",
+        TimeStamp:LastMessgae?LastMessgae.time:"  ",
         Avatar:userData.avatar
       })
      }
      fetchData()
   },[messages])
+
+  function reduceMessage(msg:string |undefined){
+     if(msg){
+        if(msg.length>25){
+          msg=msg.substring(0,25)
+          msg=msg+"..."
+        }
+     }
+     return msg
+  }
 
   return (
     <>
@@ -49,7 +58,7 @@ const Card: React.FC<CardProps> = ({messages,userId,setCurrentUserId,setChat}) =
         <div className="w-[80%] border-b py-3 border-slate-700 flex">
           <div className="text-left w-[80%]">
             <p>{ user?.userName || "John Doe"}</p>
-            <p className="text-slate-400 text-sm"> {user?.LastMessgae}</p>
+            <p className="text-slate-400 text-sm"> {reduceMessage(user?.LastMessgae)}</p>
           </div>
           <div className="w-[20%] flex flex-col items-center">
             <div className="w-[100%] flex justify-center text-[12px]">{user?.TimeStamp}</div>

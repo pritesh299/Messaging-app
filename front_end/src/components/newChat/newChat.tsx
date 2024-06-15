@@ -3,8 +3,6 @@ import ContactList from "./contactList";
 import SearchComponent from "./seacrhContact";
 import { getUsers } from "../../api";
 
-
-
 interface NewChatProps{
   viewNewContact: boolean;
   setViewNewContact: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,7 +23,7 @@ const NewChat:React.FC<NewChatProps>=({viewNewContact,setViewNewContact,setCurre
           setUserList([...data]);
 
       } catch (error) {
-
+        
         setUserList([])
         console.error("Error fetching users:", error);
 
