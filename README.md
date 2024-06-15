@@ -1,6 +1,6 @@
 # WhatsApp Clone
 
-A WhatsApp clone, with basic messgaing app features.
+A WhatsApp clone, with basic messaging  app features.
 
 ## Table of Contents
 
