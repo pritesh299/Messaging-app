@@ -1,8 +1,6 @@
 # WhatsApp Clone
 
-![WhatsApp Clone](path_to_screenshot.png)
-
-A WhatsApp clone, has basic messgaing app features
+A WhatsApp clone, with basic messgaing app features.
 
 ## Table of Contents
 
@@ -11,9 +9,7 @@ A WhatsApp clone, has basic messgaing app features
 - [Installation](#installation)
 - [Usage](#usage)
 - [Technologies Used](#technologies-used)
-- [Contributing](#contributing)
 - [License](#license)
-- [Contact](#contact)
 
 ## Features
 
@@ -23,7 +19,7 @@ A WhatsApp clone, has basic messgaing app features
 
 ## Demo
 
-Check out a live demo of the project [here](link_to_demo).
+Check out a live demo of the project [here](https://www.canva.com/design/DAGIOYxASGQ/F8-qldWKdXSyuP6pT-AIjQ/watch?utm_content=DAGIOYxASGQ&utm_campaign=designshare&utm_medium=link&utm_source=editor).
 
 ## Installation
 
