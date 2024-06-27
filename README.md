@@ -19,7 +19,7 @@ A WhatsApp clone, with basic messaging  app features.
 
 ## Demo
 
-Check out a live demo of the project [here](https://www.canva.com/design/DAGIOYxASGQ/F8-qldWKdXSyuP6pT-AIjQ/watch?utm_content=DAGIOYxASGQ&utm_campaign=designshare&utm_medium=link&utm_source=editor).
+Check out a live demo of the project [here](https://youtu.be/wEudtHxDDOU).
 
 ## Installation
 
