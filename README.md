@@ -17,6 +17,10 @@ A WhatsApp clone, with basic messaging  app features.
 - **Profile Management:** Update profile picture, status, and more.
 - **Secure Authentication:** User authentication with JWT.
 
+## Upcoming Features
+- **Calling and video calling:** call any of your contacts through this app.
+- **End to End Encrypted messages:** message are encrypted to protect user privacy.
+- **Oauth/Google account integration:** access you accoutn directly uisng google email.
 ## Demo
 
 Check out a live demo of the project [here](https://youtu.be/wEudtHxDDOU).
