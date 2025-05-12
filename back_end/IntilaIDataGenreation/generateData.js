@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import Message from "../models/message.js";
+import Message from "../models/Message.js";
 import User from "../models/user.js";
 function getTime() {
     const date = new Date();

@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Message from "../models/message.js";
+import Message from "../models/Message.js";
 
 
 

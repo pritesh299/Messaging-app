@@ -21,4 +21,15 @@ const connectDB = () => __awaiter(void 0, void 0, void 0, function* () {
         process.exit(1);
     }
 });
+const connectPostgressDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const conn = yield mongoose.connect(process.env.MONGO_URI);
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+        return conn.connection;
+    }
+    catch (error) {
+        console.error(`Error: ${error.message}`);
+        process.exit(1);
+    }
+});
 export default connectDB;

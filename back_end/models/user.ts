@@ -16,7 +16,7 @@ const UserSchema: Schema<User> = new mongoose.Schema({
     password: { type: String, required: true },
     avatar: { type: String },
     contactList:[{type:mongoose.Schema.ObjectId,ref:'User',
-  
+
     }]
 }, { timestamps: true });
 
