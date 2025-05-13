@@ -13,11 +13,8 @@ function App() {
     const [messages,setMessages]=useState< [{receiverId: String; message: String; }]>()
     const [chat,setChat]=useState(false)
  
-    
-
     return (
         <>
-        
             {authenticate ? (
                <>
                 <div className='flex flex-row fixed w-[98vw] justify-center h-[98vh] overflow-hidden'>
@@ -51,7 +48,6 @@ function App() {
                     <Authenticate  authenticate={authenticate} setAuthenticate={setAuthenticate} />
                 </>
             )}
-      {/*         <EmojiTray /> */}
         </>
     );
 }

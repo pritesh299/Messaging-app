@@ -17,11 +17,8 @@ function RegisterUser(req, res) {
             return res.send(403);
         }
         try {
-            let exist = yield prisma.user.findUnique({ where: {
-                    name: username,
-                    email: email
-                } });
-            if (exist) {
+            const existingUser = yield prisma.user.findUnique({ where: { email: email } });
+            if (existingUser) {
                 return res.status(200).json({ msg: "User already exists" });
             }
             const user = yield prisma.user.create({
@@ -42,21 +39,20 @@ function RegisterUser(req, res) {
 }
 function LoginUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { username, email, password, avatar } = req.body;
+        const { email, password } = req.body;
         const secert = process.env.JWT_SECRET || "";
+        console.log(email, password);
         try {
-            const user = yield prisma.user.findUnique({ where: {
-                    name: username,
-                    email: email
-                } });
+            const user = yield prisma.user.findUnique({ where: { email: email } });
             if (!user) {
-                return res.status(400).json({ code: 1 });
+                console.log(user);
+                return res.status(400).json({ msg: "user does not exist", code: 1 });
             }
             const passwordMatched = (user.password === password ? true : false);
             if (!passwordMatched) {
                 return res.status(400).json({ code: 2 });
             }
-            return res.status(200).json({ msg: 'Login successful', code: 4, user: user });
+            return res.status(200).json({ msg: 'Login successful', code: 3, user: user });
             // if(req.body.tokenAuthenticated){
             //     res.status(200).json({ msg: 'Login successful',code:4,user:user});
             // }else{
@@ -68,7 +64,7 @@ function LoginUser(req, res) {
             // }
         }
         catch (error) {
-            res.status(500).json({ msg: "Internal server error" });
+            res.status(500).json({ msg: "Internal server error", error: error });
         }
     });
 }

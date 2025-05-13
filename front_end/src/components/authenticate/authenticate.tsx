@@ -10,7 +10,6 @@ interface AuthenticateProps {
 
 const Authenticate:React.FC<AuthenticateProps>=({authenticate ,setAuthenticate})=>{
     const [login,setLogin]= useState(true)
-  
 
     return(<>
  

@@ -10,12 +10,9 @@ async function RegisterUser(req: Request, res: Response) {
 
 
     try {
-        let exist = await prisma.user.findUnique(
-            { where:{
-                name: username, 
-                email:email 
-            }});
-        if (exist) {
+        const existingUser = await prisma.user.findUnique({where:{email:email}})
+
+        if (existingUser) {
             return res.status(200).json({ msg: "User already exists" });
         }
 
@@ -37,23 +34,20 @@ async function RegisterUser(req: Request, res: Response) {
 }
 
 async function LoginUser(req: Request, res: Response) {
-    const { username, email, password, avatar } = req.body;
+    const { email, password} = req.body;
     const secert:string =  process.env.JWT_SECRET || ""
-
+    console.log(email,password)
     try {
-        const user = await prisma.user.findUnique(
-            { where:{
-                name: username, 
-                email:email 
-            }});
+        const user = await prisma.user.findUnique({where:{email:email}})
         if (!user) {
-            return res.status(400).json({code:1});
+            console.log(user);
+            return res.status(400).json({msg:"user does not exist",code:1});
         }
         const passwordMatched = (user.password === password ? true: false)
         if (!passwordMatched) {
             return res.status(400).json({code:2});
         }
-        return res.status(200).json({ msg: 'Login successful',code:4,user:user});
+        return res.status(200).json({ msg: 'Login successful',code:3,user:user});
     // if(req.body.tokenAuthenticated){
     //     res.status(200).json({ msg: 'Login successful',code:4,user:user});
     // }else{
@@ -64,7 +58,7 @@ async function LoginUser(req: Request, res: Response) {
     //    });
     // }
     } catch (error) {
-        res.status(500).json({ msg: "Internal server error" });
+        res.status(500).json({ msg: "Internal server error" ,error:error});
     }
 }
 

@@ -48,7 +48,7 @@ const RegisterPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) =>
         }) 
           setEmailError(false)
           console.log(response)
-          localStorage.setItem("JWTtoken",response.data.token)
+          // localStorage.setItem("JWTtoken",response.data.token)
           setAuthenticate(true)
          setLoading(false)
 

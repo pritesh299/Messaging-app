@@ -97,48 +97,37 @@ export async function addMessage( data:object ) {
 }
 
 
-export async function registerUser(userData:object){
+export async function registerUser(userCredentails:object){
 
-  const config = {
-    method : "post",
-    url : serverURL+ "register",
-    xsrfCookieName: 'csrftoken',
-        xsrfHeaderName: 'X-CSRFToken',
-        headers: {'X-Requested-With': 'XMLHttpRequest',
-                  'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-    data : userData
-}
-  
-  try {
-    const response = await axios(config)
-     return response
-  } catch (error: any) {
-    console.error('Error:', error.message);
+  try{
+    const response = await axios.post(serverURL+ "users/register", userCredentails, 
+      {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+  })
+  return response;
+  }
+  catch(error){
+    console.log(error);
     return error;
-  } 
+  }
 }
 
 export async function LoginUser(userCredentails:object,token?:string) {
-  
-  const config = {
-    method : "post",
-    url : serverURL+ "login",
-    xsrfCookieName: 'csrftoken',
-        xsrfHeaderName: 'X-CSRFToken',
-        headers: {'X-Requested-With': 'XMLHttpRequest',
-                  'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-    data : {userData:userCredentails,token:token||""}
-}
-  
-  try {
-   
-     const response = await axios(config)
-     return response.data  
-  } catch (error: any) {
- 
-    return error.response.data;
-  } 
-
+    try{
+      const response = await axios.post(serverURL+ "users/login", userCredentails, 
+        {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    })
+    return response.data;
+    }
+    catch(error){
+      console.log(error);
+      return error.response.data;
+    }
 }
 
 export async function addContact(ContactData:object,userId:string) {
