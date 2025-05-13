@@ -1,72 +1,63 @@
 import { Request, Response } from 'express';
-import User from '../models/user.js';
+import { prisma }from '../server.js'
 import { error } from 'console';
 
-export async function getUsers(req: Request, res: Response) {
+export async function getUser(req:Request,res:Response){
+    const userId = parseInt(req.params.id)
 
-    const searchKeyword = req.body.Keyword;
-    const userId=req.body.userId
-  
-    try {
-        const user= await User.findOne({_id:userId})
-        if(user){
-        const contactList=user.contactList
-       
-        const userList = await User.find( {
-            $and: [
-              { email:{$regex: new RegExp(searchKeyword, 'i')} },
-              { _id: { $nin: [...contactList,userId] } }
-            ]
-          });
-   
-        res.json({ userList });}
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: 'Internal server error' });
+    try{
+      const user = await prisma.user.findUnique({where:{id:userId}})
+      if(!user){
+        res.status(404).json({msg:"User not found"})
+      }
+      res.json(user)
+    }catch(errror){
+      console.log(error)
     }
 }
 
-export async function getContacts(req:Request,res:Response){
-    const userId =req.params.id
-   try{
-    const contactList=(await User.findOne({_id:userId}))?.contactList
-    res.json(contactList)
-   }catch(errror){
+export async function updateUser(req:Request,res:Response){
+  const userId = parseInt(req.params.id)
+  const username = (req.body.username? req.body.username : null) 
+  const email = (req.body.email? req.body.email : null) 
+  const password = (req.body.password? req.body.password : null) 
+  const avatar = (req.body.avatar? req.body.avatar : null) 
 
-console.log(error)
-   }
+  try {
+      let exist = await prisma.user.findUnique({where:{id:userId}});
+      if (!exist) {
+          return res.status(404).json({ msg: "User doesn't exists" });
+      }
+
+      const updateUser = await prisma.user.update({
+        where: {
+          id: userId,
+        },
+        data: {
+          name: (username? username: exist.name),
+          email: (email? email: exist.email),
+          password: (password? password: exist.password),
+          avatar: (avatar? avatar: exist.avatar),
+          updatedAt: new Date(),
+        },
+      });
+
+    return res.status(200).json({ msg: "user updated successfully",user:updateUser});
+
+  } catch (error:any) {
+      console.error(error);
+      res.status(500).json({msg:"Internal server error",error:error});
+  }
 }
 
-
-export async function getUser(req:Request,res:Response){
-  const userId =req.params.id
- try{
-  const user=await User.findOne({_id:userId})
-   res.json(user)
- }catch(errror){
-
-console.log(error)
- }
+export async function deleteUser(req:Request,res:Response){
+  const  userId = parseInt(req.body.userId)
+  try{
+    const resposne = await prisma.user.delete({where:{id:userId}})
+    return res.status(202).json({msg:"User is deleted successfully"})
+  }catch(error){
+    console.error(error);
+    res.status(500).json({msg:"Internal server error",error:error});
+  }
 }
 
-export async function addContact(req:Request,res:Response){
- 
-    let userId=req.body.userId
-    let contact=req.body.ContactData
-  
-try{
-  const user1=await User.findOne({_id:userId})
-  const user2=await User.findOne({_id:contact._id})
-  console.log(contact)
-  if(user1 && user2){
-      let response1= await user1.updateOne({contactList:[...user1.contactList,contact]})
-       let response2= await user2.updateOne({contactList:[...user2.contactList,user1]})
-      return res.json([response1,response2])
-
-    } 
-
-    res.json({msg:"user not found"})
- }catch(errror){
-   console.log(error)
- } 
-}

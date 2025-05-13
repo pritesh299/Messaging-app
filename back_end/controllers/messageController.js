@@ -8,31 +8,43 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import Message from "../models/Message.js";
-export function newMessage(req, res) {
+import Conversation from "../models/Conversation.js";
+export function createMessage(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { senderId, receiverId, message, seen, date, time } = req.body;
+        let { conversationId, senderId, content, seen } = req.body;
+        senderId = parseInt(senderId);
+        seen = seen == 'true' ? true : false;
+        console.log(conversationId, senderId, content, seen);
         try {
-            const newMessage = new Message({ senderId, receiverId, message, seen, date, time });
-            yield newMessage.save();
-            res.status(201).json({ message: newMessage, msg: "message has been register" });
+            const conversation = yield Conversation.find({ conversationId });
+            if (!conversation) {
+                return res.status(404).json({ msg: "conversation not found" });
+            }
+            const message = new Message({
+                conversationId: conversationId,
+                senderId: senderId,
+                content: content,
+                seen: seen,
+            });
+            yield message.save();
+            res.status(201).json({ message: message, msg: "message has been registered" });
         }
         catch (error) {
             console.error(error);
-            res.status(500).json({ msg: "Internal server error" });
+            return res.status(500).json({ msg: "Internal server error" });
         }
     });
 }
 export function getMessages(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
+        const conversationId = req.params.conversationId;
         try {
-            const { id1, id2 } = req.params;
-            const messageList = yield Message.find({
-                $or: [
-                    { $and: [{ senderId: id1 }, { receiverId: id2 }] },
-                    { $and: [{ senderId: id2 }, { receiverId: id1 }] },
-                ]
-            });
-            res.json(messageList);
+            const conversation = yield Conversation.find({ conversationId });
+            if (!conversation) {
+                return res.status(404).json({ msg: "conversation not found" });
+            }
+            const messageList = yield Message.find({ conversationId: conversationId });
+            return res.status(200).json({ msg: 'obtained the message list ', messageList: messageList });
         }
         catch (error) {
             console.error(error);

@@ -7,49 +7,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import User from '../models/user.js';
+import { prisma } from '../server.js';
 import { error } from 'console';
-export function getUsers(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const searchKeyword = req.body.Keyword;
-        const userId = req.body.userId;
-        try {
-            const user = yield User.findOne({ _id: userId });
-            if (user) {
-                const contactList = user.contactList;
-                const userList = yield User.find({
-                    $and: [
-                        { email: { $regex: new RegExp(searchKeyword, 'i') } },
-                        { _id: { $nin: [...contactList, userId] } }
-                    ]
-                });
-                res.json({ userList });
-            }
-        }
-        catch (error) {
-            console.error(error);
-            res.status(500).json({ msg: 'Internal server error' });
-        }
-    });
-}
-export function getContacts(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        var _a;
-        const userId = req.params.id;
-        try {
-            const contactList = (_a = (yield User.findOne({ _id: userId }))) === null || _a === void 0 ? void 0 : _a.contactList;
-            res.json(contactList);
-        }
-        catch (errror) {
-            console.log(error);
-        }
-    });
-}
 export function getUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const userId = req.params.id;
+        const userId = parseInt(req.params.id);
         try {
-            const user = yield User.findOne({ _id: userId });
+            const user = yield prisma.user.findUnique({ where: { id: userId } });
+            if (!user) {
+                res.status(404).json({ msg: "User not found" });
+            }
             res.json(user);
         }
         catch (errror) {
@@ -57,23 +24,48 @@ export function getUser(req, res) {
         }
     });
 }
-export function addContact(req, res) {
+export function updateUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        let userId = req.body.userId;
-        let contact = req.body.ContactData;
+        const userId = parseInt(req.params.id);
+        const username = (req.body.username ? req.body.username : null);
+        const email = (req.body.email ? req.body.email : null);
+        const password = (req.body.password ? req.body.password : null);
+        const avatar = (req.body.avatar ? req.body.avatar : null);
         try {
-            const user1 = yield User.findOne({ _id: userId });
-            const user2 = yield User.findOne({ _id: contact._id });
-            console.log(contact);
-            if (user1 && user2) {
-                let response1 = yield user1.updateOne({ contactList: [...user1.contactList, contact] });
-                let response2 = yield user2.updateOne({ contactList: [...user2.contactList, user1] });
-                return res.json([response1, response2]);
+            let exist = yield prisma.user.findUnique({ where: { id: userId } });
+            if (!exist) {
+                return res.status(404).json({ msg: "User doesn't exists" });
             }
-            res.json({ msg: "user not found" });
+            const updateUser = yield prisma.user.update({
+                where: {
+                    id: userId,
+                },
+                data: {
+                    name: (username ? username : exist.name),
+                    email: (email ? email : exist.email),
+                    password: (password ? password : exist.password),
+                    avatar: (avatar ? avatar : exist.avatar),
+                    updatedAt: new Date(),
+                },
+            });
+            return res.status(200).json({ msg: "user updated successfully", user: updateUser });
         }
-        catch (errror) {
-            console.log(error);
+        catch (error) {
+            console.error(error);
+            res.status(500).json({ msg: "Internal server error", error: error });
+        }
+    });
+}
+export function deleteUser(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const userId = parseInt(req.body.userId);
+        try {
+            const resposne = yield prisma.user.delete({ where: { id: userId } });
+            return res.status(202).json({ msg: "User is deleted successfully" });
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).json({ msg: "Internal server error", error: error });
         }
     });
 }

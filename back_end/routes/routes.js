@@ -1,13 +1,16 @@
 import express from "express";
 import { LoginUser, RegisterUser } from "../controllers/authController.js";
-/* import getConversations, { newConverstion } from "../controllers/ConverstionController.js"; */
+import { getMessages, createMessage } from "../controllers/messageController.js";
+import { createConversation, getConversations } from "../controllers/conversationController.js";
+import { deleteUser, getUser, updateUser } from "../controllers/userController.js";
 const router = express.Router();
-// router.get("/getContacts/:id", getContacts);
-// router.get("/getMessages/:id1/:id2", getMessages);
-// router.post("/getusers", getUsers);
-// router.get("/:id", getUser);
-router.post("/login", LoginUser);
-router.post("/register", RegisterUser);
-// router.post("/addContact", addContact);
-// router.post("/newMessage", newMessage);
+router.get("/users/:id", getUser); // Get user by ID
+router.delete("/users/:id", deleteUser); // Delete user by ID
+router.put("/users/:id", updateUser);
+router.post("/users/login", LoginUser); // Login
+router.post("/users/register", RegisterUser); // Register
+router.post("/conversations", createConversation); // Create a new 1-on-1 conversation
+router.get("/conversations/:userId", getConversations); // Get all conversations for a user
+router.post("/messages", createMessage);
+router.get("/messages/:conversationId", getMessages);
 export default router;

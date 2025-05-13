@@ -8,7 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { prisma } from '../server.js';
-// import generateServerMessage from "../IntilaIDataGenreation/generateData.js";
 function RegisterUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { username, email, password, avatar } = req.body;
@@ -25,7 +24,6 @@ function RegisterUser(req, res) {
             if (exist) {
                 return res.status(200).json({ msg: "User already exists" });
             }
-            // console.log(username, email, password);
             const user = yield prisma.user.create({
                 data: {
                     name: username,
@@ -34,7 +32,6 @@ function RegisterUser(req, res) {
                     avatar: (avatar == "" ? null : avatar)
                 },
             });
-            // return res.status(200).json({ msg: "New user Registered" })
             return res.status(200).json({ msg: "New user Registered", user: user });
         }
         catch (error) {
@@ -47,7 +44,6 @@ function LoginUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { username, email, password, avatar } = req.body;
         const secert = process.env.JWT_SECRET || "";
-        // if(secert===""){console.log("ERROR: secert is undefiends,please check your jwt scecert ");return  res.send(403)}
         try {
             const user = yield prisma.user.findUnique({ where: {
                     name: username,
