@@ -16,17 +16,18 @@ function RegisterUser(req, res) {
             console.log("ERROR: secert is undefiends,please check your jwt scecert ");
             return res.send(403);
         }
+        console.log(username, email, password, avatar);
         try {
             const existingUser = yield prisma.user.findUnique({ where: { email: email } });
             if (existingUser) {
-                return res.status(200).json({ msg: "User already exists" });
+                return res.status(201).json({ msg: "User already exists" });
             }
             const user = yield prisma.user.create({
                 data: {
                     name: username,
                     password: password,
                     email: email,
-                    avatar: (avatar == "" ? null : avatar)
+                    avatar: (avatar == "" ? undefined : avatar)
                 },
             });
             return res.status(200).json({ msg: "New user Registered", user: user });

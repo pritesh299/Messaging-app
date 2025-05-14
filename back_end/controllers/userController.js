@@ -17,7 +17,12 @@ export function getUser(req, res) {
             if (!user) {
                 res.status(404).json({ msg: "User not found" });
             }
-            res.json(user);
+            const userData = {
+                name: user === null || user === void 0 ? void 0 : user.name,
+                id: user === null || user === void 0 ? void 0 : user.id,
+                avatar: user === null || user === void 0 ? void 0 : user.avatar
+            };
+            res.json(userData);
         }
         catch (errror) {
             console.log(error);
@@ -58,7 +63,7 @@ export function updateUser(req, res) {
 }
 export function deleteUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const userId = parseInt(req.body.userId);
+        const userId = parseInt(req.params.userId);
         try {
             const resposne = yield prisma.user.delete({ where: { id: userId } });
             return res.status(202).json({ msg: "User is deleted successfully" });

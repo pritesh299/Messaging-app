@@ -4,7 +4,6 @@ import { getGlobal } from "../../api";
 function ProfileHeadBar(props: any) {
 
   const [viewSetting, setViewSetting] = useState(false);
-
   return (
     <>
       <div className="w-[100%] h-[7.5%] bg-[#202c33] px-4 py-2">

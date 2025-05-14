@@ -7,13 +7,13 @@ async function RegisterUser(req: Request, res: Response) {
     const { username, email, password, avatar } = req.body;
     const secert:string =  process.env.JWT_SECRET || ""
     if(secert===""){console.log("ERROR: secert is undefiends,please check your jwt scecert ");return  res.send(403)}
-
+    console.log(username,email,password,avatar)
 
     try {
         const existingUser = await prisma.user.findUnique({where:{email:email}})
 
         if (existingUser) {
-            return res.status(200).json({ msg: "User already exists" });
+            return res.status(201).json({ msg: "User already exists" });
         }
 
       const user = await prisma.user.create({
@@ -21,7 +21,7 @@ async function RegisterUser(req: Request, res: Response) {
           name: username,
           password: password,
           email: email,
-          avatar:(avatar =="" ? null: avatar)
+          avatar:(avatar==""?undefined:avatar)
         },
       });
 

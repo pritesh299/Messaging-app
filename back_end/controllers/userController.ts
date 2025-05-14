@@ -10,12 +10,16 @@ export async function getUser(req:Request,res:Response){
       if(!user){
         res.status(404).json({msg:"User not found"})
       }
-      res.json(user)
+      const userData = {
+        name:user?.name,
+        id:user?.id,
+        avatar:user?.avatar
+      }
+      res.json(userData)
     }catch(errror){
       console.log(error)
     }
 }
-
 export async function updateUser(req:Request,res:Response){
   const userId = parseInt(req.params.id)
   const username = (req.body.username? req.body.username : null) 
@@ -51,7 +55,7 @@ export async function updateUser(req:Request,res:Response){
 }
 
 export async function deleteUser(req:Request,res:Response){
-  const  userId = parseInt(req.body.userId)
+  const  userId = parseInt(req.params.userId)
   try{
     const resposne = await prisma.user.delete({where:{id:userId}})
     return res.status(202).json({msg:"User is deleted successfully"})

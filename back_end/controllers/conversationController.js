@@ -19,6 +19,7 @@ export function createConversation(req, res) {
             if (!user1 || !user2) {
                 return res.status(404).json({ msg: "User not found" });
             }
+            console;
             const memberList = [userId1, userId2].sort();
             const hashKey = memberList.join("_");
             let conversation = yield Conversation.findOne({ hashKey });
@@ -50,6 +51,9 @@ export function getConversations(req, res) {
             if (conversations.length === 0) {
                 return res.status(404).json({ msg: "No conversations found" });
             }
+            conversations.forEach((conversation) => {
+                conversation.memberList = conversation.memberList.filter((id) => id !== userId);
+            });
             return res.status(200).json({ msg: "Conversations found", conversations });
         }
         catch (error) {

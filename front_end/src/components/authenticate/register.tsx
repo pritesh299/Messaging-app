@@ -13,10 +13,10 @@ const RegisterPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) =>
   const[emailError,setEmailError]= useState(false)
   const [loading,setLoading]=useState(false)
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    avatar:'',
+    username: "",
+    email: "",
+    password: "",
+    avatar:"",
   });
      
   const handleChange = (e:any) => {
@@ -33,31 +33,26 @@ const RegisterPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) =>
    const handleSubmit = async (e:any) => {
     e.preventDefault();
     setLoading(true)
-     let response= await registerUser(formData)
-    
-      if (response.status===200){
+     let response = await registerUser(formData)
+      if (response.status===201){
           setEmailError(true)
         } 
-       if(response.status===201) {
-    
-       setGlobal({
-          id:response.data.user._id,
-          username: response.data.user.username,
-          email: response.data.user.email,
-          avatar:response.data.user.avatar 
-        }) 
-          setEmailError(false)
-          console.log(response)
-          // localStorage.setItem("JWTtoken",response.data.token)
-          setAuthenticate(true)
-         setLoading(false)
-
-         }
+       if(response.status===200) {
+            setGlobal({
+              id:response.data.user.id,
+              username: response.data.user.name,
+              email: response.data.user.email,
+              avatar:response.data.user.avatar 
+            }) 
+            setEmailError(false)
+            console.log(response)
+            // localStorage.setItem("JWTtoken",response.data.token)
+            setAuthenticate(true)
+          setLoading(false)
+       }
   };
 
   return (<>
-
-   
       {loading
       ? <CircularProgress color="success" />
       : <div className="w-full max-w-md p-4 space-y-6 bg-[#202c33]  rounded shadow-md">

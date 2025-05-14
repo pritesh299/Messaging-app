@@ -52,3 +52,21 @@ export function getMessages(req, res) {
         }
     });
 }
+export function getLastMessage(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const conversationId = req.params.conversationId;
+        const userId = req.params.userId;
+        try {
+            const conversation = yield Conversation.find({ conversationId });
+            if (!conversation) {
+                return res.status(404).json({ msg: "conversation not found" });
+            }
+            const messageList = yield Message.find({ conversationId: conversationId, senderId: userId }).sort({ createdAt: -1 }).limit(1);
+            return res.status(200).json({ msg: 'obtained the last message ', lastMessage: messageList[0] });
+        }
+        catch (error) {
+            console.error(error);
+            res.status(500).json({ msg: "Internal server error" });
+        }
+    });
+}

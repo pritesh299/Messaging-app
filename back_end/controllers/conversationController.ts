@@ -13,7 +13,7 @@ export async function createConversation(req:Request,res:Response){
       if(!user1 || !user2){
         return res.status(404).json({msg:"User not found"})
       }
-  
+      console
       const memberList = [userId1,userId2].sort();
       const hashKey = memberList.join("_");
       let conversation = await Conversation.findOne({ hashKey });
@@ -40,13 +40,17 @@ export async function createConversation(req:Request,res:Response){
         return res.status(404).json({msg:"User not found"})
       }
       const conversations = await Conversation.find({memberList:{$elemMatch:{$eq:userId}}})
+
       if(conversations.length===0){
         return res.status(404).json({msg:"No conversations found"})
       }
+      conversations.forEach((conversation)=>{
+        conversation.memberList = conversation.memberList.filter((id:number)=>id!==userId)
+      })
       return res.status(200).json({msg:"Conversations found",conversations})  
      }catch(error){
       console.error(error);
       res.status(500).json({msg:"Internal server error",error:error});
     }
-  
+    
   }

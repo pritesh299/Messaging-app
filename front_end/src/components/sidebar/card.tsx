@@ -1,37 +1,41 @@
 import React, { useEffect, useState } from "react";
-import { addMessage, getMessages, getUser } from "../../api";
+import { addMessage, getLastMessage, getMessages, getUser } from "../../api";
 import { getGlobal } from "../../api";
 
 interface CardProps {
-   userId:string;
- 
+   userId: Number;
+   conversationId:String;
   setCurrentUserId: React.Dispatch<React.SetStateAction<string>>;
   setChat:React.Dispatch<React.SetStateAction<boolean>>;
   messages: never[]
 }
 
-const Card: React.FC<CardProps> = ({messages,userId,setCurrentUserId,setChat}) => {
+const Card: React.FC<CardProps> = ({messages,conversationId,userId,setCurrentUserId,setChat}) => {
   const [hover, setHover] = useState(false);
-  const [user,setUser]=  useState<{id:string,userName:String,LastMessgae:string,TimeStamp:string,Avatar:string}>()
+  const [user,setUser]=  useState<{id:string,userName:String,lastMessgae:string,TimeStamp:string,Avatar:string}>()
   
   useEffect(()=>{
      async function fetchData(){
       let userData  = await getUser(userId)
-      let messaegList=await getMessages(userData._id,getGlobal("id"))
-      let LastMessgae=messaegList[messaegList.length-1]
-      console.log(LastMessgae)
+      let lastMessgae=await getLastMessage(conversationId,userId)
+      const isoString = lastMessgae?lastMessgae.updatedAt:"";
+      const time = new Date(isoString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
       userData&&setUser({
-        id:userData._id,
-        userName:userData.username,
-        LastMessgae:LastMessgae?LastMessgae.message:"      ",
-        TimeStamp:LastMessgae?LastMessgae.time:"  ",
+        id:userData.id,
+        userName:userData.name,
+        lastMessgae:lastMessgae?lastMessgae.content:"",
+        TimeStamp:time,
         Avatar:userData.avatar
       })
+      // console.log(userData)
+ 
      }
      fetchData()
   },[messages])
 
   function reduceMessage(msg:string |undefined){
+    // console.log(user)
+    console.log(msg)
      if(msg){
         if(msg.length>25){
           msg=msg.substring(0,25)
@@ -47,7 +51,7 @@ const Card: React.FC<CardProps> = ({messages,userId,setCurrentUserId,setChat}) =
         onMouseEnter={() => setHover(true)}
         onMouseOver={() => setHover(true)}
         onMouseOut={() => setHover(false)}
-        onClick={() => {setChat(true); {user&&setCurrentUserId(user.id)}getMessages(userId,getGlobal("id"))}}
+        // onClick={() => {setChat(true); {user&&setCurrentUserId(user.id)}}}
         className={`card h-[70px] gap-[5px] text-white flex justify-between items-center w-[100%] ${hover ? 'bg-[#273443]' : 'bg-[#111b21]'}`}
       >
         <div className="w-[20%] flex justify-center">
@@ -58,7 +62,7 @@ const Card: React.FC<CardProps> = ({messages,userId,setCurrentUserId,setChat}) =
         <div className="w-[80%] border-b py-3 border-slate-700 flex">
           <div className="text-left w-[80%]">
             <p>{ user?.userName || "John Doe"}</p>
-            <p className="text-slate-400 text-sm"> {reduceMessage(user?.LastMessgae)}</p>
+            <p className="text-slate-400 text-sm"> {reduceMessage(user?.lastMessgae)}</p>
           </div>
           <div className="w-[20%] flex flex-col items-center">
             <div className="w-[100%] flex justify-center text-[12px]">{user?.TimeStamp}</div>

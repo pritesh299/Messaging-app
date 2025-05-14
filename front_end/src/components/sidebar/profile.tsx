@@ -8,8 +8,6 @@ interface profileProps{
 
 const Profile:React.FC<profileProps>=({setViewProfile})=> {
    
-
-
     return (
         <div className="min-w-[300px] w-[60%]  min-h-[400px]  mx-auto  shadow-md  border border-slate-500 text-white">
             <div className="height-[40px] w-full bg-[#202c33] p-4 ">
