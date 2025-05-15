@@ -23,6 +23,7 @@ export async function registerUser(userCredentails:object){
 }
 
 export async function LoginUser(userCredentails:object,token?:string) {
+
     try{
       const response = await axios.post(serverURL+ "users/login", userCredentails, 
         {
@@ -84,7 +85,7 @@ export async function getUsers(keyword:string){
   }
 }
   
-  export async function getConversations(userId: string) {
+export async function getConversations(userId: string) {
     try {
       const response = await axios.get(`${serverURL}conversations/${userId}`);
       return response.data
@@ -103,10 +104,10 @@ export async function getUsers(keyword:string){
       return null;
     }
   }
-export async function getMessages(id1: string,id2:string) {
+export async function getMessages(conversationId:string) {
     try {
-      const response = await axios.get(`${serverURL}getMessages/${id1}/${id2}`);
-      return response.data
+      const response = await axios.get(`${serverURL}messages/${conversationId}`);
+      return response.data.messageList
     } catch (error: any) {
       console.error('Error:', error.message);
       return null;
@@ -123,24 +124,20 @@ export async function getLastMessage(conversationId:String,senderId:Number){
       return null;
     }  
   }
-export async function addMessage( data:object ) {
-
-  const config = {
-    method : "post",
-    url : serverURL+ "newMessage",
-    xsrfCookieName: 'csrftoken',
-        xsrfHeaderName: 'X-CSRFToken',
-        headers: {'X-Requested-With': 'XMLHttpRequest',
-                  'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-    data : data
-}
-  
-  try {
-    const response = await axios(config)
-     return response
-  } catch (error: any) {
-    console.error('Error:', error.message);
-    return null;
+export async function addMessage( messageData:object ) {
+  console.log(messageData);
+  try{
+    const response = await axios.post(serverURL+ "messages", messageData, 
+      {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+  })
+  console.log(response);
+    return response;
+  }catch(error){
+    console.log(error);
+    return error;
   }
 }
 

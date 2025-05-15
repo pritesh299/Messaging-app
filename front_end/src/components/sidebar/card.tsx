@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { addMessage, getLastMessage, getMessages, getUser } from "../../api";
-import { getGlobal } from "../../api";
+import { getGlobal,setGlobal} from "../../api";
 
 interface CardProps {
    userId: Number;
@@ -27,15 +27,12 @@ const Card: React.FC<CardProps> = ({messages,conversationId,userId,setCurrentUse
         TimeStamp:time,
         Avatar:userData.avatar
       })
-      // console.log(userData)
  
      }
      fetchData()
   },[messages])
 
   function reduceMessage(msg:string |undefined){
-    // console.log(user)
-    console.log(msg)
      if(msg){
         if(msg.length>25){
           msg=msg.substring(0,25)
@@ -51,7 +48,7 @@ const Card: React.FC<CardProps> = ({messages,conversationId,userId,setCurrentUse
         onMouseEnter={() => setHover(true)}
         onMouseOver={() => setHover(true)}
         onMouseOut={() => setHover(false)}
-        // onClick={() => {setChat(true); {user&&setCurrentUserId(user.id)}}}
+        onClick={() => {setChat(true); {user&&setCurrentUserId(user.id)};setGlobal({"conversationId":conversationId,"activeChatUserId":user?.id})}}
         className={`card h-[70px] gap-[5px] text-white flex justify-between items-center w-[100%] ${hover ? 'bg-[#273443]' : 'bg-[#111b21]'}`}
       >
         <div className="w-[20%] flex justify-center">

@@ -3,17 +3,17 @@ import { getGlobal } from "../../api";
 
 
 
-function Message({message,currentUserId}:{message:{receiverId:String,message:String,time:string},currentUserId:string}) {
+function Message({message,currentUserId}:{message:{senderId:Number,content:String,updatedAt:string},currentUserId:string}) {
 
 const [reciver,setReciver]= useState<boolean>()
 const [read,setRead]= useState(false)
 
-
   useEffect(()=>{
-    if(message.receiverId===currentUserId){
-      setReciver(false)
-    }else if(message.receiverId===getGlobal("id")){
-      setReciver(true)
+ 
+    if(message.senderId===getGlobal('id')){
+      setReciver(false);
+    }else {
+      setReciver(true);
     }
   },[])
   
@@ -51,10 +51,10 @@ const [read,setRead]= useState(false)
    <div className="bg-[#202c33]  w-auto relative max-w-[90%] rounded-r-lg rounded-b-lg  gap-2 overflow-hidden">
      <div className="gap-2 p-2 flex">
        <div className="max-w-[100%]">
-         <p>{message.message}</p>
+         <p>{message.content}</p>
        </div>
      </div>
-     <div className=" float-right text-[10px] flex items-end min-w-[50px] m-1">{message.time}</div>
+     <div className=" float-right text-[10px] flex items-end min-w-[50px] m-1">{new Date(message.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
      
    </div>
   
@@ -67,10 +67,10 @@ const [read,setRead]= useState(false)
           >
             <div className="bg-[#005c4b] relative  rounded-l-lg w-auto rounded-b-lg  p-2 gap-2 overflow-hidden">
               <div className="max-w-[100%]">
-              <p>{message.message}</p>
+              <p>{message.content}</p>
               </div>
               <div className=" float-right flex min-w-[50px]  items-end">
-                <div className="text-[10px] flex items-end min-w-[50px]">{message.time}</div>
+                <div className="text-[10px] flex items-end min-w-[50px]">{new Date(message.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
                 <div className="text-[10px] flex items-end min-w-[5px]">
            
                     <svg

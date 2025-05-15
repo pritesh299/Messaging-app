@@ -52,19 +52,20 @@ function MessageInput({currentUserId,messages,setMessages,message, setMessage,se
 
   async function sendMessage() {
     if(message!==""){
-    const data={receiverId:currentUserId,message:message}
-    socket.emit("sendMessage",data)
-    const newPost = {
+    // const data={sender:,message:message}
+    // // socket.emit("sendMessage",data)
+    const newMessage = {
       senderId: getGlobal("id"),
-      receiverId: currentUserId,
-      message: message,
+      conversationId:getGlobal("conversationId"),
+      content: message,
       seen: false,
-      time: getTime(),
-      date: getDate(),
+      updatedAt: new Date()
     };
-    setPost(newPost);
-    const response:{data:{message:object}} = await addMessage(newPost) || {data:{message:{}}}
-    setMessages([...messages,response.data.message]) 
+    // sendMessage(newMessage);
+  
+    const response = await addMessage(newMessage)
+        
+    // setMessages([...messages,response.data.message]) 
   }
   }
 
@@ -122,9 +123,9 @@ useEffect(()=>{
           <form  onSubmit={(e)=>{
             e.preventDefault()
                 sendMessage()
-                 setMessage("")
-              }}id="messageInput"  className="flex justify-center">
-             
+                setMessage("")
+              }}
+              id="messageInput"  className="flex justify-center">
             <input  name="message"
               onChange={(event) => {
                 setMessage(event.target.value)

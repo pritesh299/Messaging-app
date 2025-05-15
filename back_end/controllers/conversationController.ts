@@ -37,12 +37,12 @@ export async function createConversation(req:Request,res:Response){
      try{
       const user = await prisma.user.findUnique({where:{id:userId}})
       if(!user){ 
-        return res.status(404).json({msg:"User not found"})
+        return res.status(200).json({msg:"User not found"})
       }
       const conversations = await Conversation.find({memberList:{$elemMatch:{$eq:userId}}})
 
       if(conversations.length===0){
-        return res.status(404).json({msg:"No conversations found"})
+        return res.status(200).json({msg:"No conversations found",conversations})
       }
       conversations.forEach((conversation)=>{
         conversation.memberList = conversation.memberList.filter((id:number)=>id!==userId)

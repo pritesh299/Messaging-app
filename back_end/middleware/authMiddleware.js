@@ -9,7 +9,8 @@ const TokenAuth = (req, res, next) => {
     /*   token=token.split(" ")[1].trim() */
     if (!token || token === " ") {
         console.log("ERROR: No token provided");
-        req.body = { userData: req.body.userData, tokenAuthenticated: false };
+        console.log(req.body);
+        req.body = { email: req.body.email, password: req.body.password, tokenAuthenticated: false };
     }
     else
         (jwt.verify(token, secret, (err, decodedData) => {
@@ -18,7 +19,7 @@ const TokenAuth = (req, res, next) => {
                 console.log({ message: "Token is not valid" });
             }
             console.log('SUCCESS: Connected to protected route');
-            req.body = { userData: decodedData, tokenAuthenticated: true };
+            req.body = { email: req.body.email, password: req.body.password, tokenAuthenticated: true };
         }));
     next();
 };

@@ -11,7 +11,7 @@ const router = express.Router();
 router.get("/users/:id", getUser);               // Get user by ID
 router.delete("/users/:userId", deleteUser);        // Delete user by ID
 router.put("/users/:id",updateUser)       
-router.post("/users/login", LoginUser);          // Login
+router.post("/users/login", TokenAuth,LoginUser);          // Login
 router.post("/users/register", RegisterUser);    // Register
 router.post("/conversations", createConversation);             // Create a new 1-on-1 conversation
 router.get("/conversations/:userId", getConversations);             // Create a new 1-on-1 conversation

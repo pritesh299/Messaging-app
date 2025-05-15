@@ -8,6 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { prisma } from '../server.js';
+import jwt from "jsonwebtoken";
 function RegisterUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { username, email, password, avatar } = req.body;
@@ -42,30 +43,30 @@ function LoginUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         const { email, password } = req.body;
         const secert = process.env.JWT_SECRET || "";
-        console.log(email, password);
-        try {
-            const user = yield prisma.user.findUnique({ where: { email: email } });
-            if (!user) {
-                console.log(user);
-                return res.status(400).json({ msg: "user does not exist", code: 1 });
-            }
-            const passwordMatched = (user.password === password ? true : false);
-            if (!passwordMatched) {
-                return res.status(400).json({ code: 2 });
-            }
-            return res.status(200).json({ msg: 'Login successful', code: 3, user: user });
-            // if(req.body.tokenAuthenticated){
-            //     res.status(200).json({ msg: 'Login successful',code:4,user:user});
-            // }else{
-            //     const payload = { email:req.body.userData.email,password:req.body.userData.password};
-            //     jwt.sign(payload, secert,{ expiresIn: '1h' }, (err, token) => {
-            //      if (err) throw err;
-            //      res.status(200).json({ msg: 'Login successful',code:3,user:user,token:token});
-            //    });
-            // }
+        const user = yield prisma.user.findUnique({ where: { email: email } });
+        if (!user) {
+            return res.status(400).json({ msg: "user does not exist", code: 1 });
         }
-        catch (error) {
-            res.status(500).json({ msg: "Internal server error", error: error });
+        if (req.body.tokenAuthenticated) {
+            res.status(200).json({ msg: 'Login successful', code: 4, user: user });
+        }
+        else {
+            try {
+                const passwordMatched = (user.password === password ? true : false);
+                if (!passwordMatched) {
+                    return res.status(400).json({ code: 2 });
+                }
+                // return res.status(200).json({ msg: 'Login successful',code:3,user:user});
+                const payload = { email: email, password: password };
+                jwt.sign(payload, secert, { expiresIn: '1h' }, (err, token) => {
+                    if (err)
+                        throw err;
+                    res.status(200).json({ msg: 'Login successful', code: 3, user: user, token: token });
+                });
+            }
+            catch (error) {
+                res.status(500).json({ msg: "Internal server error", error: error });
+            }
         }
     });
 }

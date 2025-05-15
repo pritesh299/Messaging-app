@@ -45,11 +45,11 @@ export function getConversations(req, res) {
         try {
             const user = yield prisma.user.findUnique({ where: { id: userId } });
             if (!user) {
-                return res.status(404).json({ msg: "User not found" });
+                return res.status(200).json({ msg: "User not found" });
             }
             const conversations = yield Conversation.find({ memberList: { $elemMatch: { $eq: userId } } });
             if (conversations.length === 0) {
-                return res.status(404).json({ msg: "No conversations found" });
+                return res.status(200).json({ msg: "No conversations found", conversations });
             }
             conversations.forEach((conversation) => {
                 conversation.memberList = conversation.memberList.filter((id) => id !== userId);

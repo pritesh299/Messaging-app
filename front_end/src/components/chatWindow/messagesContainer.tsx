@@ -11,9 +11,9 @@ interface MessagesContainerProps{
   setChat:React.Dispatch<React.SetStateAction<boolean>>
   setMessages: React.Dispatch<React.SetStateAction<object[]>>
   messages: [{
-    receiverId: String;
-    message: String;
-    time:string;
+    senderId: Number;
+    content: String;
+    updatedAt:string;
 }]
 }
 
@@ -25,7 +25,9 @@ const MessagesContainer:React.FC<MessagesContainerProps>=({messages,setMessages,
 
   useEffect(()=>{
     async function fetchMessageList() {
-    const messageList= await getMessages(currentUserId,getGlobal("id"))
+    const conversationId = getGlobal("conversationId")
+    if(conversationId===null) return
+    let  messageList= await getMessages(conversationId)
     setMessages(messageList)
     }
     fetchMessageList()

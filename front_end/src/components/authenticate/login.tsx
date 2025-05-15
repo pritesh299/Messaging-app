@@ -16,23 +16,26 @@ const LoginPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) => {
   const [formData,setFormData] = useState({
     email: '',
     password: '',
+    token:''
   });
  
    useEffect(()=>{
       async function sendToken(){
-       let response= await LoginUser(formData,localStorage.getItem("JWTtoken")||"")
-  
-      //  let response= await LoginUser(formData,"")
 
+       let response= await LoginUser(         { 
+        email: getGlobal("email") ,
+        password: '',
+        token:localStorage.getItem("JWTtoken")||""
+     })
+       console.log(response,formData)
     if(response.code===4){
       setGlobal({
-        id:response.user._id,
-        username: response.user.username,
+        id:response.user.id,
+        username: response.user.name,
         email: response.user.email,
         avatar:response.user.avatar 
       }) 
          setAuthenticate(true)
-      
        }else{
          setLoading(false) 
        }
@@ -53,7 +56,8 @@ const LoginPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) => {
     e.preventDefault();
     setLoading(true)
     let response = await LoginUser(formData)
-    console.log(response.code)
+    console.log(formData)
+      console.log(response)
        if(response.code==1){
         setUserExits(false)
         setLoading(false)
@@ -70,7 +74,9 @@ const LoginPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) => {
           avatar:response.user.avatar 
         }) 
         setAuthenticate(true)
-        console.log("login suucesful",getGlobal('id'))
+        setLoading(false)
+        // console
+        // console.log("login suucesful",getGlobal('id'))
         localStorage.setItem("JWTtoken",response.token)
        }
   }; 

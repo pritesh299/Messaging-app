@@ -15,14 +15,15 @@ const TokenAuth = (req: Request, res: Response, next: NextFunction) => {
  
   if (!token||token===" ") {
     console.log("ERROR: No token provided");
-    req.body={userData: req.body.userData,tokenAuthenticated:false} 
+    console.log(req.body)
+    req.body={email: req.body.email,password: req.body.password, tokenAuthenticated:false} 
   } else( jwt.verify(token, secret, (err:any, decodedData:any) => {
     if (err) {
       console.log("ERROR: Could not connect to the protected route");
       console.log({ message: "Token is not valid"});
     }
      console.log('SUCCESS: Connected to protected route');
-     req.body={userData:decodedData,tokenAuthenticated:true} 
+     req.body={email: req.body.email,password: req.body.password,tokenAuthenticated:true} 
   }))
 
   next();
