@@ -18,7 +18,7 @@ export function getUser(req, res) {
                 res.status(404).json({ msg: "User not found" });
             }
             const userData = {
-                name: user === null || user === void 0 ? void 0 : user.name,
+                name: user === null || user === void 0 ? void 0 : user.username,
                 id: user === null || user === void 0 ? void 0 : user.id,
                 avatar: user === null || user === void 0 ? void 0 : user.avatar
             };
@@ -46,7 +46,7 @@ export function updateUser(req, res) {
                     id: userId,
                 },
                 data: {
-                    name: (username ? username : exist.name),
+                    username: (username ? username : exist.username),
                     email: (email ? email : exist.email),
                     password: (password ? password : exist.password),
                     avatar: (avatar ? avatar : exist.avatar),

@@ -11,7 +11,7 @@ export async function getUser(req:Request,res:Response){
         res.status(404).json({msg:"User not found"})
       }
       const userData = {
-        name:user?.name,
+        name:user?.username,
         id:user?.id,
         avatar:user?.avatar
       }
@@ -38,7 +38,7 @@ export async function updateUser(req:Request,res:Response){
           id: userId,
         },
         data: {
-          name: (username? username: exist.name),
+          username: (username? username: exist.username),
           email: (email? email: exist.email),
           password: (password? password: exist.password),
           avatar: (avatar? avatar: exist.avatar),

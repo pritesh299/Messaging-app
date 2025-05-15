@@ -1,26 +1,24 @@
 import jwt from "jsonwebtoken";
 const TokenAuth = (req, res, next) => {
-    const secret = process.env.JWT_SECRET || "";
-    if (secret === "") {
-        console.log("ERROR: Secret is undefined, please check your JWT secret");
-        return res.status(500).json({ message: "Server error" });
+    const token = req.body.token || " ";
+    const JWT_SECRET = process.env.JWT_SECRET || "";
+    if (!JWT_SECRET) {
+        console.error("FATAL: JWT_SECRET not defined in environment.");
+        return res.status(500).json({ msg: "Server misconfiguration" });
     }
-    let token = req.body.token || " ";
-    /*   token=token.split(" ")[1].trim() */
     if (!token || token === " ") {
         console.log("ERROR: No token provided");
-        console.log(req.body);
         req.body = { email: req.body.email, password: req.body.password, tokenAuthenticated: false };
     }
-    else
-        (jwt.verify(token, secret, (err, decodedData) => {
+    else {
+        jwt.verify(token, JWT_SECRET, (err, decodedData) => {
             if (err) {
                 console.log("ERROR: Could not connect to the protected route");
-                console.log({ message: "Token is not valid" });
             }
             console.log('SUCCESS: Connected to protected route');
-            req.body = { email: req.body.email, password: req.body.password, tokenAuthenticated: true };
-        }));
+            req.body = { email: decodedData.email, id: decodedData.id, token: token, tokenAuthenticated: true };
+        });
+    }
     next();
 };
 export default TokenAuth;

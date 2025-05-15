@@ -8,7 +8,6 @@ interface AuthenticateProps {
   setAuthenticate:React.Dispatch<React.SetStateAction<boolean>>
 
 }
-
 const LoginPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) => {
   const [userExits,setUserExits]=useState(true)
   const [corrrectPassword,setCorrectPassword]=useState<boolean>(true)
@@ -16,33 +15,40 @@ const LoginPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) => {
   const [formData,setFormData] = useState({
     email: '',
     password: '',
-    token:''
   });
  
    useEffect(()=>{
       async function sendToken(){
+        if((localStorage.getItem("JWTtoken")!='')){
+        setLoading(true)
+        let response= await LoginUser({ 
+          token:localStorage.getItem("JWTtoken")||""
+        })
 
-       let response= await LoginUser(         { 
-        email: getGlobal("email") ,
-        password: '',
-        token:localStorage.getItem("JWTtoken")||""
-     })
-       console.log(response,formData)
-    if(response.code===4){
-      setGlobal({
-        id:response.user.id,
-        username: response.user.name,
-        email: response.user.email,
-        avatar:response.user.avatar 
-      }) 
-         setAuthenticate(true)
-       }else{
-         setLoading(false) 
-       }
+
+        if(response.code===0){
+          setGlobal({
+            id:response.user.id,
+            username: response.user.username,
+            email: response.user.email,
+            avatar:response.user.avatar 
+          }) 
+          setAuthenticate(true)
+          setLoading(false)
+          localStorage.setItem("JWTtoken",response.token)
+          }
+         else{
+          console.log(response)
+          setUserExits(false)
+          setCorrectPassword(false)
+          setLoading(false)
+        }
       }
-      sendToken()
+    }
+    sendToken()
    },[])
-  const handleChange = (e:any) => {
+  
+  const handleInputChange = (e:any) => {
     const { name, value } = e.target;
     setCorrectPassword(true)
     setUserExits(true)
@@ -52,32 +58,29 @@ const LoginPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) => {
     });
   };
 
-  const handleSubmit = async (e:any) => {
+  const handleLoginSubmit = async (e:any) => {
     e.preventDefault();
     setLoading(true)
     let response = await LoginUser(formData)
-    console.log(formData)
-      console.log(response)
-       if(response.code==1){
+    console.log(response)
+        if(response.code===0){
+          setGlobal({
+            id:response.user.id,
+            username: response.user.username,
+            email: response.user.email,
+            avatar:response.user.avatar 
+          }) 
+          setAuthenticate(true)
+          setLoading(false)
+          localStorage.setItem("JWTtoken",response.token)
+        }
+       else if(response.code==1){
         setUserExits(false)
         setLoading(false)
        }
        else if(response.code==2){
         setCorrectPassword(false)
         setLoading(false)
-       }
-       else if(response.code===3){
-        setGlobal({
-          id:response.user._id,
-          username: response.user.username,
-          email: response.user.email,
-          avatar:response.user.avatar 
-        }) 
-        setAuthenticate(true)
-        setLoading(false)
-        // console
-        // console.log("login suucesful",getGlobal('id'))
-        localStorage.setItem("JWTtoken",response.token)
        }
   }; 
 
@@ -88,7 +91,7 @@ const LoginPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) => {
         :
         <div className="w-full max-w-md p-4 space-y-6 bg-[#202c33] rounded shadow-md">
           <h2 className="text-2xl font-bold text-center text-[#128C7E]">Login</h2>
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleLoginSubmit} className="space-y-6">
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-white">Email</label>
               <input
@@ -96,7 +99,7 @@ const LoginPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) => {
                 name="email"
                 type="email"
                 value={formData.email}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 onClick={()=>{ setCorrectPassword(true);setUserExits(true)}}
                 required
                 placeholder='Email'
@@ -110,7 +113,7 @@ const LoginPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) => {
                 name="password"
                 type="password"
                 value={formData.password}
-                onChange={handleChange}
+                onChange={handleInputChange}
                 onClick={()=>{ setCorrectPassword(true);setUserExits(true)}}
                 required
                 placeholder='Password'

@@ -23,12 +23,9 @@ const Sidebar:React.FC<SidebarProps>=( {messages,viewNewContact,setChat,setViewN
   const [viewProfile,setViewProfile] =useState(false)
 
   useEffect(()=>{
-    console.log(getGlobal("id"))
-     socket.on("connect",()=>{
-    
+    socket.on("connect",()=>{
       })
-      console.log("connected")
-      socket.emit("addUsers",getGlobal("id"))
+    socket.emit("addUsers",getGlobal("id"))
 })
 
 
