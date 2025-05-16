@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { registerUser } from '../../api';
+import { getGlobal, registerUser } from '../../api';
 import { setGlobal } from "../../api";
 import CircularProgress from '@mui/material/CircularProgress';
+import { common } from '@mui/material/colors';
 
 
 interface AuthenticateProps {
@@ -10,7 +11,8 @@ interface AuthenticateProps {
 }
 
 const RegisterPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) => {
-  const[emailError,setEmailError]= useState(false)
+  const [emailError,setEmailError]= useState(false)
+  const [userNameError,setUserNameError]= useState(false)
   const [loading,setLoading]=useState(false)
   const [formData, setFormData] = useState({
     username: "",
@@ -19,56 +21,59 @@ const RegisterPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) =>
     avatar:"",
   });
      
-  const handleChange = (e:any) => {
-    setEmailError(false)
-
+  const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    
-     setFormData({
-      ...formData,
-      [name]: value
-    }); 
+    setEmailError(false)
+    setUserNameError(false)
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-   const handleSubmit = async (e:any) => {
+   const handleRegisterSubmit = async (e:React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true)
-     let response = await registerUser(formData)
-      if (response.status===201){
-          setEmailError(true)
-        } 
-       if(response.status===200) {
-            setGlobal({
-              id:response.data.user.id,
-              username: response.data.user.name,
-              email: response.data.user.email,
-              avatar:response.data.user.avatar 
-            }) 
-            setEmailError(false)
-            console.log(response)
-            // localStorage.setItem("JWTtoken",response.data.token)
-            setAuthenticate(true)
-          setLoading(false)
-       }
+    let response = await registerUser(formData)
+    if (response.code===1){
+      setEmailError(true)
+    }
+    if (response.code===2){
+      setUserNameError(true)
+    }
+    if(response.code===0) {
+      setGlobal({
+        id:response.user.id,
+        username: response.user.name,
+        email: response.user.email,
+        avatar:response.user.avatar 
+      }) 
+      setEmailError(false)
+      setUserNameError(false)
+      localStorage.setItem("JWTtoken",response.token)
+      setAuthenticate(true)
+    }
+    setLoading(false)
   };
 
   return (<>
       {loading
       ? <CircularProgress color="success" />
       : <div className="w-full max-w-md p-4 space-y-6 bg-[#202c33]  rounded shadow-md">
-    <h2 className="text-2xl font-bold text-center text-[#128C7E]">Register user </h2>
-    <form onSubmit={handleSubmit} className="space-y-6  text-white">
+    <h2 className="text-2xl font-bold text-center text-[#128C7E]">Register User </h2>
+    <form onSubmit={handleRegisterSubmit} className="space-y-6  text-white">
       <div>
-        <label htmlFor="username" className="block text-sm font-medium">Username</label>
+        <label htmlFor="username" className="block text-sm font-medium ">Username {userNameError?<div className='text-red-400'>Username already in use,use another Username</div>:""}</label>
         <input
           id="username"
           name="username"
           type="text"
           value={formData.username}
-          onChange={handleChange}
+          onChange={handleInputChange}
           required
           placeholder='Username'
-          className="w-full text-black px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring-[#25D366] focus:border-[#25D366]"
+          className={`w-full text-black px-3 py-2 mt-1 border rounded-md shadow-sm focus:outline-none ${userNameError?" border-red-400 ":""} focus:ring-[#25D366] focus:border-[#25D366]`}
         />
       </div>
       <div>
@@ -78,7 +83,7 @@ const RegisterPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) =>
           name="email"
           type="email"
           value={formData.email}
-          onChange={handleChange}
+          onChange={handleInputChange}
           required
           placeholder='Email'
 
@@ -92,7 +97,7 @@ const RegisterPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) =>
           name="password"
           type="password"
           value={formData.password}
-          onChange={handleChange}
+          onChange={handleInputChange}
           required
           placeholder='Password'
           className="w-full px-3  text-black py-2 mt-1 border rounded-md shadow-sm focus:outline-none focus:ring-[#25D366] focus:border-[#25D366]"
@@ -105,7 +110,7 @@ const RegisterPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) =>
           name="avatar"
           accept="image/*"
           value={formData.avatar}
-          onChange={handleChange}
+          onChange={handleInputChange}
         />
       </div>
 

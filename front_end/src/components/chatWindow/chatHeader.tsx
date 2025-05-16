@@ -2,7 +2,7 @@ import React,{useEffect, useState} from "react";
 import { getUser } from "../../api";
  
 interface ChatHeaderProps{
-  currentUserId:string;
+  currentUserId:Number;
   setChat:React.Dispatch<React.SetStateAction<boolean>>
 
 }
@@ -13,12 +13,11 @@ const ChatHeader:React.FC<ChatHeaderProps> =({currentUserId,setChat})=>{
   const [user,setUser]=useState<{id:string,userName:String,Avatar:string}>()
   useEffect(  ()=>{
     async function fetchUser(){
-     let userData  = await getUser(currentUserId)
-     
+     let response  = await getUser(currentUserId)
      setUser({
-       id:userData._id,
-       userName:userData.username,
-       Avatar:userData.avatar
+       id:response.id,
+       userName:response.username,
+       Avatar:response.avatar
      })
     }
     fetchUser()
@@ -37,8 +36,6 @@ const ChatHeader:React.FC<ChatHeaderProps> =({currentUserId,setChat})=>{
           <p className=" text-sm text-slate-400">online status</p>
        </div>
        <div className="flex w-[20%] min-w-[125px] justify-end">
-    
-        
           <button onClick={()=>{
               setViewSetting(!viewSetting)
           }}>

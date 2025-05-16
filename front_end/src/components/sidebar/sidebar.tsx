@@ -13,11 +13,11 @@ interface SidebarProps {
   setViewNewContact: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentUserId: React.Dispatch<React.SetStateAction<string>>;
   messages: [{
-    receiverId: String;
-    message: String;
-}] | undefined
+    senderId: String;
+    content: String;
+    timestamp:string
+}]
 }
-
 
 const Sidebar:React.FC<SidebarProps>=( {messages,viewNewContact,setChat,setViewNewContact,setCurrentUserId})=>{
   const [viewProfile,setViewProfile] =useState(false)
@@ -32,7 +32,8 @@ const Sidebar:React.FC<SidebarProps>=( {messages,viewNewContact,setChat,setViewN
   return (
     <>
        {viewProfile
-       ?<><div className=" absolute h-full w-full flex justify-center items-center ">
+       ?<>
+        <div className=" absolute h-full w-full flex justify-center items-center ">
         <div onClick={()=>{setViewProfile(false)}} className="absolute h-full w-full bg-black z-10 bg-opacity-50 ">  
         </div>
         <div className="absolute min-w-[300px] z-20 "><Profile setViewProfile={setViewProfile}/></div>
@@ -44,7 +45,7 @@ const Sidebar:React.FC<SidebarProps>=( {messages,viewNewContact,setChat,setViewN
         setViewNewContact={setViewNewContact} 
         setViewProfile={setViewProfile}
       />
-      <SearchComponent />
+      <SearchComponent/>
       <RenderCards messages={messages} setCurrentUserId={setCurrentUserId} setChat={setChat}/> 
     </>
   );

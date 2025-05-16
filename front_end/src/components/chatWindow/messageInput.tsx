@@ -2,46 +2,13 @@ import React, { useEffect, useState } from "react";
 import { getGlobal, socket } from "../../api";
 import { addMessage } from "../../api";
 
-
-
 interface MessageInputProps {
-  currentUserId: string;
+  currentUserId: Number;
   message: string;
   messages: object[];
   setMessages: React.Dispatch<React.SetStateAction<object[]>>;
   setShowEmoji: React.Dispatch<React.SetStateAction<boolean>>
   setMessage: React.Dispatch<React.SetStateAction<string>>
-}
-
-
-function getTime(): string {
-
-  const date = new Date();
-  let hours = date.getHours();
-  const minutes = date.getMinutes();
-  const ampm = hours >= 12 ? 'PM' : 'AM';
-
-  hours = hours % 12;
-  hours = hours ? hours : 12; // the hour '0' should be '12'
-  const minutesStr = minutes < 10 ? '0' + minutes : minutes.toString();
-
-  const time = hours + ':' + minutesStr + ' ' + ampm;
-
-  return time;
-}
-
-function getDate(): string {
-  const date = new Date();
-  const day = date.getDate();
-  const month = date.getMonth() + 1; 
-  const year = date.getFullYear();
-
-  const dayStr = day < 10 ? '0' + day : day.toString();
-  const monthStr = month < 10 ? '0' + month : month.toString();
-
-  const formattedDate = monthStr + '/' + dayStr + '/' + year
-
-  return formattedDate;
 }
 
 
@@ -61,7 +28,6 @@ function MessageInput({currentUserId,messages,setMessages,message, setMessage,se
       seen: false,
       updatedAt: new Date()
     };
-    // sendMessage(newMessage);
   
     const response = await addMessage(newMessage)
         
@@ -69,17 +35,17 @@ function MessageInput({currentUserId,messages,setMessages,message, setMessage,se
   }
   }
 
-socket.on("getMessage",(data)=>{
-    const recivedMessaged:object = {
-      senderId: currentUserId,
-      receiverId:getGlobal("id") ,
-      message: data.message,
-      seen: false,
-      time: getTime(),
-      date: getDate(),
-    };
-    messages&&setMessages([...messages,recivedMessaged]) 
-  }) 
+// socket.on("getMessage",(data)=>{
+//     const recivedMessaged:object = {
+//       senderId: currentUserId,
+//       receiverId:getGlobal("id") ,
+//       message: data.message,
+//       seen: false,
+//       time: getTime(),
+//       date: getDate(),
+//     };
+//     messages&&setMessages([...messages,recivedMessaged]) 
+//   }) 
 
 useEffect(()=>{
     setMessage("")

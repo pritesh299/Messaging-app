@@ -18,10 +18,14 @@ async function RegisterUser(req: Request, res: Response) {
         return res.status(400).json({ msg: "Missing fields" });
     }
     try {
-        const existingUser = await prisma.user.findUnique({where:{email:email}})
+        const existingMail = await prisma.user.findUnique({where:{email:email}})
+        const existingName = await prisma.user.findUnique({where:{username:username}})
+        if (existingMail) {
+            return res.status(409).json({ msg: "User already exists with same mail ID",code:1});
+        }
 
-        if (existingUser) {
-            return res.status(409).json({ msg: "User already exists" });
+        if (existingName){
+            return res.status(409).json({ msg: "User already exists with same username",code:2});
         }
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUser = await prisma.user.create({
@@ -43,6 +47,7 @@ async function RegisterUser(req: Request, res: Response) {
                 avatar: newUser.avatar
             },
             token,
+            code:0
             });
 
         } catch (error) {

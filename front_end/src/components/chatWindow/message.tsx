@@ -3,7 +3,7 @@ import { getGlobal } from "../../api";
 
 
 
-function Message({message,currentUserId}:{message:{senderId:Number,content:String,updatedAt:string},currentUserId:string}) {
+function Message({message,currentUserId}:{message:{senderId:Number,content:String,updatedAt:string},currentUserId:Number}) {
 
 const [reciver,setReciver]= useState<boolean>()
 const [read,setRead]= useState(false)

@@ -6,7 +6,11 @@ import { getGlobal } from "../../api";
 interface RenderCardsProps{
   setCurrentUserId: React.Dispatch<React.SetStateAction<string>>;
   setChat:React.Dispatch<React.SetStateAction<boolean>>;
-  messages: never[]
+  messages: [{
+    senderId: String;
+    content: String;
+    timestamp:string
+}]
 }
 interface chatProfileProps {
   conversationId: string;
@@ -19,14 +23,15 @@ const RenderCards:React.FC<RenderCardsProps>=({messages,setChat,setCurrentUserId
   useEffect(() => {
     async function fetchChatList() {
       try {
-        const data = await getConversations(getGlobal("id"));
+        const response  = await getConversations(getGlobal("id"));
+        console.log(response)
         const updatedList = []
-        if (data && data.conversations) {
-          for(let i = 0;i<data.conversations.length;i++){
+        if (response && response.conversations) {
+          for(let i = 0;i<response.conversations.length;i++){
             updatedList.push({
-              conversationId: data.conversations[i]._id,
-              id: data.conversations[i].memberList[0],
-              updatedAt: data.conversations[i].updatedAt,
+              conversationId: response.conversations[i]._id,
+              id: response.conversations[i].memberList[0],
+              updatedAt: response.conversations[i].updatedAt,
             });
           }
         }
@@ -35,16 +40,13 @@ const RenderCards:React.FC<RenderCardsProps>=({messages,setChat,setCurrentUserId
         console.log(err);
       }
     }
-
     fetchChatList();
-    const intervalId = setInterval(fetchChatList, 1000);
-
-    return () => clearInterval(intervalId); // cleanup on unmount
   }, []);
 
   return (
     <div className="overflow-y-scroll w-[100%] h-[85%] bg-[#111b21] shadow-lg p-1">
-      {chatList&&chatList.map((contact,id) => (
+      {
+      chatList&&chatList.map((contact,id) => (
       <>
         <Card
           key={id}

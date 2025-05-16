@@ -24,9 +24,13 @@ function RegisterUser(req, res) {
             return res.status(400).json({ msg: "Missing fields" });
         }
         try {
-            const existingUser = yield prisma.user.findUnique({ where: { email: email } });
-            if (existingUser) {
-                return res.status(409).json({ msg: "User already exists" });
+            const existingMail = yield prisma.user.findUnique({ where: { email: email } });
+            const existingName = yield prisma.user.findUnique({ where: { username: username } });
+            if (existingMail) {
+                return res.status(409).json({ msg: "User already exists with same mail ID", code: 1 });
+            }
+            if (existingName) {
+                return res.status(409).json({ msg: "User already exists with same username", code: 2 });
             }
             const hashedPassword = yield bcrypt.hash(password, 10);
             const newUser = yield prisma.user.create({
@@ -48,6 +52,7 @@ function RegisterUser(req, res) {
                     avatar: newUser.avatar
                 },
                 token,
+                code: 0
             });
         }
         catch (error) {

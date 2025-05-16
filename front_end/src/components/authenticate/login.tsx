@@ -1,126 +1,143 @@
 import React, { useEffect, useState } from 'react';
-import { LoginUser,  } from '../../api';
-import { getGlobal, setGlobal } from "../../api";
+import { LoginUser } from '../../api';
+import { setGlobal } from '../../api';
 import CircularProgress from '@mui/material/CircularProgress';
 
 interface AuthenticateProps {
-  setLogin:React.Dispatch<React.SetStateAction<boolean>>
-  setAuthenticate:React.Dispatch<React.SetStateAction<boolean>>
-
+  setLogin: React.Dispatch<React.SetStateAction<boolean>>;
+  setAuthenticate: React.Dispatch<React.SetStateAction<boolean>>;
 }
-const LoginPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) => {
-  const [userExits,setUserExits]=useState(true)
-  const [corrrectPassword,setCorrectPassword]=useState<boolean>(true)
-  const [loading,setLoading]=useState(false)
-  const [formData,setFormData] = useState({
+
+const LoginPage: React.FC<AuthenticateProps> = ({ setLogin, setAuthenticate }) => {
+  const [userExists, setUserExists] = useState(true);
+  const [correctPassword, setCorrectPassword] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  const [formData, setFormData] = useState({
     email: '',
     password: '',
   });
- 
-   useEffect(()=>{
-      async function sendToken(){
-        if((localStorage.getItem("JWTtoken")!='')){
-        setLoading(true)
-        let response= await LoginUser({ 
-          token:localStorage.getItem("JWTtoken")||""
-        })
 
+  useEffect(() => {
+    const token = localStorage.getItem('JWTtoken');
+    if (!token) return;
 
-        if(response.code===0){
-          setGlobal({
-            id:response.user.id,
-            username: response.user.username,
-            email: response.user.email,
-            avatar:response.user.avatar 
-          }) 
-          setAuthenticate(true)
-          setLoading(false)
-          localStorage.setItem("JWTtoken",response.token)
-          }
-         else{
-          console.log(response)
-          setUserExits(false)
-          setCorrectPassword(false)
-          setLoading(false)
-        }
+    const sendToken = async () => {
+      setLoading(true);
+      const response = await LoginUser({ token });
+
+      if (response.code === 0) {
+        handleSuccessfulLogin(response);
+      } else {
+        setUserExists(false);
+        setCorrectPassword(false);
       }
-    }
-    sendToken()
-   },[])
-  
-  const handleInputChange = (e:any) => {
-    const { name, value } = e.target;
-    setCorrectPassword(true)
-    setUserExits(true)
-    setFormData({
-      ...formData,
-      [name]: value
+
+      setLoading(false);
+    };
+
+    sendToken();
+  }, []);
+
+  const handleSuccessfulLogin = (response: any) => {
+    setGlobal({
+      id: response.user.id,
+      username: response.user.username,
+      email: response.user.email,
+      avatar: response.user.avatar,
     });
+
+    localStorage.setItem('JWTtoken', response.token);
+    setAuthenticate(true);
   };
 
-  const handleLoginSubmit = async (e:any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUserExists(true);
+    setCorrectPassword(true);
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleLoginSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true)
-    let response = await LoginUser(formData)
-    console.log(response)
-        if(response.code===0){
-          setGlobal({
-            id:response.user.id,
-            username: response.user.username,
-            email: response.user.email,
-            avatar:response.user.avatar 
-          }) 
-          setAuthenticate(true)
-          setLoading(false)
-          localStorage.setItem("JWTtoken",response.token)
-        }
-       else if(response.code==1){
-        setUserExits(false)
-        setLoading(false)
-       }
-       else if(response.code==2){
-        setCorrectPassword(false)
-        setLoading(false)
-       }
-  }; 
+    setLoading(true);
+
+    const response = await LoginUser(formData);
+
+    if (response.code === 0) {
+      handleSuccessfulLogin(response);
+    } else if (response.code === 1) {
+      setUserExists(false);
+    } else if (response.code === 2) {
+      setCorrectPassword(false);
+    }
+
+    setLoading(false);
+  };
 
   return (
-  <>
-     {loading?<>
-      <CircularProgress color="success" /></>
-        :
+    <>
+      {loading ? (
+        <div className="flex justify-center">
+          <CircularProgress color="success" />
+        </div>
+      ) : (
         <div className="w-full max-w-md p-4 space-y-6 bg-[#202c33] rounded shadow-md">
           <h2 className="text-2xl font-bold text-center text-[#128C7E]">Login</h2>
+
           <form onSubmit={handleLoginSubmit} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-white">Email</label>
+              <label htmlFor="email" className="block text-sm font-medium text-white">
+                Email
+              </label>
               <input
                 id="email"
                 name="email"
                 type="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                onClick={()=>{ setCorrectPassword(true);setUserExits(true)}}
+                onClick={() => {
+                  setCorrectPassword(true);
+                  setUserExists(true);
+                }}
                 required
-                placeholder='Email'
-                className={`w-full px-3 py-2 mt-1  rounded-md shadow-sm focus:outline-none ${userExits?"border focus:ring-[#25D366] focus:border-[#25D366]":" border-4 border-red-700"}`}
+                placeholder="Email"
+                className={`w-full px-3 py-2 mt-1 rounded-md shadow-sm focus:outline-none ${
+                  userExists
+                    ? 'border focus:ring-[#25D366] focus:border-[#25D366]'
+                    : 'border-4 border-red-700'
+                }`}
               />
             </div>
+
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-white">Password</label>
+              <label htmlFor="password" className="block text-sm font-medium text-white">
+                Password
+              </label>
               <input
                 id="password"
                 name="password"
                 type="password"
                 value={formData.password}
                 onChange={handleInputChange}
-                onClick={()=>{ setCorrectPassword(true);setUserExits(true)}}
+                onClick={() => {
+                  setCorrectPassword(true);
+                  setUserExists(true);
+                }}
                 required
-                placeholder='Password'
-
-                className={`w-full px-3 py-2 mt-1  rounded-md shadow-sm focus:outline-none  ${corrrectPassword?"border focus:ring-[#25D366] focus:border-[#25D366]":" border-4 border-red-700"} `}
+                placeholder="Password"
+                className={`w-full px-3 py-2 mt-1 rounded-md shadow-sm focus:outline-none ${
+                  correctPassword
+                    ? 'border focus:ring-[#25D366] focus:border-[#25D366]'
+                    : 'border-4 border-red-700'
+                }`}
               />
             </div>
+
             <div>
               <button
                 type="submit"
@@ -130,12 +147,19 @@ const LoginPage:React.FC<AuthenticateProps> = ({setLogin,setAuthenticate}) => {
               </button>
             </div>
           </form>
-          <div className='text-white'>
-            New User?<a className='text-[#25D366]' onClick={()=>{ setLogin(false)}}> Register</a>
+
+          <div className="text-white text-center">
+            New User?{' '}
+            <button
+              className="text-[#25D366] underline hover:text-[#128C7E]"
+              onClick={() => setLogin(false)}
+            >
+              Register
+            </button>
           </div>
-        </div>}
-  
-  </>
+        </div>
+      )}
+    </>
   );
 };
 

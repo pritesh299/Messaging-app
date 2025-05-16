@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { addMessage, getLastMessage, getMessages, getUser } from "../../api";
-import { getGlobal,setGlobal} from "../../api";
+import { getLastMessage, getUser } from "../../api";
+import { setGlobal} from "../../api";
 
 interface CardProps {
    userId: Number;
    conversationId:String;
   setCurrentUserId: React.Dispatch<React.SetStateAction<string>>;
   setChat:React.Dispatch<React.SetStateAction<boolean>>;
-  messages: never[]
+  messages: [{
+    senderId: String;
+    content: String;
+    timestamp:string
+}]
 }
 
 const Card: React.FC<CardProps> = ({messages,conversationId,userId,setCurrentUserId,setChat}) => {
@@ -17,7 +21,7 @@ const Card: React.FC<CardProps> = ({messages,conversationId,userId,setCurrentUse
   useEffect(()=>{
      async function fetchData(){
       let userData  = await getUser(userId)
-      let lastMessgae=await getLastMessage(conversationId,userId)
+      let lastMessgae = await getLastMessage(conversationId,userId)
       const isoString = lastMessgae?lastMessgae.updatedAt:"";
       const time = new Date(isoString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
       userData&&setUser({
@@ -27,7 +31,6 @@ const Card: React.FC<CardProps> = ({messages,conversationId,userId,setCurrentUse
         TimeStamp:time,
         Avatar:userData.avatar
       })
- 
      }
      fetchData()
   },[messages])

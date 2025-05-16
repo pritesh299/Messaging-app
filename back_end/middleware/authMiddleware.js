@@ -9,16 +9,18 @@ const TokenAuth = (req, res, next) => {
     if (!token || token === " ") {
         console.log("ERROR: No token provided");
         req.body = { email: req.body.email, password: req.body.password, tokenAuthenticated: false };
+        next();
     }
     else {
         jwt.verify(token, JWT_SECRET, (err, decodedData) => {
             if (err) {
                 console.log("ERROR: Could not connect to the protected route");
+                return res.status(403).json({ msg: "Token is invalid" });
             }
             console.log('SUCCESS: Connected to protected route');
             req.body = { email: decodedData.email, id: decodedData.id, token: token, tokenAuthenticated: true };
+            next();
         });
     }
-    next();
 };
 export default TokenAuth;

@@ -26,7 +26,6 @@ const NewChat:React.FC<NewChatProps>=({viewNewContact,setViewNewContact,setCurre
         
         setUserList([])
         console.error("Error fetching users:", error);
-
       }
     };
 

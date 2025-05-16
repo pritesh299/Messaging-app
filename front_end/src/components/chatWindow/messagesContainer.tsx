@@ -7,7 +7,7 @@ import { getGlobal } from "../../api";
 import EmojiTray from "./emojiTray";
 
 interface MessagesContainerProps{
-  currentUserId:string;
+  currentUserId:Number;
   setChat:React.Dispatch<React.SetStateAction<boolean>>
   setMessages: React.Dispatch<React.SetStateAction<object[]>>
   messages: [{
@@ -41,21 +41,19 @@ const MessagesContainer:React.FC<MessagesContainerProps>=({messages,setMessages,
   return (
     <div className="h-[100%]">
       {showEmoji?<><div className=" absolute h-full w-[70%] ">
-        <div onClick={()=>{setShowEmoji(false)}} className="absolute h-full w-full bg-black z-10 bg-opacity-50 ">  
+        <div onClick={()=>{setShowEmoji(false)}} className="absolute h-full w-full bg-black z-10 bg-opacity-50 ">
         </div>
         <div className=" absolute z-20  top-[20%] left-[25%]"><EmojiTray message={message} setMessage={setMessage}  setShowEmoji={setShowEmoji}/></div>
         </div></>:<></> }
-     
       <div
         className="h-full w-full bg-fixed"
         style={{ backgroundImage: `url('/background.png')` }}
       >
-        <ChatHeader  currentUserId={currentUserId} setChat={setChat} />
+        <ChatHeader currentUserId={currentUserId} setChat={setChat} />
         <div  className="h-[85%] w-full bg-[#0b141a] bg-opacity-[0.95]  pt-2 pb-4">
           <div ref={MesagesRef} className="h-full w-full overflow-y-scroll relative px-[5%]">
             {messages&&messages.map((message,index)=>(
-                <>
-                <Message key={index} message={message} currentUserId={currentUserId}></Message> </>
+                <><Message key={index} message={message} currentUserId={currentUserId}></Message></>
                ))}
           </div>
         </div>
