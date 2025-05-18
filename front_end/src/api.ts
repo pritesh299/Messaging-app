@@ -80,21 +80,9 @@ export async function getUser(id: Number) {
 }
 
 export async function getUsers(keyword:string){
-  const config = {
-    method : "post",
-    url : serverURL+ "getusers",
-    xsrfCookieName: 'csrftoken',
-        xsrfHeaderName: 'X-CSRFToken',
-        headers: {'X-Requested-With': 'XMLHttpRequest',
-                  'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-    data : {keyqord:keyword,userId:getGlobal("id")}
-}
-  
   try {
-    const response = await axios(config)
-    console.log(response)
-
-     return response.data.userList
+    const response = await axios.get(serverURL+"users/username/"+keyword);
+    return response.data
   } catch (error: any) {
     console.error('Error:', error.message);
     return null;
@@ -131,26 +119,21 @@ export async function addMessage( messageData:object ) {
 
 
 
-export async function addContact(ContactData:object,userId:string) {
-  
-  const config = {
-    method : "post",
-    url : serverURL+ "addContact",
-    xsrfCookieName: 'csrftoken',
-        xsrfHeaderName: 'X-CSRFToken',
-        headers: {'X-Requested-With': 'XMLHttpRequest',
-                  'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'},
-    data : {ContactData:ContactData,userId:userId}
-}
-  
+export async function addConversation(userId1:Number,UserId2:Number) {
+  const data = {
+    userId1: userId1,
+    userId2: UserId2
+  }
   try {
-   
-     const response = await axios(config)
-     return response.data  
-  } catch (error: any) {
-    console.log(error.response.data.code)
-    return error.response.data;
-  } 
-
+    const response = await axios.post(serverURL+ "Conversations", data, 
+      {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded'
+      }
+  })
+    return response.data;
+  }catch(error){
+    console.log(error);
+  }
 }
 

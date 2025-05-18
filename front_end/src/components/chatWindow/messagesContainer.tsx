@@ -9,12 +9,16 @@ import EmojiTray from "./emojiTray";
 interface MessagesContainerProps{
   currentUserId:Number;
   setChat:React.Dispatch<React.SetStateAction<boolean>>
-  setMessages: React.Dispatch<React.SetStateAction<object[]>>
+  setMessages: React.Dispatch<React.SetStateAction<[{
+    senderId: Number;
+    content: String;
+    timestamp:string
+}] | undefined>>
   messages: [{
     senderId: Number;
     content: String;
-    updatedAt:string;
-}]
+    timestamp:string
+}] | undefined
 }
 
 const MessagesContainer:React.FC<MessagesContainerProps>=({messages,setMessages,currentUserId,setChat})=> {

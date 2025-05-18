@@ -11,7 +11,7 @@ export async function getUser(req:Request,res:Response){
         res.status(404).json({msg:"User not found"})
       }
       const userData = {
-        name:user?.username,
+        username:user?.username,
         id:user?.id,
         avatar:user?.avatar
       }
@@ -65,3 +65,14 @@ export async function deleteUser(req:Request,res:Response){
   }
 }
 
+export async function getUsers(req:Request,res:Response){
+  const keyword = req.params.keyword
+  try {
+    const users = await prisma.user.findMany({where:{username:{startsWith:keyword}}})
+    const userList = users.map((user:any)=>{return {username:user.username,id:user.id,avatar:user.avatar}})
+    return res.status(200).json({msg:"users fetched successfully",users:userList})
+  } catch (error:any) {
+    console.error(error);
+    res.status(500).json({msg:"Internal server error",error:error});
+  }
+}

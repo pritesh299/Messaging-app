@@ -61,8 +61,7 @@ const SearchComponent: React.FC<SearchComponentProps> = ({ keyWord,setKeyword })
             }}
             onChange={(e)=>{setKeyword(e.target.value)} }
             className="w-[100%] bg-[#202c33] outline-none rounded-r-lg  text-white"
-            placeholder="Search by email"
-
+            placeholder="Search by usename"
             value={keyWord}
 
           />

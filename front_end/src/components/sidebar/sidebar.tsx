@@ -11,12 +11,12 @@ interface SidebarProps {
   viewNewContact: boolean;
   setChat:React.Dispatch<React.SetStateAction<boolean>>;
   setViewNewContact: React.Dispatch<React.SetStateAction<boolean>>;
-  setCurrentUserId: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentUserId: React.Dispatch<React.SetStateAction<Number>>;
   messages: [{
-    senderId: String;
+    senderId: Number;
     content: String;
     timestamp:string
-}]
+}] | undefined
 }
 
 const Sidebar:React.FC<SidebarProps>=( {messages,viewNewContact,setChat,setViewNewContact,setCurrentUserId})=>{

@@ -35,7 +35,8 @@ export async function getMessages(req: Request, res: Response) {
         if(!conversation){
             return res.status(404).json({ msg: "conversation not found" });
         }
-        const messageList = await Message.find({ conversationId: conversationId });
+        const response = await Message.find({ conversationId: conversationId });
+        const messageList = response.map((message:any)=>{return {senderId:message.senderId,timestamp:message.updatedAt,content:message.content,seen:message.seen}})
         return res.status(200).json({msg:'obtained the message list ',messageList:messageList})
     } catch (error) {
         console.error(error);

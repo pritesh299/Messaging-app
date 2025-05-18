@@ -9,8 +9,8 @@ import RegisterPage from "./authenticate/register";
 function App() {
     const [viewNewContact, setViewNewContact] = useState(false);
     const [authenticate, setAuthenticate] = useState(false)
-    const [currentUserId,setCurrentUserId]=useState("")
-    const [messages,setMessages]=useState< [{senderId: String; content: String; timestamp: string; }]>([{"senderId": "", "content": "", "timestamp": "" }])
+    const [currentUserId,setCurrentUserId]=useState<Number>(0)
+    const [messages,setMessages]=useState< [{senderId: Number; content: String; timestamp: string; }]>()
     const [chat,setChat]=useState(false)
     const [login,setLogin]= useState(true)
 
@@ -21,8 +21,7 @@ function App() {
                 <div className='flex flex-row fixed w-[98vw] justify-center h-[98vh] overflow-hidden'>
                     <div className='w-[30%] min-w-[375px] h-[100%] relative'>
                         {viewNewContact ? (
-                            // <NewChat setChat={setChat} viewNewContact={viewNewContact} setViewNewContact={setViewNewContact}  setCurrentUserId={setCurrentUserId} />
-                            <></>
+                            <NewChat setChat={setChat} viewNewContact={viewNewContact} setViewNewContact={setViewNewContact}  setCurrentUserId={setCurrentUserId} />
                         ) : (
                             <>
                                 <Sidebar

@@ -43,7 +43,8 @@ export function getMessages(req, res) {
             if (!conversation) {
                 return res.status(404).json({ msg: "conversation not found" });
             }
-            const messageList = yield Message.find({ conversationId: conversationId });
+            const response = yield Message.find({ conversationId: conversationId });
+            const messageList = response.map((message) => { return { senderId: message.senderId, timestamp: message.updatedAt, content: message.content, seen: message.seen }; });
             return res.status(200).json({ msg: 'obtained the message list ', messageList: messageList });
         }
         catch (error) {

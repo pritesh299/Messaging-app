@@ -1,22 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { getLastMessage, getUser } from "../../api";
+import { getGlobal, getLastMessage, getUser } from "../../api";
 import { setGlobal} from "../../api";
 
 interface CardProps {
    userId: Number;
    conversationId:String;
-  setCurrentUserId: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentUserId: React.Dispatch<React.SetStateAction<Number>>;
   setChat:React.Dispatch<React.SetStateAction<boolean>>;
   messages: [{
-    senderId: String;
+    senderId: Number;
     content: String;
     timestamp:string
-}]
+}] | undefined
 }
 
 const Card: React.FC<CardProps> = ({messages,conversationId,userId,setCurrentUserId,setChat}) => {
   const [hover, setHover] = useState(false);
-  const [user,setUser]=  useState<{id:string,userName:String,lastMessgae:string,TimeStamp:string,Avatar:string}>()
+  const [user,setUser]=  useState<{id:Number,userName:String,lastMessgae:string,TimeStamp:string,Avatar:string}>()
   
   useEffect(()=>{
      async function fetchData(){

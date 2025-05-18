@@ -10,15 +10,17 @@ interface ChatHeaderProps{
 const ChatHeader:React.FC<ChatHeaderProps> =({currentUserId,setChat})=>{
 
   const [viewSetting, setViewSetting] = useState(false);
-  const [user,setUser]=useState<{id:string,userName:String,Avatar:string}>()
+  const [user,setUser]=useState<{id:string,username:String,Avatar:string}>()
   useEffect(  ()=>{
     async function fetchUser(){
      let response  = await getUser(currentUserId)
      setUser({
        id:response.id,
-       userName:response.username,
+       username:response.username,
        Avatar:response.avatar
      })
+    console.log(response)
+
     }
     fetchUser()
  },[currentUserId])
@@ -32,7 +34,7 @@ const ChatHeader:React.FC<ChatHeaderProps> =({currentUserId,setChat})=>{
         </div>
        </div>
        <div className="flex flex-col w-[75%] text-white "> 
-          <p >{user&&user.userName}</p>
+          <p >{user&&user.username}</p>
           <p className=" text-sm text-slate-400">online status</p>
        </div>
        <div className="flex w-[20%] min-w-[125px] justify-end">

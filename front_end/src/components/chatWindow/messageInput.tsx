@@ -5,8 +5,16 @@ import { addMessage } from "../../api";
 interface MessageInputProps {
   currentUserId: Number;
   message: string;
-  messages: object[];
-  setMessages: React.Dispatch<React.SetStateAction<object[]>>;
+  setMessages: React.Dispatch<React.SetStateAction<[{
+    senderId: Number;
+    content: String;
+    timestamp:string
+}] | undefined>>
+  messages: [{
+    senderId: Number;
+    content: String;
+    timestamp:string
+}] | undefined
   setShowEmoji: React.Dispatch<React.SetStateAction<boolean>>
   setMessage: React.Dispatch<React.SetStateAction<string>>
 }

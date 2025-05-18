@@ -3,11 +3,11 @@ import { getGlobal } from "../../api";
 
 
 
-function Message({message,currentUserId}:{message:{senderId:Number,content:String,updatedAt:string},currentUserId:Number}) {
+function Message({message,currentUserId}:{message:{senderId:Number,content:String,timestamp:string},currentUserId:Number}) {
 
 const [reciver,setReciver]= useState<boolean>()
 const [read,setRead]= useState(false)
-
+console.log(message)
   useEffect(()=>{
  
     if(message.senderId===getGlobal('id')){
@@ -54,7 +54,7 @@ const [read,setRead]= useState(false)
          <p>{message.content}</p>
        </div>
      </div>
-     <div className=" float-right text-[10px] flex items-end min-w-[50px] m-1">{new Date(message.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
+     <div className=" float-right text-[10px] flex items-end min-w-[50px] m-1">{new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
      
    </div>
   
@@ -70,7 +70,7 @@ const [read,setRead]= useState(false)
               <p>{message.content}</p>
               </div>
               <div className=" float-right flex min-w-[50px]  items-end">
-                <div className="text-[10px] flex items-end min-w-[50px]">{new Date(message.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
+                <div className="text-[10px] flex items-end min-w-[50px]">{new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
                 <div className="text-[10px] flex items-end min-w-[5px]">
            
                     <svg

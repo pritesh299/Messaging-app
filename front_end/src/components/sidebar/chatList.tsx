@@ -4,13 +4,13 @@ import { getConversations, getUser } from "../../api";
 import { getGlobal } from "../../api";
 
 interface RenderCardsProps{
-  setCurrentUserId: React.Dispatch<React.SetStateAction<string>>;
+  setCurrentUserId: React.Dispatch<React.SetStateAction<Number>>;
   setChat:React.Dispatch<React.SetStateAction<boolean>>;
   messages: [{
-    senderId: String;
+    senderId: Number;
     content: String;
     timestamp:string
-}]
+}] | undefined
 }
 interface chatProfileProps {
   conversationId: string;
@@ -30,11 +30,12 @@ const RenderCards:React.FC<RenderCardsProps>=({messages,setChat,setCurrentUserId
           for(let i = 0;i<response.conversations.length;i++){
             updatedList.push({
               conversationId: response.conversations[i]._id,
-              id: response.conversations[i].memberList[0],
+              id: response.conversations[i].memberList[0]| getGlobal("id"),
               updatedAt: response.conversations[i].updatedAt,
             });
           }
         }
+        console.log(updatedList)
         setChatList(updatedList);
       } catch (err) {
         console.log(err);

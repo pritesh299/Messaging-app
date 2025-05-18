@@ -1,16 +1,15 @@
 import React, { useState } from "react";
-import { getGlobal }  from "../../api";
-import { addContact } from "../../api";
+import { getGlobal,addConversation }  from "../../api";
 
 interface ContactItemProp {
   user: {
-    _id:string
+    id:Number
     username: string;
     email: string;
     avatar:string
 
   };
-  setCurrentUserId:React.Dispatch<React.SetStateAction<string>>;
+  setCurrentUserId:React.Dispatch<React.SetStateAction<Number>>;
   setChat:React.Dispatch<React.SetStateAction<boolean>>;
   setViewNewContact: React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -21,8 +20,9 @@ const ContactItem: React.FC<ContactItemProp> = ({ user,setCurrentUserId,setChat,
 
    async function clickHandler()
    {
-    setCurrentUserId(user._id) 
-    console.log(await addContact(user,getGlobal("id")))
+    const resposne = await addConversation(user.id,getGlobal("id")) 
+    console.log(resposne)
+    setCurrentUserId(user.id) 
     setChat(true)
     setViewNewContact(false) 
    }
@@ -30,7 +30,7 @@ const ContactItem: React.FC<ContactItemProp> = ({ user,setCurrentUserId,setChat,
   return (
     <>
       <button
-        id={user._id}
+        id={user.id.toString()}
         onClick={clickHandler}
         onMouseEnter={() => setHover(true)}
         onMouseOver={() => setHover(true)}

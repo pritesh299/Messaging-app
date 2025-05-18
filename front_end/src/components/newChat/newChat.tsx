@@ -6,7 +6,7 @@ import { getUsers } from "../../api";
 interface NewChatProps{
   viewNewContact: boolean;
   setViewNewContact: React.Dispatch<React.SetStateAction<boolean>>;
-  setCurrentUserId:React.Dispatch<React.SetStateAction<string>>;
+  setCurrentUserId:React.Dispatch<React.SetStateAction<Number>>;
   setChat:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -18,10 +18,8 @@ const NewChat:React.FC<NewChatProps>=({viewNewContact,setViewNewContact,setCurre
   useEffect(() => {
     const fetchData = async () => {
       try {
-
           const data = await getUsers(keyWord);
-          setUserList([...data]);
-
+          setUserList([...data.users]);
       } catch (error) {
         
         setUserList([])

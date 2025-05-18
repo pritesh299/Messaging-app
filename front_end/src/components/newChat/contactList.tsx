@@ -3,7 +3,7 @@ import ContactItem from "./contactItem";
 
 interface ContactListProps{
   userList:any[]
-  setCurrentUserId:React.Dispatch<React.SetStateAction<string>>;
+  setCurrentUserId:React.Dispatch<React.SetStateAction<Number>>;
   setChat:React.Dispatch<React.SetStateAction<boolean>>;
   setViewNewContact: React.Dispatch<React.SetStateAction<boolean>>;
 
