@@ -21,6 +21,7 @@ export function Socket(app, corsOption) {
         console.log('user connected with socket id:', socket.id);
         socket.on("addUsers", (userId) => {
             addUserToSocket(userId, socket.id);
+            console.log('users array:', users);
             io.emit("getUsers", users);
         });
         socket.on('sendMessage', (data) => {

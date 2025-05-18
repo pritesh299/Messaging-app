@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Sidebar from './sidebar/sidebar';
 import ChatWindow from './chatWindow/chatWindow';
 import NewChat from './newChat/newChat';
@@ -45,11 +45,11 @@ function App() {
                </> 
             ) : (
                 <>
-                <div className="flex items-center w-full  justify-center bg-[#111b21] min-h-screen ">
-                    { login 
-                    ? <LoginPage  setLogin={setLogin}  setAuthenticate={setAuthenticate} /> 
-                    : <RegisterPage setLogin={setLogin}  setAuthenticate={setAuthenticate} />}
-                </div>
+                    <div className="flex items-center w-full  justify-center bg-[#111b21] min-h-screen ">
+                        { login 
+                        ? <LoginPage  setLogin={setLogin}  setAuthenticate={setAuthenticate} /> 
+                        : <RegisterPage setLogin={setLogin}  setAuthenticate={setAuthenticate} />}
+                    </div>
                 </>
             )}
         </>

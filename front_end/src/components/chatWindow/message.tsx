@@ -7,7 +7,6 @@ function Message({message,currentUserId}:{message:{senderId:Number,content:Strin
 
 const [reciver,setReciver]= useState<boolean>()
 const [read,setRead]= useState(false)
-console.log(message)
   useEffect(()=>{
  
     if(message.senderId===getGlobal('id')){

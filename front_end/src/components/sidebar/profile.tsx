@@ -3,7 +3,6 @@ import { getGlobal } from "../../api";
 
 interface profileProps{
     setViewProfile: React.Dispatch<React.SetStateAction<boolean>>
-
 }
 
 const Profile:React.FC<profileProps>=({setViewProfile})=> {

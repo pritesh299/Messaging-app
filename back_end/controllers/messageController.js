@@ -14,7 +14,6 @@ export function createMessage(req, res) {
         let { conversationId, senderId, content, seen } = req.body;
         senderId = parseInt(senderId);
         seen = seen == 'true' ? true : false;
-        console.log(conversationId, senderId, content, seen);
         try {
             const conversation = yield Conversation.find({ conversationId });
             if (!conversation) {

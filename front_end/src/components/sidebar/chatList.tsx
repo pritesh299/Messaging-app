@@ -35,7 +35,6 @@ const RenderCards:React.FC<RenderCardsProps>=({messages,setChat,setCurrentUserId
             });
           }
         }
-        console.log(updatedList)
         setChatList(updatedList);
       } catch (err) {
         console.log(err);

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { getGlobal, socket } from "../../api";
 import { addMessage } from "../../api";
+import { AxiosResponse } from "axios";
 
 interface MessageInputProps {
   currentUserId: Number;
@@ -22,8 +23,6 @@ interface MessageInputProps {
 
 function MessageInput({currentUserId,messages,setMessages,message, setMessage,setShowEmoji}:MessageInputProps) {
   const [focus, setFocus] = useState(false);
- 
-  const [post, setPost] = useState({ senderId: "" });
 
   async function sendMessage() {
     if(message!==""){
@@ -36,11 +35,20 @@ function MessageInput({currentUserId,messages,setMessages,message, setMessage,se
       seen: false,
       updatedAt: new Date()
     };
-  
-    const response = await addMessage(newMessage)
-        
-    // setMessages([...messages,response.data.message]) 
-  }
+    const response: any = await addMessage(newMessage)
+    console.log(response)
+    if(messages&&(response.status === 201)){
+
+      let messageList : typeof messages =  messages && [...messages]
+      messageList.push({
+        senderId: newMessage.senderId,
+        content: newMessage.content,
+        timestamp:newMessage.updatedAt.toString()
+      })
+      setMessages(messageList)
+    }
+    setFocus(false)
+    }
   }
 
 // socket.on("getMessage",(data)=>{

@@ -29,13 +29,13 @@ export function Socket(app: Express,corsOption:{ origin: string | undefined;cred
 const httpServer = createServer(app);
 const io = new Server(httpServer,{
   cors:corsOption
-
 })
 
 io.on('connection', (socket) => {
     console.log('user connected with socket id:',socket.id);
     socket.on("addUsers", (userId: string ) => {
         addUserToSocket(userId, socket.id);
+        console.log('users array:', users)
         io.emit("getUsers", users);
     });
 
@@ -43,7 +43,6 @@ io.on('connection', (socket) => {
       const user = users.find(user => user.userId === data.receiverId);
         if (user) {
             socket.to(user.socketId).emit('getMessage', data);
-
         }
     });
 });

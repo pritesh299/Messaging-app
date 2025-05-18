@@ -26,7 +26,7 @@ const Sidebar:React.FC<SidebarProps>=( {messages,viewNewContact,setChat,setViewN
     socket.on("connect",()=>{
       })
     socket.emit("addUsers",getGlobal("id"))
-})
+  })
 
 
   return (
