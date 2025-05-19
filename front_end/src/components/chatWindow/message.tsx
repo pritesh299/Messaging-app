@@ -1,22 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { getGlobal } from "../../api";
+import { getGlobal,Message } from "../../api";
 
 
 
-function Message({message,currentUserId}:{message:{senderId:Number,content:String,timestamp:string},currentUserId:Number}) {
+function MessageCard({message,currentUserId}:{message:Message,currentUserId:Number}) {
 
-const [reciver,setReciver]= useState<boolean>()
+const [reciver,setReciver]= useState<boolean>((message.senderId===getGlobal('id')?false:true))
 const [read,setRead]= useState(false)
-  useEffect(()=>{
- 
-    if(message.senderId===getGlobal('id')){
-      setReciver(false);
-    }else {
-      setReciver(true);
-    }
-  },[])
-  
-
   return (
     <>
    {reciver
@@ -54,7 +44,6 @@ const [read,setRead]= useState(false)
        </div>
      </div>
      <div className=" float-right text-[10px] flex items-end min-w-[50px] m-1">{new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false })}</div>
-     
    </div>
   
  </div>
@@ -114,17 +103,9 @@ const [read,setRead]= useState(false)
      
        </>}
    
-
- 
-     {/*  {props.left && (
-         
-      )}
-      {props.right && (
-        
-      )} */}
     </>
   );
 }
 
-export default Message;
+export default MessageCard;
 

@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 import Message from "../models/Message.js";
 import Conversation from "../models/Conversation.js";
+import { io } from "../server.js";
 export function createMessage(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
         let { conversationId, senderId, content, seen } = req.body;
@@ -24,7 +25,9 @@ export function createMessage(req, res) {
                 senderId: senderId,
                 content: content,
                 seen: seen,
+                updatedAt: new Date(),
             });
+            io.to(conversationId).emit('new message', { senderId: message.senderId, content: message.content, seen: message.seen, timestamp: message.updatedAt });
             yield message.save();
             res.status(201).json({ message: message, msg: "message has been registered" });
         }
@@ -61,7 +64,7 @@ export function getLastMessage(req, res) {
             if (!conversation) {
                 return res.status(404).json({ msg: "conversation not found" });
             }
-            const messageList = yield Message.find({ conversationId: conversationId, senderId: userId }).sort({ createdAt: -1 }).limit(1);
+            const messageList = yield Message.find({ conversationId: conversationId }).sort({ updatedAt: -1 }).limit(1);
             return res.status(200).json({ msg: 'obtained the last message ', lastMessage: messageList[0] });
         }
         catch (error) {

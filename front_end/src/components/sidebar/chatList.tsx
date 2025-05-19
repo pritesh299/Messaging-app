@@ -1,16 +1,12 @@
 import React, { useEffect, useState } from "react";
 import Card from "./card";
 import { getConversations, getUser } from "../../api";
-import { getGlobal } from "../../api";
+import { getGlobal,Message } from "../../api";
 
 interface RenderCardsProps{
   setCurrentUserId: React.Dispatch<React.SetStateAction<Number>>;
   setChat:React.Dispatch<React.SetStateAction<boolean>>;
-  messages: [{
-    senderId: Number;
-    content: String;
-    timestamp:string
-}] | undefined
+  messages: Message[] | undefined
 }
 interface chatProfileProps {
   conversationId: string;
@@ -24,13 +20,12 @@ const RenderCards:React.FC<RenderCardsProps>=({messages,setChat,setCurrentUserId
     async function fetchChatList() {
       try {
         const response  = await getConversations(getGlobal("id"));
-        console.log(response)
         const updatedList = []
         if (response && response.conversations) {
           for(let i = 0;i<response.conversations.length;i++){
             updatedList.push({
               conversationId: response.conversations[i]._id,
-              id: response.conversations[i].memberList[0]| getGlobal("id"),
+              id: (response.conversations[i].memberList[0])? response.conversations[i].memberList[0] :  getGlobal("id"),
               updatedAt: response.conversations[i].updatedAt,
             });
           }

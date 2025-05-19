@@ -2,6 +2,14 @@ import axios from "axios"
 import { io } from "socket.io-client";
 let serverURL="http://localhost:3000/"
 
+export  interface Message {
+    senderId: Number;
+    content: String;
+    timestamp: string;
+    seen:Boolean;
+    conversationId:string
+  }
+
 export const socket=io(serverURL)
 
 let _obj:any={}
@@ -50,7 +58,7 @@ export async function LoginUser(userCredentails:object) {
 
 export async function getLastMessage(conversationId:String,senderId:Number){
   try {
-      const response = await axios.get(`${serverURL}messages/LastMessage/${conversationId}/${senderId}`);
+      const response = await axios.get(`${serverURL}messages/LastMessage/${conversationId}`);
       return response.data.lastMessage
 
     } catch (error: any) {
@@ -109,15 +117,13 @@ export async function addMessage( messageData:object ) {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
   })
-  console.log(response);
+
     return response;
   }catch(error){
     console.log(error);
     return error;
   }
 }
-
-
 
 export async function addConversation(userId1:Number,UserId2:Number) {
   const data = {

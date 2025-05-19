@@ -3,7 +3,7 @@ import ProfileHeadBar from "./userProfile";
 import SearchComponent from "./searchBar";
 import RenderCards from "./chatList";
 import Profile from "./profile";
-import { getGlobal, socket } from '../../api';
+import { Message } from "../../api";
 
 
 
@@ -12,21 +12,13 @@ interface SidebarProps {
   setChat:React.Dispatch<React.SetStateAction<boolean>>;
   setViewNewContact: React.Dispatch<React.SetStateAction<boolean>>;
   setCurrentUserId: React.Dispatch<React.SetStateAction<Number>>;
-  messages: [{
-    senderId: Number;
-    content: String;
-    timestamp:string
-}] | undefined
+  messages: Message[] | undefined;
 }
 
 const Sidebar:React.FC<SidebarProps>=( {messages,viewNewContact,setChat,setViewNewContact,setCurrentUserId})=>{
   const [viewProfile,setViewProfile] =useState(false)
 
-  useEffect(()=>{
-    socket.on("connect",()=>{
-      })
-    socket.emit("addUsers",getGlobal("id"))
-  })
+ 
 
 
   return (

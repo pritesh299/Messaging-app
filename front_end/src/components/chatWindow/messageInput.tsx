@@ -1,67 +1,42 @@
 import React, { useEffect, useState } from "react";
-import { getGlobal, socket } from "../../api";
-import { addMessage } from "../../api";
-import { AxiosResponse } from "axios";
+import { getGlobal,socket,Message,addMessage } from "../../api";
 
 interface MessageInputProps {
   currentUserId: Number;
-  message: string;
-  setMessages: React.Dispatch<React.SetStateAction<[{
-    senderId: Number;
-    content: String;
-    timestamp:string
-}] | undefined>>
-  messages: [{
-    senderId: Number;
-    content: String;
-    timestamp:string
-}] | undefined
+  messageString: string;
+  setMessages: React.Dispatch<React.SetStateAction<Message[] | undefined>>
+  messages: Message[] | undefined
   setShowEmoji: React.Dispatch<React.SetStateAction<boolean>>
   setMessage: React.Dispatch<React.SetStateAction<string>>
 }
 
-
-function MessageInput({currentUserId,messages,setMessages,message, setMessage,setShowEmoji}:MessageInputProps) {
+function MessageInput({currentUserId,messages,setMessages,messageString, setMessage,setShowEmoji}:MessageInputProps) {
   const [focus, setFocus] = useState(false);
 
   async function sendMessage() {
-    if(message!==""){
-    // const data={sender:,message:message}
-    // // socket.emit("sendMessage",data)
+    if(messageString!==""){
+
     const newMessage = {
       senderId: getGlobal("id"),
       conversationId:getGlobal("conversationId"),
-      content: message,
+      content: messageString,
       seen: false,
       updatedAt: new Date()
     };
     const response: any = await addMessage(newMessage)
-    console.log(response)
     if(messages&&(response.status === 201)){
-
-      let messageList : typeof messages =  messages && [...messages]
-      messageList.push({
+      const message:Message =  {
         senderId: newMessage.senderId,
         content: newMessage.content,
-        timestamp:newMessage.updatedAt.toString()
-      })
-      setMessages(messageList)
+        timestamp:newMessage.updatedAt.toString(),
+        seen:newMessage.seen,
+        conversationId:newMessage.conversationId,
+      }
+      setMessages([...messages,message])
+    }
     }
     setFocus(false)
     }
-  }
-
-// socket.on("getMessage",(data)=>{
-//     const recivedMessaged:object = {
-//       senderId: currentUserId,
-//       receiverId:getGlobal("id") ,
-//       message: data.message,
-//       seen: false,
-//       time: getTime(),
-//       date: getDate(),
-//     };
-//     messages&&setMessages([...messages,recivedMessaged]) 
-//   }) 
 
 useEffect(()=>{
     setMessage("")
@@ -69,12 +44,12 @@ useEffect(()=>{
 },[currentUserId])
 
 useEffect(()=>{
-  if(message===""){
+  if(messageString===""){
    setFocus(false)
   }else{
     setFocus(true)
   }
-},[message])
+},[messageString])
 
   return (
     <>
@@ -114,7 +89,7 @@ useEffect(()=>{
               }}
               className="min-w-[300px] w-[90%] px-4 py-2 rounded-lg outline-none bg-[#2a3942] text-white"
               type="text"
-              value={message}
+              value={messageString}
             />
             {focus ? (
               <button 

@@ -19,7 +19,7 @@ router.put("/users/:id",updateUser)
 router.post("/conversations", createConversation);             // Create a new 1-on-1 conversation
 router.get("/conversations/:userId", getConversations);        // Create a new 1-on-1 conversation
 router.post("/messages", createMessage);
-router.get("/messages/lastMessage/:conversationId/:userId", getLastMessage)
+router.get("/messages/lastMessage/:conversationId", getLastMessage)
 router.get("/messages/:conversationId", getMessages) 
 // router.get("/contacts/:userId", getContacts);
 

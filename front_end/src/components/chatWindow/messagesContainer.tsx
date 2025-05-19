@@ -1,46 +1,56 @@
 import React, { useEffect, useRef, useState } from "react";
 import ChatHeader from "./chatHeader";
 import MessageInput from "./messageInput";
-import Message from "./message";
-import { getMessages, socket } from "../../api";
-import { getGlobal } from "../../api";
+import MessageCard from "./message";
+import { getMessages,socket,getGlobal,Message } from "../../api";
 import EmojiTray from "./emojiTray";
 
 interface MessagesContainerProps {
   currentUserId: Number;
   setChat: React.Dispatch<React.SetStateAction<boolean>>
-  setMessages: React.Dispatch<React.SetStateAction<[{
-    senderId: Number;
-    content: String;
-    timestamp: string
-  }] | undefined>>
-  messages: [{
-    senderId: Number;
-    content: String;
-    timestamp: string
-  }] | undefined
+  setMessages: React.Dispatch<React.SetStateAction<Message[] | undefined>>
+  messages: Message[] | undefined
 }
-
 const MessagesContainer: React.FC<MessagesContainerProps> = ({ messages, setMessages, currentUserId, setChat }) => {
 
   const [showEmoji, setShowEmoji] = useState<boolean>(false)
   const [message, setMessage] = useState("");
   const MesagesRef: any = useRef(null)
 
+  async function fetchMessageList() {
+    const conversationId = getGlobal("conversationId")
+    if (conversationId === null) return
+    let messageList = await getMessages(conversationId)
+    setMessages(messageList)
+  }
+
   useEffect(() => {
-    async function fetchMessageList() {
-      const conversationId = getGlobal("conversationId")
-      if (conversationId === null) return
-      let messageList = await getMessages(conversationId)
-      setMessages(messageList)
-    }
     fetchMessageList()
   }, [currentUserId])
 
   useEffect(() => {
     MesagesRef.current?.lastElementChild?.scrollIntoView()
-    console.log(messages)
   }, [messages])
+  useEffect(() => {
+    const conversationId = getGlobal("conversationId");
+
+    if (conversationId) {
+      socket.emit('join room', conversationId);
+    }
+    const handleNewMessage = (newMessage: Message) => {
+      fetchMessageList()
+      // updatedList?.push(newMessage);
+      // setMessages(updatedList);
+      // // messages&&setMessages();
+    };
+    socket.on('new message', handleNewMessage);
+  
+    return () => {
+      socket.off('new message', handleNewMessage);
+    };
+  }, []);
+  
+
 
   return (
     <div className="h-[100%]">
@@ -57,11 +67,11 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({ messages, setMess
         <div className="h-[85%] w-full bg-[#0b141a] bg-opacity-[0.95]  pt-2 pb-4">
           <div ref={MesagesRef} className="h-full w-full overflow-y-scroll relative px-[5%]">
             {messages && messages.map((message, index) => (
-              <><Message key={index} message={message} currentUserId={currentUserId}></Message></>
+              <><MessageCard key={index} message={message} currentUserId={currentUserId}></MessageCard></>
             ))}
           </div>
         </div>
-        <MessageInput message={message} setMessage={setMessage} currentUserId={currentUserId} messages={messages} setMessages={setMessages} setShowEmoji={setShowEmoji} />
+        <MessageInput messageString={message} setMessage={setMessage} currentUserId={currentUserId} messages={messages} setMessages={setMessages} setShowEmoji={setShowEmoji} />
       </div>
     </div>
   );

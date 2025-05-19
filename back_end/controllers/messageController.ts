@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import Message from "../models/Message.js";
 import Conversation from "../models/Conversation.js";
+import { io } from "../server.js";
+import { timeStamp } from "console";
 
 export  async function createMessage(req: Request, res: Response) {
     let { conversationId, senderId, content,seen} = req.body;
@@ -18,7 +20,10 @@ export  async function createMessage(req: Request, res: Response) {
             senderId: senderId,
             content: content,
             seen: seen,
+            updatedAt: new Date(),
         });
+        
+        io.to(conversationId).emit('new message', {senderId:message.senderId,content:message.content,seen:message.seen,timestamp:message.updatedAt}); 
         await message.save();
         res.status(201).json({message:message,msg:"message has been registered"});
     } catch (error) {
@@ -51,8 +56,7 @@ export async function getLastMessage(req: Request, res: Response) {
         if(!conversation){
             return res.status(404).json({ msg: "conversation not found" });
         }
-        const messageList = await Message.find({ conversationId: conversationId ,senderId:userId }).sort({ createdAt: -1 }).limit(1);
-
+        const messageList = await Message.find({ conversationId: conversationId }).sort({updatedAt: -1}).limit(1);
         return res.status(200).json({msg:'obtained the last message ',lastMessage:messageList[0]})
     } catch (error) {
         console.error(error);
