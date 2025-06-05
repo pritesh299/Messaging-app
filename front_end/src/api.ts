@@ -57,7 +57,7 @@ export async function LoginUser(userCredentails:object) {
     }
 }
 
-export async function getLastMessage(conversationId:String,senderId:Number){
+export async function getLastMessage(conversationId:String){
   try {
       const response = await axios.get(`${serverURL}messages/LastMessage/${conversationId}`);
       return response.data.lastMessage

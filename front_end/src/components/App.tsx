@@ -4,7 +4,7 @@ import ChatWindow from './chatWindow/chatWindow';
 import NewChat from './newChat/newChat';
 import LoginPage from "./authenticate/login";
 import RegisterPage from "./authenticate/register";
-import { getGlobal, Message, socket } from '../api';
+import { Message, socket } from '../api';
 
 function App() {
     const [viewNewContact, setViewNewContact] = useState(false);

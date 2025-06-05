@@ -1,7 +1,7 @@
 // App.js
-import React, { useState } from 'react';
+import React from 'react';
 import EmojiPicker from 'emoji-picker-react';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 

@@ -37,11 +37,11 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({ messages, setMess
     if (conversationId) {
       socket.emit('join room', conversationId);
     }
-    const handleNewMessage = (newMessage: Message) => {
+    const handleNewMessage = () => {
       fetchMessageList()
       // updatedList?.push(newMessage);
       // setMessages(updatedList);
-      // // messages&&setMessages();
+      // messages&&setMessages();
     };
     socket.on('new message', handleNewMessage);
   
@@ -67,7 +67,7 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({ messages, setMess
         <div className="h-[85%] w-full bg-[#0b141a] bg-opacity-[0.95]  pt-2 pb-4">
           <div ref={MesagesRef} className="h-full w-full overflow-y-scroll relative px-[5%]">
             {messages && messages.map((message, index) => (
-              <><MessageCard key={index} message={message} currentUserId={currentUserId}></MessageCard></>
+              <><MessageCard key={index} message={message}></MessageCard></>
             ))}
           </div>
         </div>

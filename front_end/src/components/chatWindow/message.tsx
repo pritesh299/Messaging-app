@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import { getGlobal,Message } from "../../api";
 
 
 
-function MessageCard({message,currentUserId}:{message:Message,currentUserId:Number}) {
+function MessageCard({message}:{message:Message}) {
 
-const [reciver,setReciver]= useState<boolean>((message.senderId===getGlobal('id')?false:true))
-const [read,setRead]= useState(false)
+const [reciver]= useState<boolean>((message.senderId===getGlobal('id')?false:true))
+const [read]= useState(false)
   return (
     <>
    {reciver

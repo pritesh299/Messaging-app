@@ -17,7 +17,7 @@ const Card: React.FC<CardProps> = ({messages,conversationId,userId,setCurrentUse
   useEffect(()=>{
      async function fetchData(){
       let userData  = await getUser(userId)
-      let lastMessgae = await getLastMessage(conversationId,userId)
+      let lastMessgae = await getLastMessage(conversationId)
       const isoString = lastMessgae?lastMessgae.updatedAt:"";
       const time = new Date(isoString).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
       userData&&setUser({

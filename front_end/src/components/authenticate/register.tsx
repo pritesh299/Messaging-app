@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
-import { getGlobal, registerUser } from '../../api';
+import { registerUser } from '../../api';
 import { setGlobal } from "../../api";
 import CircularProgress from '@mui/material/CircularProgress';
-import { common } from '@mui/material/colors';
 
 
 interface AuthenticateProps {

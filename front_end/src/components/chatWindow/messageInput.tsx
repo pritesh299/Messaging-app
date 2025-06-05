@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getGlobal,socket,Message,addMessage } from "../../api";
+import { getGlobal,Message,addMessage } from "../../api";
 
 interface MessageInputProps {
   currentUserId: Number;

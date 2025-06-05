@@ -12,7 +12,7 @@ interface ContactListProps{
 const ContactList :React.FC<ContactListProps>= ({userList,setCurrentUserId,setChat,setViewNewContact})=> {
 
   const [NoneUser,setNoneUser]=useState(false)
-  const [hover, setHover] = useState(false);  
+  // const [hover, setHover] = useState(false);  
   
   useEffect(() => {
     if (userList.length === 0 || userList[0] === "no users") {
@@ -32,9 +32,9 @@ const ContactList :React.FC<ContactListProps>= ({userList,setCurrentUserId,setCh
         { userList && userList.map((user) => <ContactItem key={user.id} setViewNewContact={setViewNewContact} user={user} setChat={setChat} setCurrentUserId={setCurrentUserId}/>)}
         {NoneUser&&
         <div
-        onMouseEnter={() => setHover(true)}
-        onMouseOver={() => setHover(true)}
-        onMouseOut={() => setHover(false)}
+        // onMouseEnter={() => setHover(true)}
+        // onMouseOver={() => setHover(true)}
+        // onMouseOut={() => setHover(false)}
         className={`card h-[70px] gap-[5px] text-white flex justify-center items-center w-[100%] bg-[#111b21] `}
       >
          <div className=" text-center" >No  Users  </div>

@@ -11,8 +11,8 @@ const ChatHeader:React.FC<ChatHeaderProps> =({currentUserId,setChat})=>{
 
   const [viewSetting, setViewSetting] = useState(false);
   const [user,setUser]=useState<{id:string,username:String,Avatar:string}>()
-  const [online,setOnline]=useState(false)
-  const [isTyping,setIsTyping]=useState(false)
+  // const [online,setOnline]=useState(false)
+  // const [isTyping,setIsTyping]=useState(false)
   useEffect(  ()=>{
     async function fetchUser(){
      let response  = await getUser(currentUserId)

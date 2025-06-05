@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Card from "./card";
-import { getConversations, getUser } from "../../api";
+import { getConversations } from "../../api";
 import { getGlobal,Message } from "../../api";
 
 interface RenderCardsProps{
