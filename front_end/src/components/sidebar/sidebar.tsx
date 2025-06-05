@@ -36,6 +36,7 @@ const Sidebar:React.FC<SidebarProps>=( {messages,viewNewContact,setChat,setViewN
         viewNewContact={viewNewContact} 
         setViewNewContact={setViewNewContact} 
         setViewProfile={setViewProfile}
+        setChat={setChat}
       />
       <SearchComponent/>
       <RenderCards messages={messages} setCurrentUserId={setCurrentUserId} setChat={setChat}/> 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { getGlobal,addConversation }  from "../../api";
+import { getGlobal,addConversation, setGlobal }  from "../../api";
 
 interface ContactItemProp {
   user: {
@@ -23,6 +23,8 @@ const ContactItem: React.FC<ContactItemProp> = ({ user,setCurrentUserId,setChat,
     const resposne = await addConversation(user.id,getGlobal("id")) 
     console.log(resposne)
     setCurrentUserId(user.id) 
+    console.log(user.id,)
+    setGlobal({"conversationId":resposne.conversation._id,"activeChatUserId":user.id})
     setChat(true)
     setViewNewContact(false) 
    }

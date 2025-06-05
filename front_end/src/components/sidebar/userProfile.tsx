@@ -15,6 +15,7 @@ function ProfileHeadBar(props: any) {
             <button
               onClick={() => {
                 props.setViewNewContact(!props.viewNewContact);
+                props.setChat(false)
               }}
               className="hover:bg-[#2a3942] rounded-full p-2"
             >

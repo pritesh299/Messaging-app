@@ -1,6 +1,6 @@
 import axios from "axios"
 import { io } from "socket.io-client";
-let serverURL="http://localhost:3000/"
+let serverURL="http://16.171.2.212:3000/"
 
 export  interface Message {
     senderId: Number;
@@ -37,7 +37,7 @@ export async function registerUser(userCredentails:object){
   })
     return response.data;
   }catch(error:any){
-    return error.response.data;
+    return error.response;
   }
 }
 
@@ -52,7 +52,8 @@ export async function LoginUser(userCredentails:object) {
     return response.data;
     }
     catch(error:any){
-      return error.response.data;
+      console.log(error )
+      return error.response;
     }
 }
 
