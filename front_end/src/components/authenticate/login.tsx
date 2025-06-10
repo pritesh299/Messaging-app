@@ -25,17 +25,14 @@ const LoginPage: React.FC<AuthenticateProps> = ({ setLogin, setAuthenticate }) =
     const sendToken = async () => {
       setLoading(true);
       const response = await LoginUser({ token });
-
       if (response.code === 0) {
         handleSuccessfulLogin(response);
       } else {
         setUserExists(false);
         setCorrectPassword(false);
       }
-
       setLoading(false);
     };
-
     sendToken();
   }, []);
 

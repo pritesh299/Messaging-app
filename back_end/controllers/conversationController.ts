@@ -31,7 +31,8 @@ export async function createConversation(req:Request,res:Response){
       res.status(500).json({msg:"Internal server error",error:error});
     } 
   }
-  export async function getConversations(req:Request,res:Response){
+
+export async function getConversations(req:Request,res:Response){
      const userId = parseInt(req.params.userId)
   
      try{

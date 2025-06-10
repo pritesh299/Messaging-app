@@ -24,32 +24,35 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({ messages, setMess
     setMessages(messageList)
   }
 
+
+
   useEffect(() => {
     fetchMessageList()
+        const conversationId = getGlobal("conversationId");
+
+    if (conversationId) {
+      socket.emit('join room', conversationId, currentUserId);
+    }
+    const handleNewMessage = () => {
+      fetchMessageList()
+    };
+    socket.on('new message', handleNewMessage);
+    socket.on('message read',()=>{
+      messages?.forEach((message)=>{
+        if (message.senderId !== currentUserId && message.seen === false) {
+          message.seen = true;
+      }
+    })
+  })
+
+    return () => {
+      socket.off('new message', handleNewMessage);
+    };
   }, [currentUserId])
 
   useEffect(() => {
     MesagesRef.current?.lastElementChild?.scrollIntoView()
   }, [messages])
-  useEffect(() => {
-    const conversationId = getGlobal("conversationId");
-
-    if (conversationId) {
-      socket.emit('join room', conversationId);
-    }
-    const handleNewMessage = () => {
-      fetchMessageList()
-      // updatedList?.push(newMessage);
-      // setMessages(updatedList);
-      // messages&&setMessages();
-    };
-    socket.on('new message', handleNewMessage);
-  
-    return () => {
-      socket.off('new message', handleNewMessage);
-    };
-  }, []);
-  
 
 
   return (

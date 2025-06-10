@@ -1,5 +1,5 @@
 import React,{useEffect, useState} from "react";
-import { getUser } from "../../api";
+import { getGlobal, getUser, socket } from "../../api";
  
 interface ChatHeaderProps{
   currentUserId:Number;
@@ -11,7 +11,7 @@ const ChatHeader:React.FC<ChatHeaderProps> =({currentUserId,setChat})=>{
 
   const [viewSetting, setViewSetting] = useState(false);
   const [user,setUser]=useState<{id:string,username:String,Avatar:string}>()
-  // const [online,setOnline]=useState(false)
+  const [onlineStatus,setOnlineStatus]=useState(false)
   // const [isTyping,setIsTyping]=useState(false)
   useEffect(  ()=>{
     async function fetchUser(){
@@ -24,19 +24,25 @@ const ChatHeader:React.FC<ChatHeaderProps> =({currentUserId,setChat})=>{
     }
     fetchUser()
 
+    socket.emit('get user status', currentUserId);
+    socket.on('user status', (status: boolean) => {
+        setOnlineStatus(status);
+    });
+
  },[currentUserId])
 
 
   return(<>
    <div className=" w-[100%] h-[7.5%] bg-[#202c33] px-4 py-[6px] flex border-x border-slate-700">
        <div className="w-[5%] min-w-[50px]" >
-        <div className="h-[40px] w-[40px] bg-white rounded-full overflow-hidden" >
-        <img src={user&&user.Avatar} alt="contcat image" />
-        </div>
+          <div className="h-[40px] w-[40px] bg-white rounded-full relative" >
+            <img src={user&&user.Avatar} alt="contcat image"  className="rounded-full object-cover object-center bg-cover bg-center"/>
+            <div className={`h-[10px] w-[10px] rounded-full ${onlineStatus? "bg-[#008000]" : "bg-white"} absolute right-0 bottom-0 `}></div> 
+          </div>
        </div>
        <div className="flex flex-col w-[75%] text-white "> 
           <p >{user&&user.username}</p>
-          <p className=" text-sm text-slate-400">online status</p>
+          <p className=" text-sm text-slate-400">{onlineStatus?"Online": "Offline"}</p>
        </div>
        <div className="flex w-[20%] min-w-[125px] justify-end">
           <button onClick={()=>{

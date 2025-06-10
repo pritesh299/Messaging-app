@@ -6,7 +6,7 @@ import { getGlobal,Message } from "../../api";
 function MessageCard({message}:{message:Message}) {
 
 const [reciver]= useState<boolean>((message.senderId===getGlobal('id')?false:true))
-const [read]= useState(false)
+const [read]= useState(message.seen)
   return (
     <>
    {reciver

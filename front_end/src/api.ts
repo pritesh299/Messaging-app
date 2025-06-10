@@ -1,6 +1,8 @@
 import axios from "axios"
 import { io } from "socket.io-client";
-let serverURL="http://16.171.2.212:3000/"
+
+
+let serverURL=import.meta.env.VITE_SERVER_URL
 
 export  interface Message {
     senderId: Number;

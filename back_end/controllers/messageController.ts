@@ -63,3 +63,32 @@ export async function getLastMessage(req: Request, res: Response) {
         res.status(500).json({ msg: "Internal server error" });
     }
 }
+
+export async function makeMessageRead(conversationId: string, toUserId: number) {
+    try {
+        console.log("Marking messages as read for conversation:", conversationId, "by user:", toUserId);
+        const conversation = await Conversation.findOne({ conversationId });
+        if (!conversation) {
+            return { msg: "Conversation not found" };
+        }
+
+        await Message.updateMany(
+            { conversationId: conversationId, senderId: { $ne: toUserId } },
+            { $set: { seen: true } }
+        );
+
+        const updatedMessages = await Message.find({
+            conversationId: conversationId,
+            senderId: { $ne: toUserId }
+        });
+
+        console.log(updatedMessages);
+
+        io.to(conversationId).emit('message read', { conversationId });
+
+        return { msg: "All messages in the conversation have been marked as read" };
+    } catch (error) {
+        console.error(error);
+        return { msg: "Internal server error" };
+    }
+}

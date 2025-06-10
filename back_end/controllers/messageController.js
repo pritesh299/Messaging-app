@@ -73,3 +73,25 @@ export function getLastMessage(req, res) {
         }
     });
 }
+export function makeMessageRead(conversationId, toUserId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const conversation = yield Conversation.findOne({ conversationId });
+            if (!conversation) {
+                return { msg: "Conversation not found" };
+            }
+            yield Message.updateMany({ conversationId: conversationId, senderId: { $ne: toUserId } }, { $set: { seen: true } });
+            const updatedMessages = yield Message.find({
+                conversationId: conversationId,
+                senderId: { $ne: toUserId }
+            });
+            console.log(updatedMessages);
+            io.to(conversationId).emit('message read', { conversationId });
+            return { msg: "All messages in the conversation have been marked as read" };
+        }
+        catch (error) {
+            console.error(error);
+            return { msg: "Internal server error" };
+        }
+    });
+}
