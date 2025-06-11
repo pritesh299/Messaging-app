@@ -15,10 +15,10 @@ import connectDB from './config/db.js';
 import { PrismaClient } from './generated/prisma/index.js';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
-import { makeMessageRead } from './controllers/messageController.js';
+import { makeMessageDelivered, makeMessageRead } from './controllers/messageController.js';
 const app = express();
 const PORT = 3000;
-let users = [];
+export let users = [];
 const corsOption = {
     origin: process.env.APP_ORIGIN_URL,
     credentials: true,
@@ -53,11 +53,19 @@ io.on('connection', (socket) => {
         const isOnline = users.some(u => u.userId === userId);
         socket.emit('user status', isOnline);
     });
+    socket.on('get user room status', (conversationId, senderId) => {
+        users.forEach((user) => {
+            if (user.userId !== senderId && user.roomId === conversationId) {
+                io.to(conversationId).emit('user in room status', true);
+            }
+            else {
+                io.to(conversationId).emit('user in room status', false);
+            }
+        });
+    });
     socket.on('join room', (roomId, toUserId) => __awaiter(void 0, void 0, void 0, function* () {
         yield socket.join(roomId);
-        console.log(`User ${socket.id} joined room: ${roomId}`);
         let response = yield makeMessageRead(roomId, toUserId);
-        console.log(response);
         let user = users.find(u => u.socketId === socket.id);
         if (user) {
             user.roomId = roomId;
@@ -72,6 +80,11 @@ io.on('connection', (socket) => {
             user.roomId = null;
             socket.emit('user status', false);
         }
+    }));
+    socket.on('message delivered', (messageId) => __awaiter(void 0, void 0, void 0, function* () {
+        console.log("message delivered", messageId);
+        const messageDlivered = yield makeMessageDelivered(messageId);
+        io.emit('message delivered confirmation', messageId);
     }));
     socket.on('disconnect', () => {
         const disconnectedUser = users.find(u => u.socketId === socket.id);

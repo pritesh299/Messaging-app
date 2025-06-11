@@ -12,24 +12,32 @@ import Conversation from "../models/Conversation.js";
 import { io } from "../server.js";
 export function createMessage(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        let { conversationId, senderId, content, seen } = req.body;
+        let { conversationId, senderId, content } = req.body;
         senderId = parseInt(senderId);
-        seen = seen == 'true' ? true : false;
         try {
             const conversation = yield Conversation.find({ conversationId });
             if (!conversation) {
                 return res.status(404).json({ msg: "conversation not found" });
             }
-            const message = new Message({
+            let message = new Message({
                 conversationId: conversationId,
                 senderId: senderId,
+                isSent: true,
                 content: content,
-                seen: seen,
                 updatedAt: new Date(),
             });
-            io.to(conversationId).emit('new message', { senderId: message.senderId, content: message.content, seen: message.seen, timestamp: message.updatedAt });
-            yield message.save();
-            res.status(201).json({ message: message, msg: "message has been registered" });
+            const savedResponse = yield message.save();
+            io.to(conversationId).emit('new message', {
+                _id: savedResponse._id,
+                senderId: savedResponse.senderId,
+                content: savedResponse.content,
+                isRead: savedResponse.isRead,
+                isSent: savedResponse.isSent,
+                isDelivered: savedResponse.isDelivered,
+                timestamp: savedResponse.updatedAt,
+                conversationId: savedResponse.conversationId
+            });
+            res.status(201).json({ message: savedResponse, msg: "message has been registered" });
         }
         catch (error) {
             console.error(error);
@@ -73,21 +81,39 @@ export function getLastMessage(req, res) {
         }
     });
 }
-export function makeMessageRead(conversationId, toUserId) {
+export function makeMessageRead(conversationId, fromUserId) {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const conversation = yield Conversation.findOne({ conversationId });
+            const conversation = yield Conversation.find({ conversationId });
             if (!conversation) {
                 return { msg: "Conversation not found" };
             }
-            yield Message.updateMany({ conversationId: conversationId, senderId: { $ne: toUserId } }, { $set: { seen: true } });
+            yield Message.updateMany({ conversationId: conversationId, senderId: fromUserId }, { $set: { seen: true } });
             const updatedMessages = yield Message.find({
                 conversationId: conversationId,
-                senderId: { $ne: toUserId }
+                senderId: fromUserId
             });
-            console.log(updatedMessages);
             io.to(conversationId).emit('message read', { conversationId });
             return { msg: "All messages in the conversation have been marked as read" };
+        }
+        catch (error) {
+            console.error(error);
+            return { msg: "Internal server error" };
+        }
+    });
+}
+export function makeMessageDelivered(messageId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const message = yield Message.findById(messageId);
+            if (!message) {
+                return { msg: "Message not found" };
+            }
+            message.isDelivered = true;
+            let response = yield message.save();
+            console.log("message delivered", response);
+            io.to(message.conversationId.toString()).emit('message delivered confirmation', messageId);
+            return { msg: "Message marked as delivered" };
         }
         catch (error) {
             console.error(error);

@@ -5,10 +5,13 @@ import { io } from "socket.io-client";
 let serverURL=import.meta.env.VITE_SERVER_URL
 
 export  interface Message {
+    _id: string;
     senderId: Number;
     content: String;
     timestamp: string;
-    seen:Boolean;
+    isRead:Boolean;
+    isSent:Boolean;
+    isDelivered:Boolean;
     conversationId:string
   }
 
@@ -112,7 +115,6 @@ export async function getMessages(conversationId:string) {
 }
 
 export async function addMessage( messageData:object ) {
-  console.log(messageData);
   try{
     const response = await axios.post(serverURL+ "messages", messageData, 
       {
@@ -120,7 +122,7 @@ export async function addMessage( messageData:object ) {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
   })
-
+  console.log(response);
     return response;
   }catch(error){
     console.log(error);

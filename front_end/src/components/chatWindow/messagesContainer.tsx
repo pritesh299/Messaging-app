@@ -16,7 +16,6 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({ messages, setMess
   const [showEmoji, setShowEmoji] = useState<boolean>(false)
   const [message, setMessage] = useState("");
   const MesagesRef: any = useRef(null)
-
   async function fetchMessageList() {
     const conversationId = getGlobal("conversationId")
     if (conversationId === null) return
@@ -33,17 +32,46 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({ messages, setMess
     if (conversationId) {
       socket.emit('join room', conversationId, currentUserId);
     }
-    const handleNewMessage = () => {
-      fetchMessageList()
+    const handleNewMessage = (newMessage :Message) => {
+      if(messages){
+        // const message :Message  = {
+        //   _id: newMessage._id,
+        //   senderId: newMessage.senderId,
+        //   content: newMessage.content,
+        //   isRead: newMessage.isRead,
+        //   isSent: newMessage.isSent,
+        //   isDelivered: newMessage.isDelivered,
+        //   timestamp: newMessage.timestamp,
+        //   conversationId: newMessage.conversationId
+        // }
+        console.log(messages,newMessage)
+        setMessages([...messages, newMessage]);
+        // fetchMessageList();
+      }
+      socket.emit('message dilevered',newMessage._id)
+      // fetchMessageList()
+      console.log("new message recived and dilivered")
     };
     socket.on('new message', handleNewMessage);
-    socket.on('message read',()=>{
-      messages?.forEach((message)=>{
-        if (message.senderId !== currentUserId && message.seen === false) {
-          message.seen = true;
+    socket.on('message delivered confirmation', (messageId: string) => {
+      if (messages) {
+        const updatedMessages = messages.map((message) => {
+          if (message._id === messageId) {
+            return { ...message, isDelivered: true };
+          }
+          return message;
+        });
+        setMessages(updatedMessages);
+        console.log("message dilvery confirmation recived")
       }
-    })
-  })
+    });
+  //   socket.on('message read',()=>{
+  //     messages?.forEach((message)=>{
+  //     if (message.senderId !== currentUserId && message.seen === false) {
+  //         message.seen = true;
+  //     }
+  //   })
+  // })
 
     return () => {
       socket.off('new message', handleNewMessage);

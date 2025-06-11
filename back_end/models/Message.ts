@@ -14,11 +14,20 @@ const MessageSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  seen: {
+  isRead: {
+    type: Boolean,
+    default: false
+  },
+  isSent:{
+    type: Boolean,
+    default: false
+  },
+  isDelivered:{
     type: Boolean,
     default: false
   }
-}, {
+},
+  {     
   timestamps: true // adds createdAt and updatedAt
 });
 

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { getGlobal,Message,addMessage } from "../../api";
+import { getGlobal,Message,addMessage, socket } from "../../api";
 
 interface MessageInputProps {
   currentUserId: Number;
@@ -12,6 +12,7 @@ interface MessageInputProps {
 
 function MessageInput({currentUserId,messages,setMessages,messageString, setMessage,setShowEmoji}:MessageInputProps) {
   const [focus, setFocus] = useState(false);
+  const [userInSameRoom,setuserInSameRoom]=useState(false)
 
   async function sendMessage() {
     if(messageString!==""){
@@ -20,17 +21,20 @@ function MessageInput({currentUserId,messages,setMessages,messageString, setMess
       senderId: getGlobal("id"),
       conversationId:getGlobal("conversationId"),
       content: messageString,
-      seen: false,
       updatedAt: new Date()
     };
     const response: any = await addMessage(newMessage)
+
     if(messages&&(response.status === 201)){
       const message:Message =  {
-        senderId: newMessage.senderId,
-        content: newMessage.content,
-        timestamp:newMessage.updatedAt.toString(),
-        seen:newMessage.seen,
-        conversationId:newMessage.conversationId,
+        _id: response.data.message._id,
+        senderId: response.data.senderId,
+        content: response.data.content,
+        isRead: response.data.isRead,
+        isSent: response.data.isSent,
+        isDelivered: response.data.isDelivered,
+        timestamp:response.data.updatedAt,
+        conversationId:response.data.conversationId,
       }
       setMessages([...messages,message])
     }
@@ -41,6 +45,10 @@ function MessageInput({currentUserId,messages,setMessages,messageString, setMess
 useEffect(()=>{
     setMessage("")
     setFocus(false)
+    socket.emit('get user room status',getGlobal("conversationId"), currentUserId);
+    socket.on('user in room status', (status: boolean) => {
+        setuserInSameRoom(status);
+    });
 },[currentUserId])
 
 useEffect(()=>{
