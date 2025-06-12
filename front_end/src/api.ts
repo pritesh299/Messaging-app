@@ -122,7 +122,6 @@ export async function addMessage( messageData:object ) {
         'Content-Type': 'application/x-www-form-urlencoded'
       }
   })
-  console.log(response);
     return response;
   }catch(error){
     console.log(error);

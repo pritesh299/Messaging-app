@@ -16,7 +16,12 @@ function App() {
     useEffect(()=>{
         if(authenticate) {
             socket.on("connect",()=>{})
-            socket.emit("update user status",getGlobal("id"));
+            socket.emit("update-user-status",getGlobal("id"));
+            socket.on("new-message", (newMessage: Message) => {
+                if(newMessage.senderId !== getGlobal("id")){
+                    socket.emit('message-dilevered-confirmation',newMessage._id)
+                }
+            });
         }
     },[authenticate])
     return (

@@ -4,6 +4,7 @@ import MessageInput from "./messageInput";
 import MessageCard from "./message";
 import { getMessages,socket,getGlobal,Message } from "../../api";
 import EmojiTray from "./emojiTray";
+import { get } from "http";
 
 interface MessagesContainerProps {
   currentUserId: Number;
@@ -23,58 +24,26 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({ messages, setMess
     setMessages(messageList)
   }
 
-
-
   useEffect(() => {
     fetchMessageList()
         const conversationId = getGlobal("conversationId");
 
     if (conversationId) {
-      socket.emit('join room', conversationId, currentUserId);
+      socket.emit('join room', conversationId,getGlobal('id'),currentUserId);
     }
     const handleNewMessage = (newMessage :Message) => {
+
       if(messages){
-        // const message :Message  = {
-        //   _id: newMessage._id,
-        //   senderId: newMessage.senderId,
-        //   content: newMessage.content,
-        //   isRead: newMessage.isRead,
-        //   isSent: newMessage.isSent,
-        //   isDelivered: newMessage.isDelivered,
-        //   timestamp: newMessage.timestamp,
-        //   conversationId: newMessage.conversationId
-        // }
-        console.log(messages,newMessage)
         setMessages([...messages, newMessage]);
-        // fetchMessageList();
+        console.log("new message recived", newMessage);
       }
-      socket.emit('message dilevered',newMessage._id)
-      // fetchMessageList()
-      console.log("new message recived and dilivered")
+      fetchMessageList()
+
     };
-    socket.on('new message', handleNewMessage);
-    socket.on('message delivered confirmation', (messageId: string) => {
-      if (messages) {
-        const updatedMessages = messages.map((message) => {
-          if (message._id === messageId) {
-            return { ...message, isDelivered: true };
-          }
-          return message;
-        });
-        setMessages(updatedMessages);
-        console.log("message dilvery confirmation recived")
-      }
-    });
-  //   socket.on('message read',()=>{
-  //     messages?.forEach((message)=>{
-  //     if (message.senderId !== currentUserId && message.seen === false) {
-  //         message.seen = true;
-  //     }
-  //   })
-  // })
+    socket.on('new-message', handleNewMessage);
 
     return () => {
-      socket.off('new message', handleNewMessage);
+      socket.off('new-message', handleNewMessage);
     };
   }, [currentUserId])
 
@@ -97,8 +66,8 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({ messages, setMess
         <ChatHeader currentUserId={currentUserId} setChat={setChat} />
         <div className="h-[85%] w-full bg-[#0b141a] bg-opacity-[0.95]  pt-2 pb-4">
           <div ref={MesagesRef} className="h-full w-full overflow-y-scroll relative px-[5%]">
-            {messages && messages.map((message, index) => (
-              <><MessageCard key={index} message={message}></MessageCard></>
+            {messages && messages.map((messageObject, index) => (
+              <><MessageCard key={index} message={messageObject}></MessageCard></>
             ))}
           </div>
         </div>

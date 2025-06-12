@@ -24,8 +24,8 @@ const ChatHeader:React.FC<ChatHeaderProps> =({currentUserId,setChat})=>{
     }
     fetchUser()
 
-    socket.emit('get user status', currentUserId);
-    socket.on('user status', (status: boolean) => {
+    socket.emit('get-user-status', currentUserId);
+    socket.on('user-status', (status: boolean) => {
         setOnlineStatus(status);
     });
 

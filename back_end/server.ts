@@ -6,7 +6,7 @@ import connectDB from './config/db.js';
 import { PrismaClient } from './generated/prisma/index.js';
 import { Server } from 'socket.io';
 import { createServer } from 'http';
-import { makeMessageDelivered, makeMessageRead } from './controllers/messageController.js';
+import { makeMessageDelivered, makeMessageRead, makeMessagesRead } from './controllers/messageController.js';
 
 interface User {
   userId: number;
@@ -41,7 +41,7 @@ app.use('/', route);
 io.on('connection', (socket) => {
   console.log(`User connected: ${socket.id}`);
 
-  socket.on('update user status', (userId: number) => {
+  socket.on('update-user-status', (userId: number) => {
     let user = users.find(u => u.userId === userId);
     if (!user) {
       users.push({ userId, toUserId: null, socketId: socket.id, roomId: null });
@@ -51,38 +51,28 @@ io.on('connection', (socket) => {
 
     users.forEach(observer => {
       if (observer.toUserId === userId && observer.roomId) {
-        socket.to(observer.roomId).emit('user status', true);
+        socket.to(observer.roomId).emit('user-status', true);
       }
     });
   });
 
-  socket.on('get user status', (userId: number) => {
+  socket.on('get-user-status', (userId: number) => {
     const isOnline = users.some(u => u.userId === userId);
-    socket.emit('user status', isOnline);
+    socket.emit('user-status', isOnline);
   });
 
-  socket.on('get user room status', (conversationId: string, senderId: number) => {
-
-      users.forEach((user) => {
-          if (user.userId !== senderId && user.roomId === conversationId) {
-              io.to(conversationId).emit('user in room status', true); 
-          }
-          else{
-              io.to(conversationId).emit('user in room status', false); 
-          }
-      });
-  });
-
-  socket.on('join room', async (roomId: string, toUserId: number) => {
+  socket.on('join room', async (roomId: string,userId:number, toUserId: number) => {
     await socket.join(roomId);
 
-    let response = await makeMessageRead(roomId,toUserId);
+    let response = await makeMessagesRead(roomId,toUserId);
     let user = users.find(u => u.socketId === socket.id);
     if (user) {
       user.roomId = roomId;
       user.toUserId = toUserId;
+    }else{
+      users.push({ userId: userId, toUserId: toUserId, socketId: socket.id, roomId });
     }
-    socket.to(roomId).emit('user status', true);
+    socket.to(roomId).emit('user-status', true);
   });
 
   socket.on('leave room', async (roomId: string) => {
@@ -90,14 +80,30 @@ io.on('connection', (socket) => {
     let user = users.find(u => u.socketId === socket.id);
     if (user) {
       user.roomId = null;
-      socket.emit('user status', false);
+      socket.to(roomId).emit('user-status', false);
     }
   });
 
-  socket.on('message delivered',async (messageId: string) => {
-    console.log("message delivered", messageId);
+  socket.on('message-dilevered-confirmation',async (messageId: string) => {
+    console.log("message dilivered confirmation recived", messageId);
     const messageDlivered = await makeMessageDelivered(messageId);
-    io.emit('message delivered confirmation', messageId);
+    if (messageDlivered.msg === "Message marked as delivered" && messageDlivered.message) {
+      const user = users.find(u => u.userId === messageDlivered.message.senderId);
+      if (user && user.roomId) {
+        io.to(user.socketId).emit('mark-dilivered', messageId);
+      }
+    } 
+  }
+  );
+
+  socket.on('message-read-confirmation', async (messageId: string) => {
+    const messageRead = await makeMessageRead(messageId);
+    if (messageRead.msg === "Message marked as read" && messageRead.message) {
+      const user = users.find(u => u.userId === messageRead.message.senderId);
+      if (user && user.roomId) {
+        io.to(user.socketId).emit('mark-read', messageId);
+      }
+    } 
   }
   );
 
@@ -105,11 +111,11 @@ io.on('connection', (socket) => {
     const disconnectedUser = users.find(u => u.socketId === socket.id);
     users.forEach(observer => {
       if (observer.toUserId === disconnectedUser?.userId && observer.roomId) {
-        socket.to(observer.roomId).emit('user status', false);
+        socket.to(observer.roomId).emit('mark-read', false);
       }
     });
     if (disconnectedUser?.roomId) {
-      socket.to(disconnectedUser.roomId).emit('user status', false);
+      socket.to(disconnectedUser.roomId).emit('user-status', false);
     }
     users = users.filter(u => u.socketId !== socket.id);
     console.log(`User disconnected: ${socket.id}`);

@@ -12,7 +12,6 @@ interface MessageInputProps {
 
 function MessageInput({currentUserId,messages,setMessages,messageString, setMessage,setShowEmoji}:MessageInputProps) {
   const [focus, setFocus] = useState(false);
-  const [userInSameRoom,setuserInSameRoom]=useState(false)
 
   async function sendMessage() {
     if(messageString!==""){
@@ -28,13 +27,13 @@ function MessageInput({currentUserId,messages,setMessages,messageString, setMess
     if(messages&&(response.status === 201)){
       const message:Message =  {
         _id: response.data.message._id,
-        senderId: response.data.senderId,
-        content: response.data.content,
-        isRead: response.data.isRead,
-        isSent: response.data.isSent,
-        isDelivered: response.data.isDelivered,
-        timestamp:response.data.updatedAt,
-        conversationId:response.data.conversationId,
+        senderId: response.data.message.senderId,
+        content: response.data.message.content,
+        isRead: response.data.message.isRead,
+        isSent: response.data.message.isSent,
+        isDelivered: response.data.message.isDelivered,
+        timestamp:response.data.message.updatedAt,
+        conversationId:response.data.message.conversationId,
       }
       setMessages([...messages,message])
     }
@@ -45,10 +44,7 @@ function MessageInput({currentUserId,messages,setMessages,messageString, setMess
 useEffect(()=>{
     setMessage("")
     setFocus(false)
-    socket.emit('get user room status',getGlobal("conversationId"), currentUserId);
-    socket.on('user in room status', (status: boolean) => {
-        setuserInSameRoom(status);
-    });
+ 
 },[currentUserId])
 
 useEffect(()=>{
