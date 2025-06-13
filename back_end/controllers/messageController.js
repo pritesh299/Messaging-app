@@ -26,10 +26,8 @@ export function createMessage(req, res) {
                 content: content,
                 updatedAt: new Date(),
             });
-            const sender = users.find(user => user.userId === senderId);
-            const reciever = users.find(user => user.userId === (sender === null || sender === void 0 ? void 0 : sender.toUserId));
+            const reciever = users.find(user => user.userId === senderId);
             const savedResponse = yield message.save();
-            console.log("message saved", reciever);
             if (reciever) {
                 io.to(reciever.socketId).emit('new-message', {
                     _id: savedResponse._id,
