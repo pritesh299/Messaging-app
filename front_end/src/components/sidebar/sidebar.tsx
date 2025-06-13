@@ -18,9 +18,6 @@ interface SidebarProps {
 const Sidebar:React.FC<SidebarProps>=( {messages,viewNewContact,setChat,setViewNewContact,setCurrentUserId})=>{
   const [viewProfile,setViewProfile] =useState(false)
 
- 
-
-
   return (
     <>
        {viewProfile
@@ -38,7 +35,7 @@ const Sidebar:React.FC<SidebarProps>=( {messages,viewNewContact,setChat,setViewN
         setViewProfile={setViewProfile}
         setChat={setChat}
       />
-      <SearchComponent/>
+      {/* <SearchComponent/> */}
       <RenderCards messages={messages} setCurrentUserId={setCurrentUserId} setChat={setChat}/> 
     </>
   );

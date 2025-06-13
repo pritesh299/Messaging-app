@@ -10,6 +10,7 @@ const router = express.Router();
 
 router.post("/users/login", TokenAuth,LoginUser);      // Login a user
 router.post("/users/register", RegisterUser);          // Register a new user
+router.put("/users/update", updateUser);          // Register a new user
 
 router.get("/users/:id", getUser);                  // Get user by ID
 router.get("/users/username/:keyword", getUsers);   // Get users by username

@@ -42,7 +42,7 @@ export async function registerUser(userCredentails:object){
   })
     return response.data;
   }catch(error:any){
-    return error.response;
+    return error.response.data;
   }
 }
 
@@ -62,11 +62,26 @@ export async function LoginUser(userCredentails:object) {
     }
 }
 
+export async function updateUser(updateData:object) {
+    try{
+      const response = await axios.put(serverURL+ "users/update", updateData, 
+        {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+    })
+    return response.data;
+    }
+    catch(error:any){
+      console.log(error )
+      return error.response;
+    }
+}
+
 export async function getLastMessage(conversationId:String){
   try {
       const response = await axios.get(`${serverURL}messages/LastMessage/${conversationId}`);
       return response.data.lastMessage
-
     } catch (error: any) {
       console.error('Error:', error.message);
       return null;

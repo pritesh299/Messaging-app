@@ -31,10 +31,8 @@ export function getUser(req, res) {
 }
 export function updateUser(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const userId = parseInt(req.params.id);
+        const userId = parseInt(req.body.id);
         const username = (req.body.username ? req.body.username : null);
-        const email = (req.body.email ? req.body.email : null);
-        const password = (req.body.password ? req.body.password : null);
         const avatar = (req.body.avatar ? req.body.avatar : null);
         try {
             let exist = yield prisma.user.findUnique({ where: { id: userId } });
@@ -47,13 +45,12 @@ export function updateUser(req, res) {
                 },
                 data: {
                     username: (username ? username : exist.username),
-                    email: (email ? email : exist.email),
-                    password: (password ? password : exist.password),
+                    // password: (password? password: exist.password),
                     avatar: (avatar ? avatar : exist.avatar),
                     updatedAt: new Date(),
                 },
             });
-            return res.status(200).json({ msg: "user updated successfully", user: updateUser });
+            return res.status(200).json({ msg: "user updated successfully", user: updateUser, code: 0 });
         }
         catch (error) {
             console.error(error);

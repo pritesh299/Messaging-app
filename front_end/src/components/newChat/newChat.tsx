@@ -57,7 +57,7 @@ const NewChat:React.FC<NewChatProps>=({viewNewContact,setViewNewContact,setCurre
             </svg>
           </button>
           <div>
-            <p className="text-lg text-slate-200 font-semibold">Status</p>
+            <p className="text-lg text-slate-200 font-semibold">Find others</p>
           </div>
         </div>
       </div>

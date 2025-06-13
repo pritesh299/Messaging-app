@@ -21,12 +21,9 @@ export async function getUser(req:Request,res:Response){
     }
 }
 export async function updateUser(req:Request,res:Response){
-  const userId = parseInt(req.params.id)
+  const userId = parseInt(req.body.id)
   const username = (req.body.username? req.body.username : null) 
-  const email = (req.body.email? req.body.email : null) 
-  const password = (req.body.password? req.body.password : null) 
   const avatar = (req.body.avatar? req.body.avatar : null) 
-
   try {
       let exist = await prisma.user.findUnique({where:{id:userId}});
       if (!exist) {
@@ -39,14 +36,13 @@ export async function updateUser(req:Request,res:Response){
         },
         data: {
           username: (username? username: exist.username),
-          email: (email? email: exist.email),
-          password: (password? password: exist.password),
+          // password: (password? password: exist.password),
           avatar: (avatar? avatar: exist.avatar),
           updatedAt: new Date(),
         },
       });
 
-    return res.status(200).json({ msg: "user updated successfully",user:updateUser});
+    return res.status(200).json({ msg: "user updated successfully",user:updateUser,code:0});
 
   } catch (error:any) {
       console.error(error);

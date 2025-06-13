@@ -26,7 +26,8 @@ export function createMessage(req, res) {
                 content: content,
                 updatedAt: new Date(),
             });
-            const reciever = users.find(user => user.userId === senderId);
+            const sender = users.find(user => user.userId === senderId);
+            const reciever = users.find(user => user.userId === (sender === null || sender === void 0 ? void 0 : sender.toUserId));
             const savedResponse = yield message.save();
             if (reciever) {
                 io.to(reciever.socketId).emit('new-message', {
@@ -86,8 +87,13 @@ export function getLastMessage(req, res) {
             if (!conversation) {
                 return res.status(404).json({ msg: "conversation not found" });
             }
-            const messageList = yield Message.find({ conversationId: conversationId }).sort({ updatedAt: -1 }).limit(1);
-            return res.status(200).json({ msg: 'obtained the last message ', lastMessage: messageList[0] });
+            const lastMessage = yield Message.findOne({ conversationId })
+                .sort({ createdAt: -1 })
+                .exec();
+            return res.status(200).json({
+                msg: "Obtained the last message",
+                lastMessage: lastMessage || null,
+            });
         }
         catch (error) {
             console.error(error);

@@ -22,7 +22,8 @@ export  async function createMessage(req: Request, res: Response) {
             content: content,
             updatedAt: new Date(),
         });
-        const reciever = users.find(user => user.userId === senderId );
+        const sender = users.find(user => user.userId === senderId);
+        const reciever = users.find(user => user.userId === sender?.toUserId );
         const savedResponse = await message.save();
 
         if (reciever){
@@ -78,8 +79,13 @@ export async function getLastMessage(req: Request, res: Response) {
         if(!conversation){
             return res.status(404).json({ msg: "conversation not found" });
         }
-        const messageList = await Message.find({ conversationId: conversationId }).sort({updatedAt: -1}).limit(1);
-        return res.status(200).json({msg:'obtained the last message ',lastMessage:messageList[0]})
+        const lastMessage = await Message.findOne({ conversationId })
+            .sort({ createdAt: -1 })
+            .exec();
+        return res.status(200).json({
+            msg: "Obtained the last message",
+            lastMessage: lastMessage || null,
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ msg: "Internal server error" });

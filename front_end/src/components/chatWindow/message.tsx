@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getGlobal,Message, setGlobal, socket } from "../../api";
+import { getGlobal,Message, socket } from "../../api";
 
 
 
@@ -17,7 +17,7 @@ const [isDelivered,setIsDelivered]= useState(message.isDelivered)
         socket.emit('message-read-confirmation', message._id)
       }
       socket.on('mark-dilivered', (messageId: string) => {
-        console.log("message dilivered confirmation recived", messageId);
+
         if (message._id === messageId) {
           setIsDelivered(true);
           setIsSent(true)

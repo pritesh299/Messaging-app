@@ -39,7 +39,7 @@ const RenderCards:React.FC<RenderCardsProps>=({messages,setChat,setCurrentUserId
   }, []);
 
   return (
-    <div className="overflow-y-scroll w-[100%] h-[85%] bg-[#111b21] shadow-lg p-1">
+    <div className="overflow-y-scroll w-[100%] h-[92.5%] bg-[#111b21] shadow-lg p-1">
       {
       chatList&&chatList.map((contact,id) => (
       <>
