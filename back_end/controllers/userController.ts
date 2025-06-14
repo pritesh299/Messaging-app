@@ -36,13 +36,12 @@ export async function updateUser(req:Request,res:Response){
         },
         data: {
           username: (username? username: exist.username),
-          // password: (password? password: exist.password),
           avatar: (avatar? avatar: exist.avatar),
           updatedAt: new Date(),
         },
       });
 
-    return res.status(200).json({ msg: "user updated successfully",user:updateUser,code:0});
+    return res.status(200).json({ msg: "user updated successfully",user:{username:updateUser.username,avatar:updateUser.avatar,userId:updateUser.id},code:0});
 
   } catch (error:any) {
       console.error(error);

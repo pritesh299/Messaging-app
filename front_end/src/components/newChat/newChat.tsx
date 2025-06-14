@@ -1,7 +1,7 @@
 import React,{useState,useEffect} from "react";
 import ContactList from "./contactList";
 import SearchComponent from "./seacrhContact";
-import { getUsers } from "../../api";
+import { getGlobal, getUsers } from "../../api";
 
 interface NewChatProps{
   viewNewContact: boolean;
@@ -18,8 +18,9 @@ const NewChat:React.FC<NewChatProps>=({viewNewContact,setViewNewContact,setCurre
   useEffect(() => {
     const fetchData = async () => {
       try {
-          const data = await getUsers(keyWord);
-          setUserList([...data.users]);
+          let data = await getUsers(keyWord);
+          let filteredUsers = data.users.filter((user:any) => user.id !== getGlobal("id")); // Exclude current user
+          setUserList([...filteredUsers]);
       } catch (error) {
         
         setUserList([])

@@ -46,7 +46,7 @@ export async function getConversations(req:Request,res:Response){
         return res.status(200).json({msg:"No conversations found",conversations})
       }
       conversations.forEach((conversation)=>{
-        conversation.memberList = conversation.memberList.filter((id:number)=>id!==userId)
+        conversation.memberList = conversation.memberList.filter((id:Number)=>id!==userId)
       })
       return res.status(200).json({msg:"Conversations found",conversations})  
      }catch(error){

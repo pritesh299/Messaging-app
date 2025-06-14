@@ -12,7 +12,6 @@ interface ContactListProps{
 const ContactList :React.FC<ContactListProps>= ({userList,setCurrentUserId,setChat,setViewNewContact})=> {
 
   const [NoneUser,setNoneUser]=useState(false)
-  // const [hover, setHover] = useState(false);  
   
   useEffect(() => {
     if (userList.length === 0 || userList[0] === "no users") {

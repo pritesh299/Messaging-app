@@ -9,8 +9,8 @@ import { createServer } from 'http';
 import { makeMessageDelivered, makeMessageRead, makeMessagesRead } from './controllers/messageController.js';
 
 interface User {
-  userId: number;
-  toUserId: number | null;
+  userId: Number;
+  toUserId: Number | null;
   socketId: string;
   roomId: string | null;
 }
@@ -41,7 +41,7 @@ app.use('/', route);
 io.on('connection', (socket) => {
   console.log(`User connected: ${socket.id}`);
 
-  socket.on('update-user-status', (userId: number) => {
+  socket.on('update-user-status', (userId: Number) => {
     let user = users.find(u => u.userId === userId);
     if (!user) {
       users.push({ userId, toUserId: null, socketId: socket.id, roomId: null });
@@ -56,12 +56,12 @@ io.on('connection', (socket) => {
     });
   });
 
-  socket.on('get-user-status', (userId: number) => {
+  socket.on('get-user-status', (userId: Number) => {
     const isOnline = users.some(u => u.userId === userId);
     socket.emit('user-status', isOnline);
   });
 
-  socket.on('join room', async (roomId: string,userId:number, toUserId: number) => {
+  socket.on('join room', async (roomId: string,userId:Number, toUserId: Number) => {
     await socket.join(roomId);
 
     let response = await makeMessagesRead(roomId,toUserId);

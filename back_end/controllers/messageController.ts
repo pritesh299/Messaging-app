@@ -92,7 +92,7 @@ export async function getLastMessage(req: Request, res: Response) {
     }
 }
 
-export async function makeMessagesRead(conversationId: string, fromUserId: number) {
+export async function makeMessagesRead(conversationId: string, fromUserId: Number) {
     try {
         const conversation = await Conversation.find({conversationId});
         if (!conversation) {

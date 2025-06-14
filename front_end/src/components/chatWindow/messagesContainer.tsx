@@ -25,21 +25,21 @@ const MessagesContainer: React.FC<MessagesContainerProps> = ({ messages, setMess
   }
 
   useEffect(() => {
-    fetchMessageList()
-        const conversationId = getGlobal("conversationId");
-
+    const conversationId = getGlobal("conversationId");
+    console.log(currentUserId)
     if (conversationId) {
       socket.emit('join room', conversationId,getGlobal('id'),currentUserId);
     }
+    fetchMessageList()
 
     socket.on('new-message', (newMessage :Message) => {
-      if(messages){
-        setMessages([...messages, newMessage]);
+
+      if(newMessage.senderId === currentUserId){
+        fetchMessageList()
+      console.log("new message received",currentUserId,newMessage.senderId === currentUserId)
+
       }
-      fetchMessageList()
-
     });
-
   }, [currentUserId])
 
   useEffect(() => {

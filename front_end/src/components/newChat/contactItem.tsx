@@ -20,11 +20,11 @@ const ContactItem: React.FC<ContactItemProp> = ({ user,setCurrentUserId,setChat,
 
    async function clickHandler()
    {
-    const resposne = await addConversation(user.id,getGlobal("id")) 
-    console.log(resposne)
+    const response = await addConversation(user.id,getGlobal("id")) 
+
     setCurrentUserId(user.id) 
-    console.log(user.id,)
-    setGlobal({"conversationId":resposne.conversation._id,"activeChatUserId":user.id})
+
+    setGlobal({"conversationId":response.conversation._id,"activeChatUserId":user.id})
     setChat(true)
     setViewNewContact(false) 
    }
@@ -45,9 +45,8 @@ const ContactItem: React.FC<ContactItemProp> = ({ user,setCurrentUserId,setChat,
           </div>
         </div>
         <div className="w-[80%] border-b py-3 border-slate-700 flex">
-          <div className="text-left w-[80%]">
-            <p>{user.username || "John Doe"}</p>
-            <p className="text-slate-400 text-sm">{user.email || "Email"}</p>
+          <div className="text-left flex  text-xl items-center gap-2 w-[80%]">
+            <h2>{user.username || "John Doe"}</h2>
           </div>
         </div>
       </button>

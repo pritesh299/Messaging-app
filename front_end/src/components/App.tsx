@@ -18,10 +18,13 @@ function App() {
             socket.on("connect",()=>{})
             socket.emit("update-user-status",getGlobal("id"));
             socket.on("new-message", (newMessage: Message) => {
-                if(messages){
-                    setMessages([...messages, newMessage]);
-                } else {
-                    setMessages([newMessage]);
+                if(newMessage.senderId === currentUserId) {
+                    if(messages) {
+                        setMessages([...messages, newMessage]);
+                    } 
+                    else {
+                        setMessages([newMessage]);
+                    }
                 }
                 if(newMessage.senderId !== getGlobal("id")){
                     socket.emit('message-dilevered-confirmation',newMessage._id)

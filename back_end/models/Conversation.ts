@@ -6,7 +6,7 @@ const conversationSchema = new mongoose.Schema(
       type: [Number], // Array of integers (Postgres user IDs)
       required: true,
       validate: {
-        validator: (val: number[]) => val.length === 2,
+        validator: (val: Number[]) => val.length === 2,
         message: "memberList must contain exactly 2 user IDs"
       }
     },
